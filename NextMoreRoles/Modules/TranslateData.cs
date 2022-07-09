@@ -13,6 +13,8 @@ namespace NextMoreRoles.Modules
         public static int defaultLanguage = (int)SupportedLangs.English;
         public static Dictionary<string, Dictionary<int, string>> stringData = new();
         public static dynamic LangDate;
+
+        //実行元:Main.cs
         public static void Load()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();

@@ -14,6 +14,7 @@ namespace NextMoreRoles
         public static ConfigEntry<bool> EnableHorseMode { get; set; }
         public static ConfigEntry<bool> IsDownloadNextMoreSkins { get; set; }
         public static ConfigEntry<bool> IsDownloadOtherSkins { get; set; }
+        //実行元:Main.cs
         public static void Load()
         {
             Ip = NextMoreRolesPlugin.Instance.Config.Bind("Custom", "Custom Server IP", "127.0.0.1");

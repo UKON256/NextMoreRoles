@@ -17,7 +17,6 @@ namespace NextMoreRoles
     public class NextMoreRolesPlugin : BasePlugin
     {
         public const string Id = "jp.nextmoreroles";
-
         public const string VersionString = "1.0.0";
 
         public static System.Version Version = System.Version.Parse(VersionString);
@@ -35,13 +34,10 @@ namespace NextMoreRoles
         {
             Logger = Log;
             Instance = this;
-            // All Load() Start
+            Logger.LogInfo(NextMoreRoles.Modules.ModTranslation.getString("StartLogText"));
+            // ロード！！！
             NextMoreRoles.Modules.ModTranslation.Load();
-            //ChacheManager.Load();
-            //CustomCosmetics.CustomColors.Load();
             Configs.Load();
-            //CustomOptions.CustomOptions.Load();
-            //Patches.FreeNamePatch.Initialize();
 
             try
             {
@@ -50,14 +46,10 @@ namespace NextMoreRoles
                 foreach (string f in files)
                     File.Delete(f);
             }
-            catch (Exception e)
+            catch (Exception Error)
             {
-                System.Console.WriteLine("Exception occured when clearing old versions:\n" + e);
+                NextMoreRolesPlugin.Logger.LogError("Exception occured when clearing old versions:\n" + Error);
             }
-
-            // Old Delete End
-
-            Logger.LogInfo(NextMoreRoles.Modules.ModTranslation.getString("StartLogText"));
 
             var assembly = Assembly.GetExecutingAssembly();
 
@@ -65,15 +57,6 @@ namespace NextMoreRoles
             Harmony.PatchAll();
             //SubmergedCompatibility.Initialize();
         }
-        /*
-        [HarmonyPatch(typeof(TranslationController), nameof(TranslationController.GetString), new Type[] { typeof(StringNames), typeof(Il2CppReferenceArray<Il2CppSystem.Object>) })]
-        class TranslateControllerMessagePatch
-        {
-            static void Postfix(ref string __result, [HarmonyArgument(0)] StringNames id)
-            {
-                NextMoreRolesPlugin.Logger.LogInfo(id+":"+__result);
-            }
-        }*/
         [HarmonyPatch(typeof(StatsManager), nameof(StatsManager.AmBanned), MethodType.Getter)]
         public static class AmBannedPatch
         {
