@@ -1,4 +1,4 @@
-//From TheOtherRoles. thanks
+/*//From TheOtherRoles. thanks
 using System;
 using System.Collections;
 using System.Diagnostics;
@@ -75,4 +75,4 @@ public static class StopLoadingMainMenu
     {
         return !BepInExUpdater.UpdateRequired;
     }
-}
+}*/

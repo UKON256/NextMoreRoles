@@ -79,13 +79,6 @@ namespace NextMoreRoles.Modules
 
             return ResourcesManager.loadSpriteFromResources(key, pixelsPerUnit);
         }
-        [HarmonyPatch(typeof(LanguageSetter), nameof(LanguageSetter.SetLanguage))]
-        class SetLanguagePatch
-        {
-            static void Postfix()
-            {
-                ClientOptionsPatch.UpdateTranslations();
-            }
-        }
+
     }
 }

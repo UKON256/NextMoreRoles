@@ -1,3 +1,4 @@
+using System;
 using BepInEx.Configuration;
 namespace NextMoreRoles
 {
@@ -17,17 +18,21 @@ namespace NextMoreRoles
         //実行元:Main.cs
         public static void Load()
         {
-            Ip = NextMoreRolesPlugin.Instance.Config.Bind("Custom", "Custom Server IP", "127.0.0.1");
-            Port = NextMoreRolesPlugin.Instance.Config.Bind("Custom", "Custom Server Port", (ushort)22023);
+            try
+            {
+                Ip = NextMoreRolesPlugin.Instance.Config.Bind("Custom", "Custom Server IP", "127.0.0.1");
+                Port = NextMoreRolesPlugin.Instance.Config.Bind("Custom", "Custom Server Port", (ushort)22023);
 
-            AutoUpdate = NextMoreRolesPlugin.Instance.Config.Bind("Custom", "Auto Update", true);
-            DebugMode = NextMoreRolesPlugin.Instance.Config.Bind("Custom", "Debug Mode", false);
-            IsVersionErrorView = NextMoreRolesPlugin.Instance.Config.Bind("Custom", "IsVersionErrorView", true);
-            HideTaskArrows = NextMoreRolesPlugin.Instance.Config.Bind("Custom", "HideTaskArrows", false);
-            EnableHorseMode = NextMoreRolesPlugin.Instance.Config.Bind("Custom", "EnableHorseMode", false);
-            /*IntroPatch.ShouldAlwaysHorseAround.isHorseMode = ConfigRoles.EnableHorseMode.Value;
-            Patch.RegionMenuOpenPatch.defaultRegions = ServerManager.DefaultRegions;
-            Patch.RegionMenuOpenPatch.UpdateRegions();*/
+                AutoUpdate = NextMoreRolesPlugin.Instance.Config.Bind("Custom", "Auto Update", true);
+                DebugMode = NextMoreRolesPlugin.Instance.Config.Bind("Custom", "Debug Mode", false);
+                HideTaskArrows = NextMoreRolesPlugin.Instance.Config.Bind("Custom", "HideTaskArrows", false);
+                EnableHorseMode = NextMoreRolesPlugin.Instance.Config.Bind("Custom", "EnableHorseMode", false);
+                NextMoreRolesPlugin.Logger.LogInfo("Configの読み込みに成功しました。");
+            }
+            catch (SystemException Error)
+            {
+                NextMoreRolesPlugin.Logger.LogError("Configの読み込みに失敗しました。エラー:"+Error);
+            }
         }
     }
 }
