@@ -116,7 +116,7 @@ namespace NextMoreRoles.Patches.SystemPatches
             var Trans = MoreOptions.transform.localPosition;
             MoreOptions.gameObject.SetActive(true);
             Trans = MoreOptions.transform.position;
-            MoreOptions.Text.text = ModTranslation.getString("MODOptionsText");
+            MoreOptions.Text.text = ModTranslation.GetString("OptionsText");
             var moreOptionsButton = MoreOptions.GetComponent<PassiveButton>();
             moreOptionsButton.OnClick = new ButtonClickedEvent();
             moreOptionsButton.OnClick.AddListener((Action)(() =>
@@ -150,7 +150,7 @@ namespace NextMoreRoles.Patches.SystemPatches
             var Title = TitleTextTitle = Object.Instantiate(TitleText, PopUp.transform);
             Title.GetComponent<RectTransform>().localPosition = Vector3.up * 2.3f;
             Title.gameObject.SetActive(true);
-            Title.text = ModTranslation.getString("moreOptionsText");
+            Title.text = ModTranslation.GetString("ModOptionTitle");
             Title.name = "TitleText";
         }
         private static void SetUpOptions(OptionsMenuBehaviour __instance)
@@ -261,7 +261,7 @@ namespace NextMoreRoles.Patches.SystemPatches
                 button.onState = info.DefaultValue;
                 button.Background.color = button.onState ? Color.green : Palette.ImpostorRed;
 
-                button.Text.text = ModTranslation.getString(info.Title);
+                button.Text.text = ModTranslation.GetString(info.Title);
                 button.Text.fontSizeMin = button.Text.fontSizeMax = 2.2f;
                 button.Text.font = Object.Instantiate(TitleText.font);
                 button.Text.GetComponent<RectTransform>().sizeDelta = new Vector2(2, 2);
@@ -306,13 +306,14 @@ namespace NextMoreRoles.Patches.SystemPatches
 
 
 
+        //実行元:TraslationData.cs
         public static void UpdateTranslations()
         {
             if (TitleTextTitle)
-                TitleTextTitle.text = ModTranslation.getString("MoreOptionsText");
+                TitleTextTitle.text = ModTranslation.GetString("ModOptionTitle");
 
             if (MoreOptions)
-                MoreOptions.Text.text = ModTranslation.getString("MODOptionsText");
+                MoreOptions.Text.text = ModTranslation.GetString("ModOptionTitle");
             try
             {
                 MODButtons[0].Text.text = FastDestroyableSingleton<TranslationController>.Instance.GetString(StringNames.SettingsCensorChat);
@@ -322,7 +323,7 @@ namespace NextMoreRoles.Patches.SystemPatches
             for (int i = 0; i < AllOptions.Length; i++)
             {
                 if (i >= MODButtons.Count) break;
-                MODButtons[i + 2].Text.text = ModTranslation.getString(AllOptions[i].Title);
+                MODButtons[i + 2].Text.text = ModTranslation.GetString(AllOptions[i].Title);
             }
         }
 

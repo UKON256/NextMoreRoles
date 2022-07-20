@@ -1,3 +1,4 @@
+using System.Xml.Schema;
 using System;
 using BepInEx.Configuration;
 namespace NextMoreRoles
@@ -9,17 +10,14 @@ namespace NextMoreRoles
 
         public static ConfigEntry<bool> AutoUpdate { get; set; }
         public static ConfigEntry<bool> DebugMode { get; set; }
-        public static ConfigEntry<bool> IsVersionErrorView { get; set; }
-        public static ConfigEntry<string> NextMoreCosmeticsURL { get; set; }
         public static ConfigEntry<bool> HideTaskArrows { get; set; }
         public static ConfigEntry<bool> EnableHorseMode { get; set; }
-        public static ConfigEntry<bool> IsDownloadNextMoreSkins { get; set; }
-        public static ConfigEntry<bool> IsDownloadOtherSkins { get; set; }
         //実行元:Main.cs
         public static void Load()
         {
             try
             {
+                //Config作成
                 Ip = NextMoreRolesPlugin.Instance.Config.Bind("Custom", "Custom Server IP", "127.0.0.1");
                 Port = NextMoreRolesPlugin.Instance.Config.Bind("Custom", "Custom Server Port", (ushort)22023);
 
@@ -27,11 +25,11 @@ namespace NextMoreRoles
                 DebugMode = NextMoreRolesPlugin.Instance.Config.Bind("Custom", "Debug Mode", false);
                 HideTaskArrows = NextMoreRolesPlugin.Instance.Config.Bind("Custom", "HideTaskArrows", false);
                 EnableHorseMode = NextMoreRolesPlugin.Instance.Config.Bind("Custom", "EnableHorseMode", false);
-                NextMoreRolesPlugin.Logger.LogInfo("Configの読み込みに成功しました。");
+                //Logger.Info("Configの読み込みに成功しました。", "Config");
             }
             catch (SystemException Error)
             {
-                NextMoreRolesPlugin.Logger.LogError("Configの読み込みに失敗しました。エラー:"+Error);
+                Logger.Error("Configの読み込みに失敗しました。エラー:"+Error, "Config");
             }
         }
     }

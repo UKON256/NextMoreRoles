@@ -36,11 +36,11 @@ namespace NextMoreRoles.Patches.LobbyPatches
                         writer.Write(Assembly.GetExecutingAssembly().ManifestModule.ModuleVersionId.ToByteArray());
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.ShareMODVersion(NextMoreRolesPlugin.Version.Major, NextMoreRolesPlugin.Version.Minor, NextMoreRolesPlugin.Version.Build, NextMoreRolesPlugin.Version.Revision, Assembly.GetExecutingAssembly().ManifestModule.ModuleVersionId, AmongUsClient.Instance.ClientId);
-                        NextMoreRolesPlugin.Logger.LogInfo("バージョンシェアに成功しました。");
+                        Logger.Info("バージョンシェアに成功しました。", "TranslateData");
                     }
                     catch(SystemException Error)
                     {
-                        NextMoreRolesPlugin.Logger.LogError("バージョンシェアに失敗しました。エラー:"+Error);
+                        Logger.Error("バージョンシェアに失敗しました。エラー:"+Error, "TranslateData");
                     }
                 }
             }
@@ -61,11 +61,11 @@ namespace NextMoreRoles.Patches.LobbyPatches
 
         public class GameStartManagerUpdatePatch
         {
-            private static bool update = false;
+            //private static bool update = false;
             public static Dictionary<int, PlayerVersion> VersionPlayers = new();
-            public static int Proce;
-            private static string currentText = "";
-            public static bool LastBlockStart;
+            //public static int Proce;
+            //private static string currentText = "";
+            //public static bool LastBlockStart;
 
         }
     }

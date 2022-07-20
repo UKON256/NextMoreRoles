@@ -1,18 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Reflection;
 using BepInEx;
 using BepInEx.IL2CPP;
 using HarmonyLib;
-using UnityEngine;
 using NextMoreRoles.Modules;
+using LogType = BepInEx.Logging.LogLevel;
 
 namespace NextMoreRoles
 {
     [BepInPlugin(Id, "NextMoreRoles", VersionString)]
-    //[BepInDependency(SubmergedCompatibility.SUBMERGED_GUID, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInProcess("Among Us.exe")]
     public class NextMoreRolesPlugin : BasePlugin
     {
@@ -31,49 +29,29 @@ namespace NextMoreRoles
 
         public override void Load()
         {
-            Logger = Log;
             Instance = this;
-            // ロード！！！
-            NextMoreRolesPlugin.Logger.LogInfo("ロードを開始しています");
+            Logger = BepInEx.Logging.Logger.CreateLogSource("NextMoreRoles");
+
+            // 初期化
             try
             {
                 ModTranslation.Load();
                 Configs.Load();
-                NextMoreRolesPlugin.Logger.LogInfo("ロードが正常に終了しました");
-            }
-            catch(SystemException Error)
-            {
-                NextMoreRolesPlugin.Logger.LogError("ロードに失敗しました。エラー:"+Error);
-            }
-            //ロード終了！
 
-            //色々開始！
-            NextMoreRolesPlugin.Logger.LogInfo("スタートアップを開始しています");
-            try
-            {
-                /*try
-                {
-                    DirectoryInfo d = new(Path.GetDirectoryName(Application.dataPath) + @"\BepInEx\plugins");
-                    string[] files = d.GetFiles("*.dll.old").Select(x => x.FullName).ToArray(); // Getting old versions
-                    foreach (string f in files)
-                    File.Delete(f);
-                }
-                catch (Exception Error)
-                {
-                    NextMoreRolesPlugin.Logger.LogError("Exception occured when clearing old versions:\n" + Error);
-                }*/
                 var assembly = Assembly.GetExecutingAssembly();
                 StringDATE = new Dictionary<string, Dictionary<int, string>>();
                 Harmony.PatchAll();
-                //SubmergedCompatibility.Initialize();
-                NextMoreRolesPlugin.Logger.LogInfo("スタートアップが正常に終了しました");
+
+                NextMoreRoles.Logger.Info("スタートアップが正常に終了しました", "Main");
             }
             catch(SystemException Error)
             {
-                NextMoreRolesPlugin.Logger.LogError("スタートアップに失敗しました。エラー:"+Error);
+                NextMoreRoles.Logger.Error("スタートアップに失敗しました。\nエラー:"+Error, "Main");
             }
-            //色々終わり！
+            //ロード終了
         }
+
+
 
         [HarmonyPatch(typeof(ModManager), nameof(ModManager.LateUpdate))]
         class ShowModStamp
@@ -84,16 +62,74 @@ namespace NextMoreRoles
             }
         }
 
+
+
         //実行元:Patches.HarmonyPatches.PingTracker
         private static string BaseCredentials = $@"<size=130%><color>Next</color><color>More</color><color=#ff0000>Roles</color></size> v{NextMoreRolesPlugin.Version}";
         [HarmonyPatch(typeof(PingTracker), nameof(PingTracker.Update))]
         private static void PingSetMODName(PingTracker __instance)
         {
             __instance.text.alignment = TMPro.TextAlignmentOptions.TopRight;
-            //__instance.text.text = $"{BaseCredentials}\n{__instance.text.text}";
             if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started)
             {
                 __instance.text.text = $"{BaseCredentials}\n{__instance.text.text}";
+            }
+        }
+    }
+
+
+
+    //TOHより参考にさせていただきました
+    public class Logger
+    {
+        public static void Info(string Text, string ActedFile, bool IsSendInGame = false, [CallerLineNumber] int lineNumber = 0, [CallerFilePath] string fileName = "") =>
+            SendMessages(Text, LogType.Info, ActedFile, IsSendInGame, lineNumber, fileName);
+        public static void Warn(string Text, string ActedFile, bool IsSendInGame = false, [CallerLineNumber] int lineNumber = 0, [CallerFilePath] string fileName = "") =>
+            SendMessages(Text, LogType.Warning, ActedFile, IsSendInGame, lineNumber, fileName);
+        public static void Error(string Text, string ActedFile, bool IsSendInGame = false, [CallerLineNumber] int lineNumber = 0, [CallerFilePath] string fileName = "") =>
+            SendMessages(Text, LogType.Error, ActedFile, IsSendInGame, lineNumber, fileName);
+        public static void Fatal(string Text, string ActedFile, bool IsSendInGame = false, [CallerLineNumber] int lineNumber = 0, [CallerFilePath] string fileName = "") =>
+            SendMessages(Text, LogType.Fatal, ActedFile, IsSendInGame, lineNumber, fileName);
+        public static void Msg(string Text, string ActedFile, bool IsSendInGame = false, [CallerLineNumber] int lineNumber = 0, [CallerFilePath] string fileName = "") =>
+            SendMessages(Text, LogType.Message, ActedFile, IsSendInGame, lineNumber, fileName);
+
+
+
+        private static void SendMesagesInGame(string Text)
+        {
+            if (DestroyableSingleton<HudManager>._instance) DestroyableSingleton<HudManager>.Instance.Notifier.AddItem(Text);
+        }
+        private static void SendMessages(string Text, LogType LogType = LogType.Info, string tag = "", bool IsSendInGame = false ,int lineNumber = 0, string fileName = "")
+        {
+            var logger = NextMoreRoles.NextMoreRolesPlugin.Logger;
+            string t = DateTime.Now.ToString("HH:mm:ss");
+            if (IsSendInGame) SendMesagesInGame($"[{tag}]{Text}");
+
+            Text = Text.Replace("\r", "\\r").Replace("\n", "\\n");
+            string log_text = $"[{t}][{tag}]{Text}";
+
+            //Typeで送信
+            switch (LogType)
+            {
+                case LogType.Info:
+                    logger.LogInfo(log_text);
+                    break;
+                case LogType.Warning:
+                    logger.LogWarning(log_text);
+                    break;
+                case LogType.Error:
+                    logger.LogError(log_text);
+                    break;
+                case LogType.Fatal:
+                    logger.LogFatal(log_text);
+                    break;
+                case LogType.Message:
+                    logger.LogMessage(log_text);
+                    break;
+                default:
+                    logger.LogWarning("ログのタイプが無効です");
+                    logger.LogInfo(log_text);
+                    break;
             }
         }
     }

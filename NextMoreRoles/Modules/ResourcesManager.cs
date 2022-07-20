@@ -19,10 +19,10 @@ namespace NextMoreRoles.Modules
                 Texture2D texture = loadTextureFromResources(path);
                 sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), pixelsPerUnit);
                 sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
-                NextMoreRolesPlugin.Logger.LogInfo("パスからのスプライトの生成に成功しました。\nPath:"+path);
+                Logger.Info("パスからのスプライトの生成に成功しました。\nPath:"+path, "ResourcesManager");
                 return CachedSprites[path + pixelsPerUnit] = sprite;
             } catch {
-                NextMoreRolesPlugin.Logger.LogError("パスからのスプライト生成に失敗しました。Path: " + path);
+                Logger.Error("パスからのスプライト生成に失敗しました。Path: " + path, "ResourcesManager");
             }
             return null;
         }
@@ -37,7 +37,7 @@ namespace NextMoreRoles.Modules
                 LoadImage(texture, byteTexture, false);
                 return texture;
             } catch {
-                NextMoreRolesPlugin.Logger.LogError("画像の読み込みに失敗しました。Path: " + path);
+                Logger.Error("画像の読み込みに失敗しました。Path: " + path, "ResourcesManager");
             }
             return null;
         }
@@ -60,7 +60,7 @@ namespace NextMoreRoles.Modules
                     return texture;
                 }
             } catch {
-                System.Console.WriteLine("テクスチャの読み込みに失敗しました。Path: " + path);
+                Logger.Error("テクスチャの読み込みに失敗しました。Path: " + path, "ResourcesManager");
             }
             return null;
         }

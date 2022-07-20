@@ -13,6 +13,8 @@ namespace NextMoreRoles.Modules.CustomRPC
     {
         SetRoomDestroyTimer,
         ShareMODVersion,
+        UncheckedSetVanilaRole,
+        SpawnBot,
     }
 
     public static class RPCProcedure
@@ -29,6 +31,13 @@ namespace NextMoreRoles.Modules.CustomRPC
             else
                 ver = new System.Version(major, minor, build, revision);
             Patches.LobbyPatches.ShareGameVersion.GameStartManagerUpdatePatch.VersionPlayers[clientId] = new Patches.LobbyPatches.PlayerVersion(ver, guid);
+        }
+        public static void UncheckedSetVanilaRole(byte playerid, byte roletype)
+        {
+            var player = ModHelpers.playerById(playerid);
+            if (player == null) return;
+            DestroyableSingleton<RoleManager>.Instance.SetRole(player, (RoleTypes)roletype);
+            player.Data.Role.Role = (RoleTypes)roletype;
         }
 
 
@@ -64,12 +73,15 @@ namespace NextMoreRoles.Modules.CustomRPC
                             }
                             ShareMODVersion(major, minor, patch, revision == 0xFF ? -1 : revision, guid, versionOwnerId);
                             break;
+                        case CustomRPC.UncheckedSetVanilaRole:
+                            UncheckedSetVanilaRole(Reader.ReadByte(), Reader.ReadByte());
+                            break;
                     }
-                    NextMoreRolesPlugin.Logger.LogInfo("CustomRPCを送信しました。コールID:"+CallId);
+                    Logger.Info("CustomRPCを送信しました。コールID:"+CallId, "CustomRPC");
                 }
                 catch(SystemException Error)
                 {
-                    NextMoreRolesPlugin.Logger.LogError("CustomRPCにてエラーが発生しました。\nコールID:" +CallId+ "、\nエラー:"+Error);
+                    Logger.Error("CustomRPCにてエラーが発生しました。\nコールID:" +CallId+ "、\nエラー:"+Error, "CustomRPC");
                 }
             }
         }
