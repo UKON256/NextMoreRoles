@@ -2,8 +2,6 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using HarmonyLib;
 
 namespace NextMoreRoles.Modules
 {
@@ -16,7 +14,7 @@ namespace NextMoreRoles.Modules
         public static void Load()
         {
             //変数
-            int NowLine = 1;                                                    //現在の行
+            int NowLine = 1;
 
             //色々
             TranslateDatas = new();
@@ -104,17 +102,9 @@ namespace NextMoreRoles.Modules
             }
             else
             {
-                return $"<NotFound>{Key}";
+                Logger.Warn($"翻訳データが辞書中にありません。Key:{Key}、Lang:{LanguageId}", "TranslateData");
+                return $"<NotFound>{Key}"/*\n言語:{LanguageId}、数値:{(int)LanguageId}"*/;
             }
-        }
-    }
-
-    [HarmonyPatch(typeof(LanguageSetter), nameof(LanguageSetter.SetLanguage))]
-    class SetLanguagePatch
-    {
-        static void Postfix()
-        {
-            NextMoreRoles.Patches.SystemPatches.ClientOptionsPatch.UpdateTranslations();
         }
     }
 }

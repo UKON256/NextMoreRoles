@@ -16,7 +16,7 @@ namespace NextMoreRoles.Patches.HarmonyPatches
     {
         public static void Prefix(GameStartManager __instance)
         {
-            NextMoreRoles.Patches.GamePatches.DebugModePatch.SetRoomMinPlayer(__instance);
+            if (Configs.IsDebugMode.Value) {NextMoreRoles.Patches.GamePatches.DebugModePatch.SetRoomMinPlayer(__instance);}
         }
     }
 }

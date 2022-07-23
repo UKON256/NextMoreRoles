@@ -1,12 +1,8 @@
 using System;
-using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
-using HarmonyLib;
 using Hazel;
 using NextMoreRoles.Modules.CustomRPC;
-using NextMoreRoles.Modules;
-using NextMoreRoles.Helpers;
 
 namespace NextMoreRoles.Patches.LobbyPatches
 {

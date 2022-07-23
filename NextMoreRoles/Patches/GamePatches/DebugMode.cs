@@ -14,7 +14,7 @@ namespace NextMoreRoles.Patches.GamePatches
         //BOT召喚！
         public static void BotSpawn()
         {
-            if (!Configs.DebugMode.Value || !AmongUsClient.Instance.AmHost) return;
+            if (!Configs.IsDebugMode.Value || !AmongUsClient.Instance.AmHost) return;
 
             if (Input.GetKeyDown(KeyCode.G))
             {
