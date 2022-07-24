@@ -1,1 +1,22 @@
-## 内容,英名,和名
+### 内容,英名,2,3,4,5,6,7,8,9,10,和名
+## Main
+# クライアント設定系
+#ModOptions,Mod Options,,,,,,,,,,MODの設定
+#VanillaOptions,Vanilla Options,,,,,,,,,,バニラの設定
+# 試合設定
+
+
+
+## Role
+# インポスター
+#TeamImpostor,IMPOSTOR,,,,,,,,,,インポスター
+
+# クルーメイト
+#TeamCrewmate,CREWMATE,,,,,,,,,,クルー
+
+# ニュートラル
+#TeamNeutral,NEUTRAL,,,,,,,,,,第三陣営
+
+# インポスター幽霊
+
+# クルーメイト幽霊

@@ -143,7 +143,7 @@ namespace NextMoreRoles.Patches.SystemPatches.ClientOptions
             var title = TitleTextTitle = Object.Instantiate(TitleText, PopUp.transform);
             title.GetComponent<RectTransform>().localPosition = Vector3.up * 2.3f;
             title.gameObject.SetActive(true);
-            title.text = ModTranslation.GetString("ModOptionsTitle");
+            title.text = ModTranslation.GetString("ModOptions");
             title.name = "TitleText";
         }
 

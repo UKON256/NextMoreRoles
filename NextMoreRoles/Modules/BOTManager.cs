@@ -43,7 +43,6 @@ namespace NextMoreRoles.Modules
             Bot.RpcSetNamePlate("nameplate_NoPlate");
             Bot.RpcSetSkin("skin_None");
             GameData.Instance.RpcSetTasks(Bot.PlayerId, new byte[0]);
-            Logger.Info("botスポーン!\nID:" + Bot.PlayerId + "\nBotName:" + Bot.name, "BotManager");
             AllBots.Add(Bot);
             MessageWriter writer = RPCHelper.StartRPC(CustomRPC.CustomRPC.SpawnBot);
             writer.Write(Bot.PlayerId);

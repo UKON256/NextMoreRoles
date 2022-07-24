@@ -6,6 +6,7 @@ using BepInEx;
 using BepInEx.IL2CPP;
 using HarmonyLib;
 using NextMoreRoles.Modules;
+using NextMoreRoles.Patches.TitlePatches;
 using LogType = BepInEx.Logging.LogLevel;
 
 namespace NextMoreRoles
@@ -37,6 +38,7 @@ namespace NextMoreRoles
             {
                 ModTranslation.Load();
                 Configs.Load();
+                ChangeName.Load();
 
                 var assembly = Assembly.GetExecutingAssembly();
                 StringDATE = new Dictionary<string, Dictionary<int, string>>();
@@ -64,16 +66,11 @@ namespace NextMoreRoles
 
 
 
-        //実行元:Patches.HarmonyPatches.PingTracker
-        private static string BaseCredentials = $@"<size=130%><color>Next</color><color>More</color><color=#ff0000>Roles</color></size> v{NextMoreRolesPlugin.Version}";
-        [HarmonyPatch(typeof(PingTracker), nameof(PingTracker.Update))]
-        private static void PingSetMODName(PingTracker __instance)
+        //実行元:Patches.HarmonyPatches.PingTracker.cs
+        private static string BaseCredentials = $@"<size=130%><color=#7dff7d>Next</color><color=#00ffff>More</color><color=#ff0000>Roles</color></size> v{NextMoreRolesPlugin.Version}";
+        public static void PingSetMODName(PingTracker __instance)
         {
-            __instance.text.alignment = TMPro.TextAlignmentOptions.TopRight;
-            if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started)
-            {
-                __instance.text.text = $"{BaseCredentials}\n{__instance.text.text}";
-            }
+            __instance.text.text = $"{BaseCredentials}";
         }
     }
 

@@ -1,4 +1,5 @@
 using HarmonyLib;
+using UnityEngine;
 
 namespace NextMoreRoles.Patches.HarmonyPatches
 {
@@ -7,7 +8,7 @@ namespace NextMoreRoles.Patches.HarmonyPatches
     {
         static void Postfix()
         {
-            //RoleClass.ClearAndReloadRoles();
+            GamePatches.GameStart.GameStart_ClearAndReloads.ClearAndReloads();
         }
     }
 
@@ -16,7 +17,9 @@ namespace NextMoreRoles.Patches.HarmonyPatches
     {
         public static void Prefix(GameStartManager __instance)
         {
-            if (Configs.IsDebugMode.Value) {NextMoreRoles.Patches.GamePatches.DebugModePatch.SetRoomMinPlayer(__instance);}
+            if (Configs.IsDebugMode.Value) NextMoreRoles.Patches.GamePatches.DebugModePatch.SetRoomMinPlayer(__instance);
+            if (Input.GetKeyDown(KeyCode.F7)) NextMoreRoles.Patches.LobbyPatches.QuickGameStart.QuickStartCancel();
+            if (Input.GetKeyDown(KeyCode.F8)) NextMoreRoles.Patches.LobbyPatches.QuickGameStart.QuickStart();
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Reflection;
 using HarmonyLib;
 using UnityEngine;
 
-namespace NextMoreRoles
+namespace NextMoreRoles.Helpers
 {
     public class CachedPlayer
     {

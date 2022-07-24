@@ -1,6 +1,7 @@
 using System;
 using HarmonyLib;
 using Hazel;
+using NextMoreRoles.Modules.GameEnds;
 
 namespace NextMoreRoles.Modules.CustomRPC
 {
@@ -15,6 +16,7 @@ namespace NextMoreRoles.Modules.CustomRPC
         ShareMODVersion,
         UncheckedSetVanilaRole,
         SpawnBot,
+        HaisonFlagUp,
     }
 
     public static class RPCProcedure
@@ -40,6 +42,11 @@ namespace NextMoreRoles.Modules.CustomRPC
             player.Data.Role.Role = (RoleTypes)roletype;
         }
 
+        public static void HaisonFlagUp()
+        {
+            GameEndsSetUp.IsHaison = true;
+        }
+
 
 
         //RPC管理！
@@ -53,6 +60,9 @@ namespace NextMoreRoles.Modules.CustomRPC
                     byte PacketId = CallId;
                     switch ((CustomRPC)PacketId)
                     {
+                        case CustomRPC.SetRoomDestroyTimer:
+                            SetRoomDestroyTimer(Reader.ReadByte(), Reader.ReadByte());
+                            break;
                         case CustomRPC.ShareMODVersion:
                             byte major = Reader.ReadByte();
                             byte minor = Reader.ReadByte();
@@ -75,6 +85,9 @@ namespace NextMoreRoles.Modules.CustomRPC
                             break;
                         case CustomRPC.UncheckedSetVanilaRole:
                             UncheckedSetVanilaRole(Reader.ReadByte(), Reader.ReadByte());
+                            break;
+                        case CustomRPC.HaisonFlagUp:
+                            HaisonFlagUp();
                             break;
                     }
                     Logger.Info("CustomRPCを送信しました。コールID:"+CallId, "CustomRPC");
