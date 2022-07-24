@@ -1,5 +1,4 @@
 using HarmonyLib;
-using NextMoreRoles.Modules.FlagManager;
 
 namespace NextMoreRoles.Patches.HarmonyPatches.Meeting
 {
@@ -8,6 +7,7 @@ namespace NextMoreRoles.Patches.HarmonyPatches.Meeting
     {
         static void Postfix()
         {
+            Logger.Info("=====緊急会議開始=====", "MeetingHud");
             NextMoreRoles.Modules.FlagManager.Meeting.IsMeeting = true;
         }
     }

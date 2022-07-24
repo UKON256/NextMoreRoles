@@ -1,7 +1,5 @@
 using HarmonyLib;
 using UnityEngine;
-using NextMoreRoles.Helpers;
-using NextMoreRoles.Modules.CustomRPC;
 
 namespace NextMoreRoles.Patches.HarmonyPatches
 {
@@ -23,21 +21,19 @@ namespace NextMoreRoles.Patches.HarmonyPatches
     [HarmonyPatch(typeof(ControllerManager), nameof(ControllerManager.Update))]
     class DebugManager
     {
-        public static void Postfix(ControllerManager __instance)
+        static void Postfix()
         {
             if (AmongUsClient.Instance.GameState == AmongUsClient.GameStates.Started)
             {
+                //廃村
                 if (AmongUsClient.Instance.AmHost && Input.GetKeyDown(KeyCode.H) && Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.RightShift))
                 {
-                    RPCHelper.StartRPC(CustomRPC.HaisonFlagUp).EndRPC();
-                    RPCProcedure.HaisonFlagUp();
-                    ShipStatus.RpcEndGame(GameOverReason.HumansByTask, false);
-                    MapUtilities.CachedShipStatus.enabled = false;
+                    NextMoreRoles.Patches.GamePatches.HaisonAndMeetingSkip.Haison();
                 }
                 //会議を強制終了
                 if (AmongUsClient.Instance.AmHost && Input.GetKeyDown(KeyCode.M) && Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.RightShift))
                 {
-                    MeetingHud.Instance.RpcClose();
+                    NextMoreRoles.Patches.GamePatches.HaisonAndMeetingSkip.MeetingSkip();
                 }
             }
         }

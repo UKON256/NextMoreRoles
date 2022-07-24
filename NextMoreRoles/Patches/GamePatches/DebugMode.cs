@@ -15,12 +15,12 @@ namespace NextMoreRoles.Patches.GamePatches
         //BOT召喚！ 実行元:HarmonyPatches.KeyBoardOrJoyStick.cs
         public static void BotSpawn()
         {
-            Logger.Info("botスポーン!", "BotManager");
+            Logger.Info("BOTがスポーンしました", "BotManager");
             NextMoreRoles.Modules.BotManager.Spawn();
         }
 
         //デバッグモードON
-        //実行元:HarmonyPatches.PingTracker.cs
+        //実行元:GamePatches.PingMessages.cs
         public static void PingSetDebugMode(PingTracker __instance)
         {
             __instance.text.text += "\n" + $"<color=#a4ebf0>デバッグモード:ON</color>";
