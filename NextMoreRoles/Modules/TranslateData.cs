@@ -103,7 +103,7 @@ namespace NextMoreRoles.Modules
             else
             {
                 Logger.Warn($"翻訳データが辞書中にありません。Key:{Key}、Lang:{LanguageId}", "TranslateData");
-                return $"<NotFound>{Key}\n言語:{LanguageId}、数値:{(int)LanguageId}";
+                return $"<NotFound>{Key}"/*\n言語:{LanguageId}、数値:{(int)LanguageId}"*/;
             }
         }
     }
