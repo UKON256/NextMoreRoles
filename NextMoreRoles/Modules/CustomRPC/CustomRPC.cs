@@ -1,7 +1,7 @@
 using System;
 using HarmonyLib;
 using Hazel;
-using NextMoreRoles.Modules.GameEnds;
+using NextMoreRoles.Patches.GamePatches.GameEnds;
 
 namespace NextMoreRoles.Modules.CustomRPC
 {

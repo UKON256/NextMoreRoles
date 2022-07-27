@@ -14,7 +14,7 @@ namespace NextMoreRoles.Patches.HarmonyPatches
     }
 
     [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.OnDestroy))]
-    public static class ShipStatus_OnDestroy
+    class ShipStatus_OnDestroy
     {
         [HarmonyPostfix, HarmonyPriority(Priority.Last)]
         public static void Postfix()

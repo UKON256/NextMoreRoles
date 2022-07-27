@@ -15,6 +15,8 @@ namespace NextMoreRoles
     [BepInProcess("Among Us.exe")]
     public class NextMoreRolesPlugin : BasePlugin
     {
+        public static string NextMoreRolesTitle = $@"<color=#7dff7d>Next</color><color=#00ffff>More</color><color=#ff0000>Roles</color>";
+
         public const string Id = "jp.nextmoreroles";
         public const string VersionString = "1.0.0";
 
@@ -67,7 +69,7 @@ namespace NextMoreRoles
 
 
         //実行元:Patches.GamePatches.PingMessages.cs
-        private static string BaseCredentials = $@"<size=130%><color=#7dff7d>Next</color><color=#00ffff>More</color><color=#ff0000>Roles</color></size> v{NextMoreRolesPlugin.Version}";
+        private static string BaseCredentials = $@"<size=130%>{NextMoreRolesTitle}</size> v{NextMoreRolesPlugin.Version}";
         public static void PingSetMODName(PingTracker __instance)
         {
             __instance.text.text = $"{BaseCredentials}";

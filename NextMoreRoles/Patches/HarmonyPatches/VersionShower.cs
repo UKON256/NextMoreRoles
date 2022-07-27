@@ -7,7 +7,7 @@ namespace NextMoreRoles.Patches.HarmonyPatches
     {
         static void Postfix(VersionShower __instance)
         {
-            NextMoreRoles.Patches.TitlePatches.WrapUpPatch.SetAmongUsLogo(__instance);
+            NextMoreRoles.Patches.TitlePatches.WrapUpPatch.ChangeAmongUsLogo(__instance);
         }
     }
 }

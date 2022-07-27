@@ -17,11 +17,11 @@ namespace NextMoreRoles.Patches.SystemPatches.ClientOptions
 
 
 
-        //設定ボタンを押したときに実行される奴
-        [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
-        class MainMenu_Start_Postfix
+
+        //実行元:HarmonyPatches.MainMenuManager.cs
+        public class MainMenu_Start_Postfix
         {
-            static void Postfix(MainMenuManager __instance)
+            public static void Postfix(MainMenuManager __instance)
             {
                 NextMoreRoles.Patches.SystemPatches.ClientOptions.ClientVanillaOptions.MainMenu_Start_Postfix(__instance);
                 NextMoreRoles.Patches.SystemPatches.ClientOptions.ClientModOptions.MeinMenu_Start_Postfix(__instance);

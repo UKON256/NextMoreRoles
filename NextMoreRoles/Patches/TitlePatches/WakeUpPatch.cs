@@ -5,7 +5,8 @@ namespace NextMoreRoles.Patches.TitlePatches
 {
     class WrapUpPatch
     {
-        public static void SetAmongUsLogo(VersionShower __instance)
+        //実行元:HarmonyPatches.VersionShower.cs
+        public static void ChangeAmongUsLogo(VersionShower __instance)
         {
             var AmongUsLogo = GameObject.Find("bannerLogo_AmongUs");
             if (AmongUsLogo == null) return;
@@ -23,13 +24,41 @@ namespace NextMoreRoles.Patches.TitlePatches
             Credentials.alignment = TMPro.TextAlignmentOptions.Center;
             Credentials.fontSize *= 0.9f;
             Credentials.transform.SetParent(AmongUsLogo.transform);
+            Credentials.transform.localPosition += new Vector3(0, -0.2f, 0);
 
             var Version = UnityEngine.Object.Instantiate(Credentials);
             Version.transform.position = new Vector3(0, -0.35f, 0);
-            Version.SetText(string.Format(ModTranslation.GetString("CreditsVersion"), NextMoreRolesPlugin.Version.ToString()));
+            Version.SetText($"{NextMoreRolesPlugin.NextMoreRolesTitle} v{NextMoreRolesPlugin.Version.ToString()}");
 
             Credentials.transform.SetParent(AmongUsLogo.transform);
             Version.transform.SetParent(AmongUsLogo.transform);
+        }
+    }
+
+
+
+    //実行元:HarmonyPatches.MainMenuManager.cs
+    public class SetNMRLogo
+    {
+        public static SpriteRenderer Renderer;
+
+        //実行元:HarmonyPatches.MainMenuManager.cs
+        public static void SetLogo()
+        {
+            //あもあすロゴ！
+            var AmongUsLogo = GameObject.Find("bannerLogo_AmongUs");
+            if (AmongUsLogo != null)
+            {
+                AmongUsLogo.transform.localScale *= 0.6f;
+                AmongUsLogo.transform.position += Vector3.up * 0.25f;
+            }
+
+            //NMRロゴ！
+            var NMRLogo = new GameObject("NMRLogo");
+            NMRLogo.transform.position = Vector3.up;
+            NMRLogo.transform.localScale *= 0.55f;
+            Renderer = NMRLogo.AddComponent<SpriteRenderer>();
+            Renderer.sprite = ResourcesManager.loadSpriteFromResources("NextMoreRoles.Resources.Titles.TitleLogo.png", 150f);
         }
     }
 }
