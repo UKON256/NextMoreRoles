@@ -14,9 +14,7 @@ namespace NextMoreRoles.Modules.CustomRPC
     {
         SetRoomDestroyTimer,
         ShareMODVersion,
-        UncheckedSetVanilaRole,
         SpawnBot,
-        HaisonFlagUp,
     }
 
     public static class RPCProcedure
@@ -34,22 +32,10 @@ namespace NextMoreRoles.Modules.CustomRPC
                 ver = new System.Version(major, minor, build, revision);
             Patches.LobbyPatches.ShareGameVersion.GameStartManagerUpdatePatch.VersionPlayers[clientId] = new Patches.LobbyPatches.PlayerVersion(ver, guid);
         }
-        public static void UncheckedSetVanilaRole(byte playerid, byte roletype)
-        {
-            var player = ModHelpers.playerById(playerid);
-            if (player == null) return;
-            DestroyableSingleton<RoleManager>.Instance.SetRole(player, (RoleTypes)roletype);
-            player.Data.Role.Role = (RoleTypes)roletype;
-        }
-
-        public static void HaisonFlagUp()
-        {
-            GameEndsSetUp.IsHaison = true;
-        }
 
 
 
-        //RPC管理！
+        //RPC管理
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
         class RPCHandlerPatch
         {
@@ -82,12 +68,6 @@ namespace NextMoreRoles.Modules.CustomRPC
                                 guid = new Guid(new byte[16]);
                             }
                             ShareMODVersion(major, minor, patch, revision == 0xFF ? -1 : revision, guid, versionOwnerId);
-                            break;
-                        case CustomRPC.UncheckedSetVanilaRole:
-                            UncheckedSetVanilaRole(Reader.ReadByte(), Reader.ReadByte());
-                            break;
-                        case CustomRPC.HaisonFlagUp:
-                            HaisonFlagUp();
                             break;
                     }
                     Logger.Info("CustomRPCを送信しました。コールID:"+CallId, "CustomRPC");

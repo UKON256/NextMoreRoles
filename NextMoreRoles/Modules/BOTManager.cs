@@ -7,7 +7,7 @@ using NextMoreRoles.Helpers;
 namespace NextMoreRoles.Modules
 {
     // Spawn dummys
-    class BotManager
+    public static class BotManager
     {
         public static List<PlayerControl> AllBots = new();
         //スポーン！
@@ -64,32 +64,6 @@ namespace NextMoreRoles.Modules
                 Bots.Despawn();
                 Logger.Info("BOTをすべてデスポーンしました", "BotManager");
             }
-        }
-
-
-
-        //BOTフラグ！
-        public static bool IsBot(PlayerControl Target)
-        {
-            try
-            {
-                if (Target == null || Target.Data.Disconnected) return false;
-                //BOTのどれかが目標のIDが一緒ならBOT
-                foreach (PlayerControl Bots in AllBots)
-                {
-                    if (Bots.PlayerId == Target.PlayerId) return true;
-                }
-                return false;
-            }
-            catch(SystemException Error)
-            {
-                Logger.Error($"Botフラグが正常に動作しませんでした。\nエラー:{Error}", "BotManager");
-                return false;
-            }
-        }
-        public static bool IsPlayer(PlayerControl Target)
-        {
-            return !IsBot(Target);
         }
     }
 }

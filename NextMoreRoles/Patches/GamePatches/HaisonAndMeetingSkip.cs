@@ -1,5 +1,5 @@
 using NextMoreRoles.Helpers;
-using NextMoreRoles.Modules.CustomRPC;
+using NextMoreRoles.Patches.GamePatches.GameEnds;
 
 namespace NextMoreRoles.Patches.GamePatches
 {
@@ -9,9 +9,8 @@ namespace NextMoreRoles.Patches.GamePatches
         //廃村
         public static void Haison()
         {
-            RPCHelper.StartRPC(CustomRPC.HaisonFlagUp).EndRPC();
-            RPCProcedure.HaisonFlagUp();
-            ShipStatus.RpcEndGame(GameOverReason.HumansByTask, false);
+            Logger.Info("=====廃村しました=====", "HaisonAndMeetingSkip");
+            ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.Haison, false);
             MapUtilities.CachedShipStatus.enabled = false;
         }
 
