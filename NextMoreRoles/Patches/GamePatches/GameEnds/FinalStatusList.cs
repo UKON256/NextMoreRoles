@@ -20,7 +20,9 @@ namespace NextMoreRoles.Patches.GamePatches.GameEnds
         internal class PlayerRoleInfo
         {
             public string PlayerName { get; set; }
+            public string NameSuffix { get; set; }
             //public List<RoleInfo> Roles {get;set;}
+            public string RoleString { get; set; }
             public int TasksCompleted  {get;set;}
             public int TasksTotal  {get;set;}
         }
