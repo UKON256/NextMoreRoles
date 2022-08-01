@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Hazel;
 using UnityEngine;
 using NextMoreRoles.Helpers;
 
@@ -11,7 +9,7 @@ namespace NextMoreRoles.Modules
     {
         public static List<PlayerControl> AllBots = new();
         //スポーン！
-        public static PlayerControl Spawn(string Name = "BOTだよぉ", byte BotPlayerId = 1)
+        public static PlayerControl Spawn(string Name = "BOT", byte BotPlayerId = 1)
         {
             byte id = 0;
             foreach (PlayerControl p in CachedPlayer.AllPlayers)
@@ -39,12 +37,8 @@ namespace NextMoreRoles.Modules
             Bot.RpcSetNamePlate("nameplate_NoPlate");
             Bot.RpcSetSkin("skin_None");
 
-            //RPC送信
             GameData.Instance.RpcSetTasks(Bot.PlayerId, new byte[0]);
             AllBots.Add(Bot);
-            MessageWriter writer = RPCHelper.StartRPC(CustomRPC.CustomRPC.SpawnBot);
-            writer.Write(Bot.PlayerId);
-            new LateTask(() => writer.EndRPC(), 0.5f);
             Logger.Info("BOTをスポーンしました", "BotManager");
             return Bot;
         }
@@ -63,6 +57,18 @@ namespace NextMoreRoles.Modules
                 GameData.Instance.RemovePlayer(Bots.PlayerId);
                 Bots.Despawn();
                 Logger.Info("BOTをすべてデスポーンしました", "BotManager");
+            }
+        }
+
+
+
+        // BOTになにかさせる
+        //投票 (実行元:HarmonyPatches.Meeting.MeetingHud.cs)
+        public static void VotingBot(MeetingHud __instance)
+        {
+            foreach(PlayerControl Bot in AllBots)
+            {
+                __instance.CastVote(Bot.PlayerId, Bot.PlayerId);
             }
         }
     }

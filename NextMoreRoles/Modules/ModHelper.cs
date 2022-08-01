@@ -9,11 +9,11 @@ namespace NextMoreRoles.Modules
     public static class ModHelpers
     {
         public static Dictionary<byte, SpriteRenderer> MyRendCache = new();
-        public static TextMeshPro nameText(this PlayerControl player)
+        public static TextMeshPro NameText(this PlayerControl player)
         {
             return player.cosmetics.nameText;
         }
-        public static TextMeshPro nameText(this PoolablePlayer player)
+        public static TextMeshPro NameText(this PoolablePlayer player)
         {
             return player.transform.FindChild("NameText_TMP").GetComponent<TextMeshPro>();
         }
@@ -33,7 +33,7 @@ namespace NextMoreRoles.Modules
         }
 
 
-        public static PlayerControl playerById(byte id)
+        public static PlayerControl PlayerById(byte id)
         {
             foreach (CachedPlayer player in CachedPlayer.AllPlayers)
             {
@@ -45,14 +45,14 @@ namespace NextMoreRoles.Modules
             return null;
         }
 
-        public static InnerNet.ClientData getClient(this PlayerControl player)
+        public static InnerNet.ClientData GetClient(this PlayerControl player)
         {
             var client = AmongUsClient.Instance.allClients.GetFastEnumerator().ToArray().Where(cd => cd.Character.PlayerId == player.PlayerId).FirstOrDefault();
             return client;
         }
-        public static int getClientId(this PlayerControl player)
+        public static int GetClientId(this PlayerControl player)
         {
-            var client = player.getClient();
+            var client = player.GetClient();
             if (client == null) return -1;
             return client.Id;
         }

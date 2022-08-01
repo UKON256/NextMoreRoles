@@ -12,12 +12,16 @@ namespace NextMoreRoles.Patches.GamePatches
             __instance.MinPlayers = 1;
         }
 
+
+
         //BOT召喚！ 実行元:HarmonyPatches.KeyBoardOrJoyStick.cs
         public static void BotSpawn()
         {
             Logger.Info("BOTがスポーンしました", "BotManager");
             NextMoreRoles.Modules.BotManager.Spawn();
         }
+
+
 
         //デバッグモードON
         //実行元:GamePatches.PingMessages.cs

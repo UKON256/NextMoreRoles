@@ -11,7 +11,7 @@ namespace NextMoreRoles.Patches.LobbyPatches
         public static bool IsVersionOK = false;
         public static bool IsChangeVersion = false;
         public static bool IsRPCSend = false;
-        public static float timer = 600;
+        public static float Timer = 600;
         public static float RPCTimer = 1f;
 
         //実行元:HarmonyPatches.AmongUsClient.cs
@@ -47,7 +47,7 @@ namespace NextMoreRoles.Patches.LobbyPatches
         {
             public static void Postfix()
             {
-                timer = 600f;
+                Timer = 600f;
                 RPCTimer = 1f;
                 /*GameStartManagerUpdatePatch.Proce = 0;
                 GameStartManagerUpdatePatch.LastBlockStart = false;

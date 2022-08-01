@@ -42,13 +42,21 @@ namespace NextMoreRoles.Modules.FlagManager
         //BOTフラグ！
         public static bool IsBot(this PlayerControl Target)
         {
-            if (Target == null || Target.Data.Disconnected) return false;
-            //BOTのどれかが目標のIDが一緒ならBOT
-            foreach (PlayerControl Bots in BotManager.AllBots)
+            try
             {
-                if (Bots.PlayerId == Target.PlayerId) return true;
+                if (Target == null || Target.Data.Disconnected) return false;
+                //BOTのどれかが目標のIDが一緒ならBOT
+                foreach (PlayerControl Bots in BotManager.AllBots)
+                {
+                    if (Bots.PlayerId == Target.PlayerId) return true;
+                }
+                return false;
             }
-            return false;
+            catch(SystemException Error)
+            {
+                Logger.Error($"BOTのフラグ判定に失敗しました。:{Error}", "GameFlag");
+                return false;
+            }
         }
         public static bool IsPlayer(this PlayerControl Target)
         {

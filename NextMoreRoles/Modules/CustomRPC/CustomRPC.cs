@@ -1,28 +1,30 @@
 using System;
 using HarmonyLib;
 using Hazel;
-using NextMoreRoles.Patches.GamePatches.GameEnds;
 
 namespace NextMoreRoles.Modules.CustomRPC
 {
     public enum RoleId
     {
-
+        aa,
     }
 
     public enum CustomRPC
     {
         SetRoomDestroyTimer,
         ShareMODVersion,
-        SpawnBot,
+        ShareBotData,
     }
 
     public static class RPCProcedure
     {
-        public static void SetRoomDestroyTimer(byte min, byte seconds)
+        //部屋が消し去られる時間をセットする
+        public static void SetRoomDestroyTimer(byte Min, byte Seconds)
         {
-            Patches.LobbyPatches.ShareGameVersion.timer = (min * 60) + seconds;
+            Patches.LobbyPatches.ShareGameVersion.Timer = (Min * 60) + Seconds;
         }
+
+        //MODのバージョン、MODが入っているか否かをシェアする
         public static void ShareMODVersion(int major, int minor, int build, int revision, Guid guid, int clientId)
         {
             System.Version ver;
@@ -33,23 +35,31 @@ namespace NextMoreRoles.Modules.CustomRPC
             Patches.LobbyPatches.ShareGameVersion.GameStartManagerUpdatePatch.VersionPlayers[clientId] = new Patches.LobbyPatches.PlayerVersion(ver, guid);
         }
 
-
+        //BOTのデータを他人にシェアする
+        public static void ShareBotData(byte BotId)
+        {
+            PlayerControl Bot = ModHelpers.PlayerById(BotId);
+            if (Bot == null) return;
+            if(BotManager.AllBots == null) BotManager.AllBots = new();
+            BotManager.AllBots.Add(Bot);
+        }
 
         //RPC管理
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
         class RPCHandlerPatch
         {
-            static void Postfix(PlayerControl __instance, [HarmonyArgument(0)] byte CallId, [HarmonyArgument(1)] MessageReader Reader)
+            static void Postfix([HarmonyArgument(0)] byte CallId, [HarmonyArgument(1)] MessageReader Reader)
             {
                 try
                 {
                     byte PacketId = CallId;
-                    switch ((CustomRPC)PacketId)
+                    switch (PacketId)
                     {
-                        case CustomRPC.SetRoomDestroyTimer:
+                        case (byte)CustomRPC.SetRoomDestroyTimer:
                             SetRoomDestroyTimer(Reader.ReadByte(), Reader.ReadByte());
                             break;
-                        case CustomRPC.ShareMODVersion:
+
+                        case (byte)CustomRPC.ShareMODVersion:
                             byte major = Reader.ReadByte();
                             byte minor = Reader.ReadByte();
                             byte patch = Reader.ReadByte();
@@ -68,6 +78,10 @@ namespace NextMoreRoles.Modules.CustomRPC
                                 guid = new Guid(new byte[16]);
                             }
                             ShareMODVersion(major, minor, patch, revision == 0xFF ? -1 : revision, guid, versionOwnerId);
+                            break;
+
+                        case (byte)CustomRPC.ShareBotData:
+                            ShareBotData(Reader.ReadByte());
                             break;
                     }
                     Logger.Info("CustomRPCを送信しました。コールID:"+CallId, "CustomRPC");

@@ -108,26 +108,25 @@ namespace NextMoreRoles.Patches.GamePatches.GameEnds
                 //全滅
                 else if (IsEveryoneDied)
                 {
+                    TempData.winners = new();
                     AdditionalTempData.WinCondition = WinCondition.EveryoneDied;
                 }
 
                 //廃村以外にいずれもあてはまらないときにエラーエンド
                 else
                 {
+                    TempData.winners = new();
                     AdditionalTempData.WinCondition = WinCondition.ErrorEnd;
                 }
 
                 //廃村
                 if (IsHaison)
                 {
-                    TempData.winners = new();
+                    TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
                     foreach (PlayerControl p in CachedPlayer.AllPlayers)
                     {
-                        if (p.IsPlayer())
-                        {
-                            Wpd = new(p.Data);
-                            TempData.winners.Add(Wpd);
-                        }
+                        Wpd = new(p.Data);
+                        TempData.winners.Add(Wpd);
                     }
                     AdditionalTempData.WinCondition = WinCondition.Haison;
                 }
