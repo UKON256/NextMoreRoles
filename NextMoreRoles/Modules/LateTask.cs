@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NextMoreRoles.Modules
 {
-    //TownOfHostよりパクら.....お借りしました、ありがとうございます！
+    //TownOfHostよりパクら.....いただきました、ありがとうございます！
     class LateTask
     {
         public string name;
