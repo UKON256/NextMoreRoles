@@ -1,30 +1,24 @@
+using System;
 using System.Collections.Generic;
+using UnityEngine;
+using NextMoreRoles.Modules;
 
 namespace NextMoreRoles.Patches.GamePatches.GameEnds
 {
-    static class AdditionalTempData
+    class FinalStatusPatch
     {
-        // なんか.....あれだよ！色々！
-        public static List<PlayerRoleInfo> PlayerRoles;
-        public static GameOverReason GameOverReason;
-        public static WinCondition WinCondition;
-        public static List<WinCondition> AdditionalWinConditions;
+        public static class FinalStatusDatas
+        {
+            public static List<Tuple<Vector3, bool>> LocalPlayerPositions = new();
+            public static List<DeadPlayer> DeadPlayers = new();
+            public static Dictionary<int, FinalPlayerStatus> FinalStatuses = new();
 
-        //実行元:GamePatches.GameEnds.GameEnds.cs
-        public static void Clear()
-        {
-            PlayerRoles = new();
-            AdditionalWinConditions = new();
-            WinCondition = WinCondition.ErrorEnd;
-        }
-        internal class PlayerRoleInfo
-        {
-            public string PlayerName { get; set; }
-            public string NameSuffix { get; set; }
-            //public List<RoleInfo> Roles {get;set;}
-            public string RoleString { get; set; }
-            public int TasksCompleted  {get;set;}
-            public int TasksTotal  {get;set;}
+            public static void Clear()
+            {
+                LocalPlayerPositions = new();
+                DeadPlayers = new();
+                FinalStatuses = new();
+            }
         }
     }
 

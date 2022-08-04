@@ -1,5 +1,4 @@
 using Hazel;
-using NextMoreRoles.Helpers;
 using NextMoreRoles.Modules;
 using NextMoreRoles.Modules.CustomRPC;
 
@@ -10,7 +9,8 @@ namespace NextMoreRoles.Patches.GamePatches.GameStart
         //実行元:HarmonyPatches.GameStartManager.cs、   終了時:Patches.GamePatches.GameEnds.GameEnds.cs
         public static void ClearAndReloads()
         {
-            NextMoreRoles.Modules.FlagManager.FlagReset.ClearAndReloads();
+            NextMoreRoles.Modules.ResetFlags.ClearAndReloads();
+            NextMoreRoles.Modules.ResetDatas.ClearAndReloads();
             NextMoreRoles.Patches.GamePatches.GameEnds.AdditionalTempData.Clear();
             //RoleClass.ClearAndReloads();
 
