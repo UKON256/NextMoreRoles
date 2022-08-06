@@ -12,11 +12,11 @@ namespace NextMoreRoles.Modules
     {
         public static Dictionary<string, Sprite> CachedSprites = new();
 
-        public static Sprite loadSpriteFromResources(string path, float pixelsPerUnit) {
+        public static Sprite LoadSpriteFromResources(string path, float pixelsPerUnit) {
             try
             {
                 if (CachedSprites.TryGetValue(path + pixelsPerUnit, out var sprite)) return sprite;
-                Texture2D texture = loadTextureFromResources(path);
+                Texture2D texture = LoadTextureFromResources(path);
                 sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), pixelsPerUnit);
                 sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
                 Logger.Info("パスからのスプライトの生成に成功しました。\nPath:"+path, "ResourcesManager");
@@ -27,7 +27,7 @@ namespace NextMoreRoles.Modules
             return null;
         }
 
-        public static unsafe Texture2D loadTextureFromResources(string path) {
+        public static unsafe Texture2D LoadTextureFromResources(string path) {
             try {
                 Texture2D texture = new(2, 2, TextureFormat.ARGB32, true);
                 Assembly assembly = Assembly.GetExecutingAssembly();
@@ -51,7 +51,7 @@ namespace NextMoreRoles.Modules
             return iCall_LoadImage.Invoke(tex.Pointer, il2cppArray.Pointer, markNonReadable);
         }
 
-        public static Texture2D loadTextureFromDisk(string path) {
+        public static Texture2D LoadTextureFromDisk(string path) {
             try {
                 if (File.Exists(path))     {
                     Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);

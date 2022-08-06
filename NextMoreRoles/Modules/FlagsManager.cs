@@ -119,4 +119,14 @@ namespace NextMoreRoles.Modules
             return IsFriend;
         }
     }
+
+
+
+    static class ModeFlags
+    {
+        public static bool IsMode(Mode mode, bool IsChache = true)
+        {
+            return false;
+        }
+    }
 }

@@ -41,6 +41,7 @@ namespace NextMoreRoles
                 ModTranslation.Load();
                 Configs.Load();
                 ChangeName.Load();
+                NextMoreRoles.Modules.CustomOptions.CustomOptions.Load();
 
                 var assembly = Assembly.GetExecutingAssembly();
                 StringDATE = new Dictionary<string, Dictionary<int, string>>();

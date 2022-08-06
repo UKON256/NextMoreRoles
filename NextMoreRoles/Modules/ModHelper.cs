@@ -3,6 +3,7 @@ using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
 using NextMoreRoles.Helpers;
+using NextMoreRoles.Modules.CustomOptions;
 
 namespace NextMoreRoles.Modules
 {

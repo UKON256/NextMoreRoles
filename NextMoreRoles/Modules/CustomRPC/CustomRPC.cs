@@ -4,11 +4,6 @@ using Hazel;
 
 namespace NextMoreRoles.Modules.CustomRPC
 {
-    public enum RoleId
-    {
-        aa,
-    }
-
     public enum CustomRPC
     {
         SetRoomDestroyTimer,
