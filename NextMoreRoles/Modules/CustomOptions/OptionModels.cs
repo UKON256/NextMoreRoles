@@ -3,6 +3,9 @@ using System.Linq;
 using BepInEx.Configuration;
 using System.Collections.Generic;
 using UnityEngine;
+using Hazel;
+using NextMoreRoles.Helpers;
+using NextMoreRoles.Roles;
 
 namespace NextMoreRoles.Modules.CustomOptions
 {
@@ -12,7 +15,8 @@ namespace NextMoreRoles.Modules.CustomOptions
         Crewmate,   //クルータブ
         Impostor,   //インポタブ
         Neutral,    //第三タブ
-        Modifier,   //属性タブ
+        Combination,//コンビネーション
+        Attribute,  //属性タブ
     }
     public class CustomOption
     {
@@ -34,7 +38,19 @@ namespace NextMoreRoles.Modules.CustomOptions
         public bool IsHidden;
         public CustomOptionType Type;
 
-        public bool Enabled => this.GetBool();
+        public virtual bool Enabled
+        {
+            get
+            {
+                return GetBool();
+            }
+        }
+
+        //Null用のやつ
+        public CustomOption()
+        {
+
+        }
 
         public CustomOption(int Id, CustomOptionType Type, string Name, System.Object[] Selections, System.Object DefaultValue, CustomOption Parent, bool IsHeader, bool IsHidden, string Format)
         {
@@ -88,6 +104,36 @@ namespace NextMoreRoles.Modules.CustomOptions
             return new CustomOption(Id, Type, Name, new string[] { "OptionOff", "OptionOn" }, DefaultValue ? "OptionOn" : "OptionOff", Parent, IsHeader, IsHidden, Format);
         }
 
+        public static void SwitchPreset(int newPreset)
+        {
+            CustomOption.Preset = newPreset;
+            foreach (CustomOption option in CustomOption.Options)
+            {
+                if (option.Id <= 0) continue;
+
+                option.Entry = NextMoreRolesPlugin.Instance.Config.Bind($"Preset{Preset}", option.Id.ToString(), option.DefaultSelection);
+                option.Selection = Mathf.Clamp(option.Entry.Value, 0, option.Selections.Length - 1);
+                if (option.OptionBehaviour is not null and StringOption stringOption)
+                {
+                    stringOption.oldValue = stringOption.Value = option.Selection;
+                    stringOption.ValueText.text = option.GetString();
+                }
+            }
+        }
+
+        public static void ShareOptionSelections()
+        {
+            if (CachedPlayer.AllPlayers.Count <= 1 || (AmongUsClient.Instance?.AmHost == false && PlayerControl.LocalPlayer == null)) return;
+
+            MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.CustomRPC.ShareOptions, SendOption.Reliable);
+            messageWriter.WritePacked((uint)CustomOption.Options.Count);
+            foreach (CustomOption option in CustomOption.Options)
+            {
+                messageWriter.WritePacked((uint)option.Id);
+                messageWriter.WritePacked((uint)Convert.ToUInt32(option.Selection));
+            }
+            messageWriter.EndMessage();
+        }
 
 
         public virtual int GetSelection()
@@ -114,6 +160,136 @@ namespace NextMoreRoles.Modules.CustomOptions
         {
             string sel = Selections[Selection].ToString();
             return Format != "" ? sel : ModTranslation.GetString(sel);
+        }
+
+        public virtual string GetName()
+        {
+            return ModTranslation.GetString(Name);
+        }
+
+        public virtual void UpdateSelection(int newSelection)
+        {
+            Selection = Mathf.Clamp((newSelection + Selections.Length) % Selections.Length, 0, Selections.Length - 1);
+            if (OptionBehaviour is not null and StringOption stringOption)
+            {
+                stringOption.oldValue = stringOption.Value = Selection;
+                stringOption.ValueText.text = GetString();
+
+                if (AmongUsClient.Instance?.AmHost == true && PlayerControl.LocalPlayer)
+                {
+                    if (Id == 0) SwitchPreset(Selection); // Switch presets
+                    else if (Entry != null) Entry.Value = Selection; // Save selection to config
+
+                    ShareOptionSelections();// Share all selections
+                }
+            }
+        }
+    }
+
+
+
+    public class CustomOptionBlank : CustomOption
+    {
+        public CustomOptionBlank(CustomOption Parent)
+        {
+            this.Parent = Parent;
+            this.Id = -1;
+            this.Name = "";
+            this.IsHeader = false;
+            this.IsHidden = true;
+            this.Children = new List<CustomOption>();
+            this.Selections = new string[] { "" };
+            Options.Add(this);
+        }
+
+        public override int GetSelection()
+        {
+            return 0;
+        }
+
+        public override bool GetBool()
+        {
+            return true;
+        }
+
+        public override float GetFloat()
+        {
+            return 0f;
+        }
+
+        public override string GetString()
+        {
+            return "";
+        }
+
+        public override void UpdateSelection(int newSelection)
+        {
+            return;
+        }
+    }
+
+    public class CustomRoleOption : CustomOption
+    {
+        public static List<CustomRoleOption> RoleOptions = new();
+
+        public CustomOption countOption = null;
+
+        public RoleId RoleId;
+
+        public int Rate
+        {
+            get
+            {
+                return GetSelection();
+            }
+        }
+
+        public bool IsRoleEnable
+        {
+            get
+            {
+                return GetSelection() != 0;
+            }
+        }
+
+        public IntroData Intro
+        {
+            get
+            {
+                return IntroData.GetIntroDate(RoleId);
+            }
+        }
+
+        public int Count
+        {
+            get
+            {
+                return countOption != null ? Mathf.RoundToInt(countOption.GetFloat()) : 1;
+            }
+        }
+
+        public (int, int) Data
+        {
+            get
+            {
+                return (Rate, Count);
+            }
+        }
+
+        public CustomRoleOption(int id, bool isSHROn, CustomOptionType type, string name, Color color, int max = 15) :
+            base(id, isSHROn, type, CustomOptions.Cs(color, name), CustomOptions.rates, "", null, true, false, "")
+        {
+            try
+            {
+                this.RoleId = IntroDate.IntroDatas.FirstOrDefault((_) =>
+                {
+                    return _.NameKey + "Name" == name;
+                }).RoleId;
+            }
+            catch { }
+            RoleOptions.Add(this);
+            if (max > 1)
+                countOption = CustomOption.Create(id + 10000, isSHROn, type, "roleNumAssigned", 1f, 1f, 15f, 1f, this, format: "unitPlayers");
         }
     }
 }

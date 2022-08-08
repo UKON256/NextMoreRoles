@@ -1,6 +1,7 @@
 using HarmonyLib;
 using System;
 using NextMoreRoles.Modules;
+using NextMoreRoles.Modules.CustomOptions;
 
 namespace NextMoreRoles.Patches.HarmonyPatches
 {
@@ -26,6 +27,17 @@ namespace NextMoreRoles.Patches.HarmonyPatches
             //死んでるプレイヤーを追加
             DeadPlayer DeadPlayer = new(__instance, DateTime.UtcNow, DeathReason.Exile, __instance);
             DeadPlayer.DeadPlayers.Add(DeadPlayer);
+        }
+    }
+
+
+
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.RpcSyncSettings))]
+    public class RpcSyncSettingsPatch
+    {
+        public static void Postfix()
+        {
+            CustomOption.ShareOptionSelections();
         }
     }
 }

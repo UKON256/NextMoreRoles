@@ -22,7 +22,7 @@ namespace NextMoreRoles
 
         public static System.Version Version = System.Version.Parse(VersionString);
         internal static BepInEx.Logging.ManualLogSource Logger;
-        public static int optionsPage = 1;
+        public static int OptionsPage = 1;
         public Harmony Harmony { get; } = new Harmony(Id);
         public static NextMoreRolesPlugin Instance;
         public static Dictionary<string, Dictionary<int, string>> StringDATE;

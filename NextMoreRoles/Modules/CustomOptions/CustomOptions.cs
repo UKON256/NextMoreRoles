@@ -12,6 +12,8 @@ namespace NextMoreRoles.Modules.CustomOptions
         public static string[] Presets = new string[] { "preset1", "preset2", "preset3", "preset4", "preset5"};
 
 
+        public static CustomOption SpecialOptions;
+        public static CustomOption HideSettings;
 
         //=====   メインタブ   =====//
         public static CustomOption PresetSelection;
@@ -45,8 +47,18 @@ namespace NextMoreRoles.Modules.CustomOptions
         //実行元:Main.cs
         public static void Load()
         {
+            SpecialOptions = new CustomOptionBlank(null);
+           // HideSettings = CustomOption.Create(2, CustomOptionType.General, cs(Color.white, "HideSettings"), false, SpecialOptions);
+
             //=====   メインタブ   =====//
             PresetSelection = CustomOption.Create(1000, CustomOptionType.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Preset"), Presets, null, true);
+            CrewmateRolesMin = CustomOption.Create(1001, CustomOptionType.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "CrewmateRolesMin"), 0f, 0f, 15f, 1f);
+            CrewmateRolesMax = CustomOption.Create(1002, CustomOptionType.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "CrewmateRolesMax"), 0f, 0f, 15f, 1f);
+            ImpostorRolesMin = CustomOption.Create(1003, CustomOptionType.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "ImpostorRolesMin"), 0f, 0f, 15f, 1f);
+            ImpostorRolesMax = CustomOption.Create(1004, CustomOptionType.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "ImpostorRolesMax"), 0f, 0f, 15f, 1f);
+            NeutralRolesMin = CustomOption.Create(1005, CustomOptionType.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "NeutralRolesMin"), 0f, 0f, 15f, 1f);
+            NeutralRolesMax = CustomOption.Create(1006, CustomOptionType.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "NeutralRolesMax"), 0f, 0f, 15f, 1f);
+
 
             //=====クルーメイトタブ=====//
 

@@ -1,11 +1,9 @@
+using System.Text;
 using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using BepInEx.Configuration;
 using HarmonyLib;
-using Hazel;
 using UnityEngine;
 using NextMoreRoles.Modules;
 using NextMoreRoles.Modules.CustomOptions;
@@ -18,7 +16,7 @@ namespace NextMoreRoles.Patches.GamePatches
         {
             if (GameObject.Find("NMRSettings") != null)
             {
-                GameObject.Find("NMRSettings").transform.FindChild("GameGroup").FindChild("Text").GetComponent<TMPro.TextMeshPro>().SetText(ModTranslation.GetString("NextMoreRolesSetting"));
+                GameObject.Find("NMRSettings").transform.FindChild("GameGroup").FindChild("Text").GetComponent<TMPro.TextMeshPro>().SetText(ModTranslation.GetString("NMRSetting"));
                 return;
             }
             if (GameObject.Find("CrewmateSettings") != null)
@@ -65,7 +63,7 @@ namespace NextMoreRoles.Patches.GamePatches
             var CrewmateSettings = UnityEngine.Object.Instantiate(GameSettings, GameSettings.transform.parent);
             var CrewmateMenu = CrewmateSettings.transform.FindChild("GameGroup").FindChild("SliderInner").GetComponent<GameOptionsMenu>();
             CrewmateSettings.name = "CrewmateSettings";
-            CrewmateSettings.transform.FindChild("GameGroup").FindChild("SliderInner").name = "GenericSetting";
+            CrewmateSettings.transform.FindChild("GameGroup").FindChild("SliderInner").name = "CrewmateSetting";
             var CrewmateTab = UnityEngine.Object.Instantiate(RoleTab, RoleTab.transform.parent);
             var CrewmateTabHighlight = CrewmateTab.transform.FindChild("Hat Button").FindChild("Tab Background").GetComponent<SpriteRenderer>();
             CrewmateTab.transform.FindChild("Hat Button").FindChild("Icon").GetComponent<SpriteRenderer>().sprite = ResourcesManager.LoadSpriteFromResources("NextMoreRoles.Resources.Lobby.TabIcons.Crewmate.png", 100f);
@@ -73,7 +71,7 @@ namespace NextMoreRoles.Patches.GamePatches
             var ImpostorSettings = UnityEngine.Object.Instantiate(GameSettings, GameSettings.transform.parent);
             var ImpostorMenu = ImpostorSettings.transform.FindChild("GameGroup").FindChild("SliderInner").GetComponent<GameOptionsMenu>();
             ImpostorSettings.name = "ImpostorSettings";
-            ImpostorSettings.transform.FindChild("GameGroup").FindChild("SliderInner").name = "GenericSetting";
+            ImpostorSettings.transform.FindChild("GameGroup").FindChild("SliderInner").name = "ImpostorSetting";
             var ImpostorTab = UnityEngine.Object.Instantiate(RoleTab, RoleTab.transform.parent);
             var ImpostorTabHighlight = ImpostorTab.transform.FindChild("Hat Button").FindChild("Tab Background").GetComponent<SpriteRenderer>();
             ImpostorTab.transform.FindChild("Hat Button").FindChild("Icon").GetComponent<SpriteRenderer>().sprite = ResourcesManager.LoadSpriteFromResources("NextMoreRoles.Resources.Lobby.TabIcons.Impostor.png", 100f);
@@ -81,7 +79,7 @@ namespace NextMoreRoles.Patches.GamePatches
             var NeutralSettings = UnityEngine.Object.Instantiate(GameSettings, GameSettings.transform.parent);
             var NeutralMenu = NeutralSettings.transform.FindChild("GameGroup").FindChild("SliderInner").GetComponent<GameOptionsMenu>();
             NeutralSettings.name = "NeutralSettings";
-            NeutralSettings.transform.FindChild("GameGroup").FindChild("SliderInner").name = "GenericSetting";
+            NeutralSettings.transform.FindChild("GameGroup").FindChild("SliderInner").name = "NeutralSetting";
             var NeutralTab = UnityEngine.Object.Instantiate(RoleTab, RoleTab.transform.parent);
             var NeutralTabHighlight = NeutralTab.transform.FindChild("Hat Button").FindChild("Tab Background").GetComponent<SpriteRenderer>();
             NeutralTab.transform.FindChild("Hat Button").FindChild("Icon").GetComponent<SpriteRenderer>().sprite = ResourcesManager.LoadSpriteFromResources("NextMoreRoles.Resources.Lobby.TabIcons.Neutral.png", 100f);
@@ -89,7 +87,7 @@ namespace NextMoreRoles.Patches.GamePatches
             var CombinationSettings = UnityEngine.Object.Instantiate(GameSettings, GameSettings.transform.parent);
             var CombinationMenu = CombinationSettings.transform.FindChild("GameGroup").FindChild("SliderInner").GetComponent<GameOptionsMenu>();
             CombinationSettings.name = "CombinationSettings";
-            CombinationSettings.transform.FindChild("GameGroup").FindChild("SliderInner").name = "GenericSetting";
+            CombinationSettings.transform.FindChild("GameGroup").FindChild("SliderInner").name = "CombinationSetting";
             var CombinationTab = UnityEngine.Object.Instantiate(RoleTab, RoleTab.transform.parent);
             var CombinationTabHighlight = CombinationTab.transform.FindChild("Hat Button").FindChild("Tab Background").GetComponent<SpriteRenderer>();
             CombinationTab.transform.FindChild("Hat Button").FindChild("Icon").GetComponent<SpriteRenderer>().sprite = ResourcesManager.LoadSpriteFromResources("NextMoreRoles.Resources.Lobby.TabIcons.Combination.png", 100f);
@@ -97,7 +95,7 @@ namespace NextMoreRoles.Patches.GamePatches
             var AttributeSettings = UnityEngine.Object.Instantiate(GameSettings, GameSettings.transform.parent);
             var AttributeMenu = AttributeSettings.transform.FindChild("GameGroup").FindChild("SliderInner").GetComponent<GameOptionsMenu>();
             AttributeSettings.name = "AttributeSettings";
-            AttributeSettings.transform.FindChild("GameGroup").FindChild("SliderInner").name = "GenericSetting";
+            AttributeSettings.transform.FindChild("GameGroup").FindChild("SliderInner").name = "AttributeSetting";
             var AttributeTab = UnityEngine.Object.Instantiate(RoleTab, RoleTab.transform.parent);
             var AttributeTabHighlight = AttributeTab.transform.FindChild("Hat Button").FindChild("Tab Background").GetComponent<SpriteRenderer>();
             AttributeTab.transform.FindChild("Hat Button").FindChild("Icon").GetComponent<SpriteRenderer>().sprite = ResourcesManager.LoadSpriteFromResources("NextMoreRoles.Resources.Lobby.TabIcons.Attribute.png", 100f);
@@ -118,6 +116,7 @@ namespace NextMoreRoles.Patches.GamePatches
             for (int i = 0; i < Tabs.Length; i++)
             {
                 var Button = Tabs[i].GetComponentInChildren<PassiveButton>();
+                int CopiedIndex = i;
                 Button.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
                 Button.OnClick.AddListener((System.Action)(() =>
                 {
@@ -137,45 +136,45 @@ namespace NextMoreRoles.Patches.GamePatches
                     CombinationTabHighlight.enabled = false;
                     AttributeTabHighlight.enabled = false;
 
-                    //=====現在実行中のところだけ実行する=====//
+                    //=====クリックしたタブの部分だけ表示する=====//
                     //バニラ
-                    if (i == 0)
+                    if (CopiedIndex == 0)
                     {
                         GameSettingMenu.RegularGameSettings.SetActive(true);
                         GameSettingMenu.GameSettingsHightlight.enabled = true;
                     }
                     //NMRのタブ
-                    else if (i == 1)
+                    else if (CopiedIndex == 1)
                     {
                         NMRSettings.gameObject.SetActive(true);
                         NMRTabHighlight.enabled = true;
                     }
                     //クルータブ
-                    else if (i == 2)
+                    else if (CopiedIndex == 2)
                     {
                         CrewmateSettings.gameObject.SetActive(true);
                         CrewmateTabHighlight.enabled = true;
                     }
                     //インポタブ
-                    else if (i == 3)
+                    else if (CopiedIndex == 3)
                     {
                         ImpostorSettings.gameObject.SetActive(true);
                         ImpostorTabHighlight.enabled = true;
                     }
                     //第三タブ
-                    else if (i == 4)
+                    else if (CopiedIndex == 4)
                     {
                         NeutralSettings.gameObject.SetActive(true);
                         NeutralTabHighlight.enabled = true;
                     }
                     //コンビ
-                    else if (i == 5)
+                    else if (CopiedIndex == 5)
                     {
                         CombinationSettings.gameObject.SetActive(true);
                         CombinationTabHighlight.enabled = true;
                     }
                     //属性(重複)
-                    else if (i == 5)
+                    else if (CopiedIndex == 6)
                     {
                         AttributeSettings.gameObject.SetActive(true);
                         AttributeTabHighlight.enabled = true;
@@ -259,6 +258,301 @@ namespace NextMoreRoles.Patches.GamePatches
 
             var LongTasksOption = __instance.Children.FirstOrDefault(x => x.name == "NumLongTasks").TryCast<NumberOption>();
             if (LongTasksOption != null) LongTasksOption.ValidRange = new FloatRange(0f, 15f);
+        }
+    }
+
+
+
+    class UpdateCustomOptions
+    {
+        private static float Timer = 1f;
+        public static void Postifx(GameOptionsMenu __instance)
+        {
+            //バニラの設定を開いていたらそれを返す
+            var GameSettingMenu = UnityEngine.Object.FindObjectsOfType<GameSettingMenu>().FirstOrDefault();
+            if (GameSettingMenu.RegularGameSettings.active || GameSettingMenu.RolesSettings.gameObject.active) return;
+
+            //タイマーが0.1未満ならやり直し
+            Timer += Time.deltaTime;
+            if (Timer < 0.1f) return;
+            Timer = 0f;
+
+            //アイテムの数(オプションの数)
+            float ItemsCount = __instance.Children.Length;
+
+            float Offset = 2.75f;
+            foreach (CustomOption Option in CustomOption.Options)
+            {
+                //設定したタイプのやつになるまで繰り返す
+                if (GameObject.Find("NMRTab") && Option.Type != CustomOptionType.General)
+                    continue;
+                if (GameObject.Find("CrewmateTab") && Option.Type != CustomOptionType.Crewmate)
+                    continue;
+                if (GameObject.Find("ImpostorTab") && Option.Type != CustomOptionType.Impostor)
+                    continue;
+                if (GameObject.Find("NeutralTab") && Option.Type != CustomOptionType.Neutral)
+                    continue;
+                if (GameObject.Find("CombinationTab") && Option.Type != CustomOptionType.Combination)
+                    continue;
+                if (GameObject.Find("AttributeTab") && Option.Type != CustomOptionType.Attribute)
+                    continue;
+
+                if (Option?.OptionBehaviour != null && Option.OptionBehaviour.gameObject != null)
+                {
+                    bool Enabled = true;
+                    var Parent = Option.Parent;
+
+                    if (AmongUsClient.Instance?.AmHost == false && CustomOptions.HideSettings.GetBool())
+                    {
+                        Enabled = false;
+                    }
+
+                    if (Option.IsHidden)
+                    {
+                        Enabled = false;
+                    }
+
+                    while (Parent != null && Enabled)
+                    {
+                        Enabled = Parent.Enabled;
+                        Parent = Parent.Parent;
+                    }
+
+                    Option.OptionBehaviour.gameObject.SetActive(Enabled);
+                    if (Enabled)
+                    {
+                        Offset -= Option.IsHeader ? 0.75f : 0.5f;
+                        Option.OptionBehaviour.transform.localPosition = new Vector3(Option.OptionBehaviour.transform.localPosition.x, Offset, Option.OptionBehaviour.transform.localPosition.z);
+
+                        if (Option.IsHeader)
+                        {
+                            ItemsCount += 0.5f;
+                        }
+                    }
+                    else
+                    {
+                        ItemsCount --;
+                    }
+                }
+            }
+            __instance.GetComponentInParent<Scroller>().ContentYBounds.max = -4.0f + ItemsCount * 0.5f;
+        }
+    }
+
+
+
+    //左側のリストにオプションを乗せる
+    [HarmonyPatch]
+    class GameOptionsDataPatch
+    {
+        private static IEnumerable<MethodBase> TargetMethods()
+        {
+            return typeof(GameOptionsData).GetMethods().Where(x => x.ReturnType == typeof(string) && x.GetParameters().Length == 1 && x.GetParameters()[0].ParameterType == typeof(int));
+        }
+        public static string OptionToString(CustomOption Option)
+        {
+            return Option == null ? "" : $"{Option.GetName()}: {Option.GetString()}";
+        }
+        public static string OptionsToString(CustomOption Option, bool SkipFirst = false)
+        {
+            if (Option == null) return "";
+
+            List<string> Options = new();
+            if (!Option.IsHidden && !SkipFirst) Options.Add(OptionToString(Option));
+            if (Option.Enabled)
+            {
+                foreach (CustomOption op in Option.Children)
+                {
+                    string str = OptionsToString(op);
+                    if (str != "") Options.Add(str);
+                }
+            }
+            return string.Join("\n", Options);
+        }
+
+        public static void Postifx(ref string __result)
+        {
+            bool HideSettings = AmongUsClient.Instance?.AmHost == false && CustomOptions.HideSettings.GetBool();
+            if (HideSettings) return;
+
+            List<string> Pages = new();
+            Pages.Add(__result);
+
+            StringBuilder Entry = new();
+            List<string> Entries = new();
+
+            Entries.Add(OptionToString(CustomOptions.PresetSelection));
+
+            var OptionName = CustomOptions.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), ModTranslation.GetString("CrewmateRoles"));
+            var Min = CustomOptions.CrewmateRolesMin.GetSelection();
+            var Max = CustomOptions.CrewmateRolesMax.GetSelection();
+            if (Min > Max) Min = Max;
+            var OptionValue = (Min == Max) ? $"{Max}" : $"{Min} - {Max}";
+            Entry.AppendLine($"{OptionName}: {OptionValue}");
+
+            OptionName = CustomOptions.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), ModTranslation.GetString("ImpostorRoles"));
+            Min = CustomOptions.ImpostorRolesMin.GetSelection();
+            Max = CustomOptions.ImpostorRolesMax.GetSelection();
+            if (Min > Max) Min = Max;
+            OptionValue = (Min == Max) ? $"{Max}" : $"{Min} - {Max}";
+            Entry.AppendLine($"{OptionName}: {OptionValue}");
+
+            OptionName = CustomOptions.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), ModTranslation.GetString("NeutralRoles"));
+            Min = CustomOptions.NeutralRolesMin.GetSelection();
+            Max = CustomOptions.NeutralRolesMax.GetSelection();
+            if (Min > Max) Min = Max;
+            OptionValue = (Min == Max) ? $"{Max}" : $"{Min} - {Max}";
+            Entry.AppendLine($"{OptionName}: {OptionValue}");
+
+            Entries.Add(Entry.ToString().Trim('\r', '\n'));
+
+            static void AddChildren(CustomOption Option, ref StringBuilder Entry, bool Indent = true)
+            {
+                if (!Option.Enabled) return;
+
+                foreach (var Child in Option.Children)
+                {
+                    if (!Child.IsHidden)
+                        Entry.AppendLine((Indent ? "    " : "") + OptionToString(Child));
+                    AddChildren(Child, ref Entry, Indent);
+                }
+            }
+
+            foreach (CustomOption Option in CustomOption.Options)
+            {
+                if ((Option == CustomOptions.PresetSelection) ||
+                    (Option == CustomOptions.CrewmateRolesMin) ||
+                    (Option == CustomOptions.CrewmateRolesMax) ||
+                    (Option == CustomOptions.ImpostorRolesMin) ||
+                    (Option == CustomOptions.ImpostorRolesMax) ||
+                    (Option == CustomOptions.NeutralRolesMin) ||
+                    (Option == CustomOptions.NeutralRolesMax))
+                {
+                    continue;
+                }
+
+                if (Option.Parent == null)
+                {
+                    if (!Option.Enabled) continue;
+
+                    Entry = new();
+                    if (!Option.IsHidden)
+                        Entry.AppendLine(OptionsToString(Option));
+
+                    AddChildren(Option, ref Entry, !Option.IsHidden);
+                    Entries.Add(Entry.ToString().Trim('\r', '\n'));
+                }
+            }
+
+            int MaxLines = 28;
+            int LineCount = 0;
+            string Page = "";
+            foreach (var e in Entries)
+            {
+                int Lines = e.Count(c => c == '\n') + 1;
+
+                if (LineCount + Lines > MaxLines)
+                {
+                    Pages.Add(Page);
+                    Page = "";
+                    LineCount = 0;
+                }
+
+                Page = Page + e + "\n\n";
+                LineCount += Lines + 1;
+            }
+
+            Page = Page.Trim('\r', '\n');
+            if (Page != "")
+            {
+                Pages.Add(Page);
+            }
+
+            int NumPages = Pages.Count;
+            int Counter = NextMoreRolesPlugin.OptionsPage %= NumPages;
+
+            __result = Pages[Counter].Trim('\r', '\n') + "\n\n" + ModTranslation.GetString("PressTabForMore") + $" ({Counter + 1}/{NumPages})";
+        }
+    }
+
+
+
+    public class HudManagerUpdate
+    {
+        public static float
+            MinX,/*-5.3F*/
+            OriginalY = 2.9F,
+            MinY = 2.9F;
+
+
+        public static Scroller Scroller;
+        private static Vector3 LastPosition;
+        private static float lastAspect;
+        private static bool setLastPosition = false;
+
+        public static void Prefix(HudManager __instance)
+        {
+            if (__instance.GameSettings?.transform == null) return;
+
+            // Sets the MinX position to the left edge of the screen + 0.1 units
+            Rect safeArea = Screen.safeArea;
+            float aspect = Mathf.Min(Camera.main.aspect, safeArea.width / safeArea.height);
+            float safeOrthographicSize = CameraSafeArea.GetSafeOrthographicSize(Camera.main);
+            MinX = 0.1f - safeOrthographicSize * aspect;
+
+            if (!setLastPosition || aspect != lastAspect)
+            {
+                LastPosition = new Vector3(MinX, MinY);
+                lastAspect = aspect;
+                setLastPosition = true;
+                if (Scroller != null) Scroller.ContentXBounds = new FloatRange(MinX, MinX);
+            }
+
+            CreateScroller(__instance);
+
+            Scroller.gameObject.SetActive(__instance.GameSettings.gameObject.activeSelf);
+
+            if (!Scroller.gameObject.active) return;
+
+            var rows = __instance.GameSettings.text.Count(c => c == '\n');
+            float LobbyTextRowHeight = 0.06F;
+            var maxY = Mathf.Max(MinY, rows * LobbyTextRowHeight + (rows - 38) * LobbyTextRowHeight);
+
+            Scroller.ContentYBounds = new FloatRange(MinY, maxY);
+
+            // Prevent scrolling when the player is interacting with a menu
+            if (PlayerControl.LocalPlayer?.CanMove != true)
+            {
+                __instance.GameSettings.transform.localPosition = LastPosition;
+
+                return;
+            }
+
+            if (__instance.GameSettings.transform.localPosition.x != MinX ||
+                __instance.GameSettings.transform.localPosition.y < MinY) return;
+
+            LastPosition = __instance.GameSettings.transform.localPosition;
+        }
+
+        private static void CreateScroller(HudManager __instance)
+        {
+            if (Scroller != null) return;
+
+            Scroller = new GameObject("SettingsScroller").AddComponent<Scroller>();
+            Scroller.transform.SetParent(__instance.GameSettings.transform.parent);
+            Scroller.gameObject.layer = 5;
+
+            Scroller.transform.localScale = Vector3.one;
+            Scroller.allowX = false;
+            Scroller.allowY = true;
+            Scroller.active = true;
+            Scroller.velocity = new Vector2(0, 0);
+            Scroller.ScrollbarYBounds = new FloatRange(0, 0);
+            Scroller.ContentXBounds = new FloatRange(MinX, MinX);
+            Scroller.enabled = true;
+
+            Scroller.Inner = __instance.GameSettings.transform;
+            __instance.GameSettings.transform.SetParent(Scroller.transform);
         }
     }
 }
