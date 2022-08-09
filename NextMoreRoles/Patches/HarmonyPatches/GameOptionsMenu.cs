@@ -10,7 +10,7 @@ namespace NextMoreRoles.Patches.HarmonyPatches
         {
             try
             {
-                GamePatches.CreateOptionTab.Open_Postfix(__instance);
+                LobbyPatches.CreateOptionTab.Open_Postfix(__instance);
             }
             catch(SystemException Error)
             {
@@ -24,7 +24,7 @@ namespace NextMoreRoles.Patches.HarmonyPatches
     {
         static void Postfix(GameOptionsMenu __instance)
         {
-            NextMoreRoles.Patches.GamePatches.UpdateCustomOptions.Postifx(__instance);
+            NextMoreRoles.Patches.LobbyPatches.UpdateCustomOptions.Postifx(__instance);
         }
     }
 

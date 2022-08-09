@@ -45,7 +45,7 @@ namespace NextMoreRoles.Roles
             }
         }
 
-        public static List<PlayerControl> livingPlayers
+        public static List<PlayerControl> LivingPlayers
         {
             get
             {
@@ -53,7 +53,7 @@ namespace NextMoreRoles.Roles
             }
         }
 
-        public static List<PlayerControl> deadPlayers
+        public static List<PlayerControl> DeadPlayers
         {
             get
             {
@@ -61,7 +61,7 @@ namespace NextMoreRoles.Roles
             }
         }
 
-        public static bool exists
+        public static bool Exists
         {
             get { return Players.Count > 0; }
         }
@@ -77,7 +77,7 @@ namespace NextMoreRoles.Roles
             return Players.Any(x => x.Player == Player);
         }
 
-        public static T setRole(PlayerControl Player)
+        public static T SetRole(PlayerControl Player)
         {
             if (!IsRole(Player))
             {
@@ -88,14 +88,14 @@ namespace NextMoreRoles.Roles
             return null;
         }
 
-        public static void eraseRole(PlayerControl Player)
+        public static void EraseRole(PlayerControl Player)
         {
             Players.DoIf(x => x.Player == Player, x => x.ResetRole());
             Players.RemoveAll(x => x.Player == Player && x.RoleId == RoleType);
             AllRoles.RemoveAll(x => x.Player == Player && x.RoleId == RoleType);
         }
 
-        public static void swapRole(PlayerControl p1, PlayerControl p2)
+        public static void SwapRole(PlayerControl p1, PlayerControl p2)
         {
             var index = Players.FindIndex(x => x.Player == p1);
             if (index >= 0)

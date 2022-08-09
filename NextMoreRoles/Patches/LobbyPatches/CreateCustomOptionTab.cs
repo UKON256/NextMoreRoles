@@ -8,7 +8,7 @@ using UnityEngine;
 using NextMoreRoles.Modules;
 using NextMoreRoles.Modules.CustomOptions;
 
-namespace NextMoreRoles.Patches.GamePatches
+namespace NextMoreRoles.Patches.LobbyPatches
 {
     class CreateOptionTab
     {
@@ -265,12 +265,25 @@ namespace NextMoreRoles.Patches.GamePatches
 
     class UpdateCustomOptions
     {
+        public static CustomOptionType GetCustomOptionType(string name)
+        {
+            return name switch
+            {
+                "GenericSetting" => CustomOptionType.General,
+                "CrewmateSetting" => CustomOptionType.Crewmate,
+                "ImpostorSetting" => CustomOptionType.Impostor,
+                "NeutralSetting" => CustomOptionType.Neutral,
+                "CombinationSetting" => CustomOptionType.Combination,
+                "AttributeSetting" => CustomOptionType.Attribute,
+                _ => CustomOptionType.Crewmate,
+            };
+        }
         private static float Timer = 1f;
         public static void Postifx(GameOptionsMenu __instance)
         {
             //バニラの設定を開いていたらそれを返す
             var GameSettingMenu = UnityEngine.Object.FindObjectsOfType<GameSettingMenu>().FirstOrDefault();
-            if (GameSettingMenu.RegularGameSettings.active || GameSettingMenu.RolesSettings.gameObject.active) return;
+            if (GameSettingMenu.RegularGameSettings.active) return;
 
             //タイマーが0.1未満ならやり直し
             Timer += Time.deltaTime;
@@ -281,8 +294,11 @@ namespace NextMoreRoles.Patches.GamePatches
             float ItemsCount = __instance.Children.Length;
 
             float Offset = 2.75f;
+            CustomOptionType Type = GetCustomOptionType(__instance.name);
             foreach (CustomOption Option in CustomOption.Options)
             {
+                if (Option.Type != Type) continue;
+
                 //設定したタイプのやつになるまで繰り返す
                 if (GameObject.Find("NMRTab") && Option.Type != CustomOptionType.General)
                     continue;

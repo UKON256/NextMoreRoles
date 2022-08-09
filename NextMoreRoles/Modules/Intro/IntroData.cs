@@ -1,35 +1,32 @@
-using System;
+using System.Linq;
 using UnityEngine;
 using System.Collections.Generic;
 using NextMoreRoles.Roles;
+using NextMoreRoles.Modules.CustomOptions;
 
 namespace NextMoreRoles.Modules.Intro
 {
     public class IntroData
     {
-        public static List<IntroData> IntroDatas = new();
-        public static Dictionary<RoleId, IntroData> IntroDatasCache = new();
         public static List<IntroData> GhostRoleDatas = new();
-        public string NameKey;
         public string Name;
-        public Int16 TitleNum;
-        public string TitleDesc;
+        public string TitleDescription;
         public Color Color;
         public RoleId RoleId;
-        public string Description;
+        public string GameDescription;
         public RoleType Team;
+        //public IntroSoundType IntroSound;
         public bool IsGhostRole;
-        IntroData(string NameKey, Color Color, Int16 TitleNum, RoleId RoleId, RoleType Team = RoleType.Crewmate, bool IsGhostRole = false)
+        IntroData(string Name, Color Color, RoleId RoleId, RoleType Team = RoleType.Crewmate, /*IntroSoundType IntroSound = IntroSoundType.Crewmate, */bool IsGhostRole = false)
         {
+            this.Name = ModTranslation.GetString(Name);
             this.Color = Color;
-            this.NameKey = NameKey;
-            this.Name = ModTranslation.GetString(NameKey);
             this.RoleId = RoleId;
-            this.TitleNum = TitleNum;
-            this.TitleDesc = GetTitle(NameKey, TitleNum);
-            this.Description = ModTranslation.GetString(NameKey + "Description");
             this.Team = Team;
+            //this.IntroSound = IntroSound;
             this.IsGhostRole = IsGhostRole;
+            this.TitleDescription = ModTranslation.GetString(Name + "TitleDesc");
+            this.GameDescription = ModTranslation.GetString(Name + "GameDesc");
 
             if (IsGhostRole)
             {
@@ -37,5 +34,40 @@ namespace NextMoreRoles.Modules.Intro
             }
             IntroDatas.Add(this);
         }
+
+        public static IntroData GetIntroData(RoleId RoleId, PlayerControl p = null)
+        {
+            try
+            {
+                return IntroDatasCache[RoleId];
+            }
+            catch
+            {
+                var Data = IntroDatas.FirstOrDefault((_) => _.RoleId == RoleId);
+                if (Data == null) Data = Crewmate;
+                IntroDatasCache[RoleId] = Data;
+                return Data;
+            }
+        }
+        public static CustomRoleOption GetOption(RoleId RoleId)
+        {
+            var Option = CustomRoleOption.RoleOptions.FirstOrDefault((_) => _.RoleId == RoleId);
+            return Option;
+        }
+
+
+
+        public static List<IntroData> IntroDatas = new();                       //イントロのリスト
+        public static Dictionary<RoleId, IntroData> IntroDatasCache = new();    //紐づけて受け取るとき軽くする
+        //=====クルーメイト陣営=====//
+        public static IntroData Crewmate = new("Crewmate", RoleBase.CrewmateBlue, RoleId.Crewmate, RoleType.Crewmate);
+        //public static IntroData Sheriff = new("Sheriff", Color.yellow, RoleId.Sheriff, RoleType.Crewmate);
+
+        //=====インポスター陣営=====//
+        public static IntroData Impostor = new("Impostor", RoleBase.ImpostorRed, RoleId.Crewmate, RoleType.Impostor);
+        public static IntroData Ninja = new("Ninja", RoleBase.ImpostorRed, RoleId.Ninja, RoleType.Impostor);
+        public static IntroData Madmate = new("Madmate", RoleBase.ImpostorRed, RoleId.Madmate, RoleType.Impostor);
+
+        //=====  ニュートラル  =====//
     }
 }

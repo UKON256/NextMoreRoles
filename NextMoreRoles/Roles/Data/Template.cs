@@ -1,12 +1,12 @@
 using HarmonyLib;
 using UnityEngine;
 
-namespace NextMoreRoles.Roles.Data.Crewmate
+namespace NextMoreRoles.Roles.Data
 {
     [HarmonyPatch]
-    public class Sheriff : RoleBase<Sheriff>
+    public class RoleName : RoleBase<RoleName>
     {
-        public static Color Color = new Color32(248, 205, 70, byte.MaxValue);
+        public static Color Color = new Color32(0, 0, 0, byte.MaxValue);
 
         public override void FixedUpdate() {}
         public override void OnKill(PlayerControl Target) {}
@@ -18,7 +18,7 @@ namespace NextMoreRoles.Roles.Data.Crewmate
 
 
 
-    class SheriffFunctions
+    class RoleNameFunctions
     {
 
     }

@@ -6,6 +6,7 @@ using UnityEngine;
 using Hazel;
 using NextMoreRoles.Helpers;
 using NextMoreRoles.Roles;
+using NextMoreRoles.Modules.Intro;
 
 namespace NextMoreRoles.Modules.CustomOptions
 {
@@ -256,7 +257,7 @@ namespace NextMoreRoles.Modules.CustomOptions
         {
             get
             {
-                return IntroData.GetIntroDate(RoleId);
+                return IntroData.GetIntroData(RoleId);
             }
         }
 
@@ -276,20 +277,20 @@ namespace NextMoreRoles.Modules.CustomOptions
             }
         }
 
-        public CustomRoleOption(int id, bool isSHROn, CustomOptionType type, string name, Color color, int max = 15) :
-            base(id, isSHROn, type, CustomOptions.Cs(color, name), CustomOptions.rates, "", null, true, false, "")
+        public CustomRoleOption(int Id, CustomOptionType Type, string Name, Color Color, int Max = 15) :
+            base(Id, Type, CustomOptions.cs(Color, Name), CustomOptions.Rates, "", null, true, false, "")
         {
             try
             {
-                this.RoleId = IntroDate.IntroDatas.FirstOrDefault((_) =>
+                this.RoleId = IntroData.IntroDatas.FirstOrDefault((_) =>
                 {
-                    return _.NameKey + "Name" == name;
+                    return _.Name == Name;
                 }).RoleId;
             }
             catch { }
             RoleOptions.Add(this);
-            if (max > 1)
-                countOption = CustomOption.Create(id + 10000, isSHROn, type, "roleNumAssigned", 1f, 1f, 15f, 1f, this, format: "unitPlayers");
+            if (Max > 1)
+                countOption = CustomOption.Create(Id + 10000, Type, "PlayerCount", 1f, 1f, 15f, 1f, this, Format: "unitPlayers");
         }
     }
 }
