@@ -24,7 +24,7 @@ namespace NextMoreRoles.Patches.TitlePatches
             Credentials.alignment = TMPro.TextAlignmentOptions.Center;
             Credentials.fontSize *= 0.9f;
             Credentials.transform.SetParent(AmongUsLogo.transform);
-            Credentials.transform.localPosition += new Vector3(0, -0.2f, 0);
+            Credentials.transform.localPosition += new Vector3(0, 0, 0);
 
             var Version = UnityEngine.Object.Instantiate(Credentials);
             Version.transform.position = new Vector3(0, -0.35f, 0);
@@ -58,7 +58,7 @@ namespace NextMoreRoles.Patches.TitlePatches
             NMRLogo.transform.position = Vector3.up;
             NMRLogo.transform.localScale *= 0.55f;
             Renderer = NMRLogo.AddComponent<SpriteRenderer>();
-            Renderer.sprite = ResourcesManager.loadSpriteFromResources("NextMoreRoles.Resources.Titles.TitleLogo.png", 150f);
+            Renderer.sprite = ResourcesManager.LoadSpriteFromResources("NextMoreRoles.Resources.Titles.TitleLogo.png", 150f);
         }
     }
 }

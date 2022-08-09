@@ -1,19 +1,29 @@
-using System.Runtime;
 using System;
 using System.Collections.Generic;
 using NextMoreRoles.Helpers;
 
-//試合系のフラグ管理
-namespace NextMoreRoles.Modules.FlagManager
+namespace NextMoreRoles.Modules
 {
-    class Meeting
+    class ResetFlags
+    {
+        public static void ClearAndReloads()
+        {
+            NextMoreRoles.Modules.MeetingFlags.IsMeeting = false;
+        }
+    }
+
+
+
+    class MeetingFlags
     {
         //現在ミーティング中かどうか。
         //変更元: TRUE:HarmonyPatches.MeetingHud.cs FALSE:GamePatches.GameStart.ClearAndReloads.cs
         public static bool IsMeeting;
     }
 
-    public static class Players
+
+
+    static class PlayerFlags
     {
         public static List<PlayerControl> AlivePlayers;
         public static List<PlayerControl> GetAllAlivePlayer()
@@ -61,6 +71,62 @@ namespace NextMoreRoles.Modules.FlagManager
         public static bool IsPlayer(this PlayerControl Target)
         {
             return !IsBot(Target);
+        }
+    }
+
+
+
+    static class RoleFlags
+    {
+        public static bool IsImpostor(this PlayerControl Target)
+        {
+            return Target != null && Target.Data.Role.IsImpostor;
+        }
+        public static bool IsCrew(this PlayerControl Target)
+        {
+            return !IsImpostor(Target) && !IsMad(Target) && !IsNeutral(Target) && !IsFriend(Target);
+        }
+        public static bool IsNeutral(this PlayerControl Target)
+        {
+            var IsNeutral = false;
+            /*switch (Target.)
+            {
+                case
+                    //第三か
+                    IsNeutral = true;
+                    break;
+            }*/
+            return IsNeutral;
+        }
+
+        public static bool IsMad(this PlayerControl Target)
+        {
+            var IsMad = false;
+            /*switch (Target.GetRole)
+            {
+                case
+            }*/
+            return IsMad;
+        }
+
+        public static bool IsFriend(this PlayerControl Target)
+        {
+            var IsFriend = false;
+            /*switch (Target.GetRole())
+            {
+                case
+            }*/
+            return IsFriend;
+        }
+    }
+
+
+
+    static class ModeFlags
+    {
+        public static bool IsMode(Mode mode, bool IsChache = true)
+        {
+            return false;
         }
     }
 }

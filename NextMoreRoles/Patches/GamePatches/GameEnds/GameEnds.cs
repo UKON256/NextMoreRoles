@@ -3,7 +3,6 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using HarmonyLib;
-using NextMoreRoles.Modules.FlagManager;
 using NextMoreRoles.Modules;
 using NextMoreRoles.Helpers;
 
@@ -14,6 +13,7 @@ namespace NextMoreRoles.Patches.GamePatches.GameEnds
     {
         public static TMPro.TMP_Text TextRenderer;
 
+        //XPとかをもらうときにOO勝利を非表示
         [HarmonyPatch(typeof(EndGameNavigation), nameof(EndGameNavigation.ShowProgression))]
         class ShowProgressionPatch
         {
@@ -60,7 +60,7 @@ namespace NextMoreRoles.Patches.GamePatches.GameEnds
                 //第三
 
                 //第三が勝ってようが関係ない奴たち
-                bool IsEveryoneDied = Players.GetAllAlivePlayer == null;
+                bool IsEveryoneDied = PlayerFlags.GetAllAlivePlayer == null;
                 bool IsHaison = GameOverReason == (GameOverReason)CustomGameOverReason.Haison;
 
 
@@ -78,7 +78,7 @@ namespace NextMoreRoles.Patches.GamePatches.GameEnds
                     AdditionalTempData.WinCondition = WinCondition.CrewmateWin;
                     foreach (PlayerControl p in CachedPlayer.AllPlayers)
                     {
-                        if (p.IsPlayer() && p.IsCrew())
+                        if (p.IsCrew())
                         {
                             Wpd = new(p.Data);
                             TempData.winners.Add(Wpd);
@@ -94,11 +94,8 @@ namespace NextMoreRoles.Patches.GamePatches.GameEnds
                     {
                         if (p.IsImpostor() || p.IsMad())
                         {
-                            if (p.IsPlayer())
-                            {
-                                Wpd = new(p.Data);
-                                TempData.winners.Add(Wpd);
-                            }
+                            Wpd = new(p.Data);
+                            TempData.winners.Add(Wpd);
                         }
                     }
                 }
@@ -245,11 +242,11 @@ namespace NextMoreRoles.Patches.GamePatches.GameEnds
 
                 //全滅
                 case WinCondition.EveryoneDied:
-                    __instance.WinText.text = ModTranslation.GetString("EveryoneDied");
                     EndText = ModTranslation.GetString("EveryoneDied");
                     EndBackColor = Palette.DisabledGrey;
                     EndTextColor = Palette.White;
                     IsVisibleWinText = false;
+                    __instance.WinText.text = EndText;
                     break;
 
                 //いずれも当てはまらないときにエラーエンド
@@ -265,14 +262,14 @@ namespace NextMoreRoles.Patches.GamePatches.GameEnds
             Logger.Info($"要因:{WinCondition}", "GameEnds");
 
             //陣営の方のテキストの色と内容
-            GameEndsSetUp.TextRenderer.text = IsVisibleWinText ? string.Format(EndText + " " + ModTranslation.GetString("Win")) : EndText;  //もしIsVisibleWinTextがtrueならOO勝利のテキストを
+            GameEndsSetUp.TextRenderer.text = IsVisibleWinText ? string.Format(EndText + ModTranslation.GetString("Win")) : EndText;  //もしIsVisibleWinTextがtrueならOO勝利のテキストを
             GameEndsSetUp.TextRenderer.color = EndTextColor == Color.black ? EndBackColor:EndTextColor;                                     //EndTextColorが他で代入されてなければ背景色に、代入されてればそれを
             //背景の変更
             __instance.BackgroundBar.material.SetColor("_Color", EndBackColor);
 
             //リセット
             AdditionalTempData.Clear();
-            Patches.GamePatches.GameStart.GameStart_ClearAndReloads.ClearAndReloads();
+            //Patches.GamePatches.GameStart.GameStart_ClearAndReloads.ClearAndReloads();
         }
     }
 }

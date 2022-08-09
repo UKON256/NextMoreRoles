@@ -1,16 +1,14 @@
 using System;
+using System.Linq;
 using HarmonyLib;
 using Hazel;
+using NextMoreRoles.Modules.CustomOptions;
 
 namespace NextMoreRoles.Modules.CustomRPC
 {
-    public enum RoleId
-    {
-        aa,
-    }
-
     public enum CustomRPC
     {
+        ShareOptions = 112,
         SetRoomDestroyTimer,
         ShareMODVersion,
         ShareBotData,
@@ -18,6 +16,25 @@ namespace NextMoreRoles.Modules.CustomRPC
 
     public static class RPCProcedure
     {
+        //部屋の設定をシェアする
+        public static void ShareOptions(int NumberOfOptions, MessageReader Reader)
+        {
+            try
+            {
+                for (int i = 0; i < NumberOfOptions; i++)
+                {
+                    uint optionId = Reader.ReadPackedUInt32();
+                    uint selection = Reader.ReadPackedUInt32();
+                    CustomOption Option = CustomOption.Options.FirstOrDefault(option => option.Id == (int)optionId);
+                    Option.UpdateSelection((int)selection);
+                }
+            }
+            catch (SystemException Error)
+            {
+                Logger.Error($"部屋設定のシェアに失敗しました。{Error}", "CustomRPC");
+            }
+        }
+
         //部屋が消し去られる時間をセットする
         public static void SetRoomDestroyTimer(byte Min, byte Seconds)
         {
@@ -55,6 +72,10 @@ namespace NextMoreRoles.Modules.CustomRPC
                     byte PacketId = CallId;
                     switch (PacketId)
                     {
+                        case (byte)CustomRPC.ShareOptions:
+                            ShareOptions((int)Reader.ReadPackedUInt32(), Reader);
+                            break;
+
                         case (byte)CustomRPC.SetRoomDestroyTimer:
                             SetRoomDestroyTimer(Reader.ReadByte(), Reader.ReadByte());
                             break;
