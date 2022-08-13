@@ -5,6 +5,16 @@ using NextMoreRoles.Modules;
 
 namespace NextMoreRoles.Patches.HarmonyPatches
 {
+    //始まった時
+    [HarmonyPatch(typeof(HudManager), nameof(HudManager.Start))]
+    class HudManager_Start
+    {
+        static void Postfix(HudManager __instance)
+        {
+            NextMoreRoles.Modules.Button.HudManager_Start.Postfix(__instance);
+        }
+    }
+
     //毎時実行されるよ！
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     class HudManager_Update

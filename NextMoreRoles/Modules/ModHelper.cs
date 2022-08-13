@@ -57,5 +57,25 @@ namespace NextMoreRoles.Modules
             if (client == null) return -1;
             return client.Id;
         }
+        public static bool IsCheckListPlayerControl(this List<PlayerControl> ListData, PlayerControl CheckPlayer)
+        {
+            foreach (PlayerControl Player in ListData)
+            {
+                if (Player.PlayerId == CheckPlayer.PlayerId)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public static List<T> ToList<T>(this UnhollowerBaseLib.Il2CppArrayBase<T> Array)
+        {
+            List<T> list = new();
+            foreach (var item in Array)
+            {
+                list.Add(item);
+            }
+            return list;
+        }
     }
 }

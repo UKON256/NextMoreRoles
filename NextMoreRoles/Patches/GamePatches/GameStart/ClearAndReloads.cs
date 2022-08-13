@@ -12,7 +12,7 @@ namespace NextMoreRoles.Patches.GamePatches.GameStart
             NextMoreRoles.Modules.ResetFlags.ClearAndReloads();
             NextMoreRoles.Modules.ResetDatas.ClearAndReloads();
             NextMoreRoles.Patches.GamePatches.GameEnds.AdditionalTempData.Clear();
-            //RoleClass.ClearAndReloads();
+            NextMoreRoles.Roles.RoleClass.ClearAndReload();
 
             //BotRPC送信
             if (AmongUsClient.Instance.AmHost)

@@ -1,6 +1,11 @@
 using System;
+using System.Reflection;
 using System.Collections.Generic;
 using NextMoreRoles.Helpers;
+using NextMoreRoles.Roles;
+using NextMoreRoles.Roles.Data.Crewmate;
+using NextMoreRoles.Roles.Data.Impostor;
+using NextMoreRoles.Roles.Data.Neutral;
 
 namespace NextMoreRoles.Modules
 {
@@ -117,6 +122,11 @@ namespace NextMoreRoles.Modules
                 case
             }*/
             return IsFriend;
+        }
+
+        public static bool IsRole(this PlayerControl Target, RoleId Role)
+        {
+            return false;
         }
     }
 
