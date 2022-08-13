@@ -275,7 +275,7 @@ namespace NextMoreRoles.Patches.LobbyPatches
                 "NeutralSetting" => CustomOptionType.Neutral,
                 "CombinationSetting" => CustomOptionType.Combination,
                 "AttributeSetting" => CustomOptionType.Attribute,
-                _ => CustomOptionType.Crewmate,
+                _ => CustomOptionType.General,
             };
         }
         private static float Timer = 1f;

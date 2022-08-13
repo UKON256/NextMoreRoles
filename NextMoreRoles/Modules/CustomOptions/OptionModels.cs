@@ -278,7 +278,7 @@ namespace NextMoreRoles.Modules.CustomOptions
         }
 
         public CustomRoleOption(int Id, CustomOptionType Type, string Name, Color Color, int Max = 15) :
-            base(Id, Type, CustomOptions.cs(Color, Name), CustomOptions.Rates, "", null, true, false, "")
+            base(Id, Type, CustomOptions.cs(Color, Name), CustomOptions.Rates, "", null, true, false, "NoTranslate")
         {
             try
             {
@@ -291,6 +291,30 @@ namespace NextMoreRoles.Modules.CustomOptions
             RoleOptions.Add(this);
             if (Max > 1)
                 countOption = CustomOption.Create(Id + 10000, Type, "PlayerCount", 1f, 1f, 15f, 1f, this, Format: "unitPlayers");
+        }
+    }
+
+    public class CustomTasksOption : CustomOption
+    {
+        public CustomOption CommonTasksOption = null;
+        public CustomOption LongTasksOption = null;
+        public CustomOption ShortTasksOption = null;
+
+        public int CommonTasks { get { return Mathf.RoundToInt(CommonTasksOption.GetSelection()); } }
+        public int LongTasks { get { return Mathf.RoundToInt(LongTasksOption.GetSelection()); } }
+        public int ShortTasks { get { return Mathf.RoundToInt(ShortTasksOption.GetSelection()); } }
+
+        /*public List<byte> GenerateTasks()
+        {
+            return NextMoreRoles.Modules..GenerateTasks(CommonTasks, LongTasks, ShortTasks);
+
+        }*/
+
+        public CustomTasksOption(int Id, CustomOptionType Type, int CommonDef, int LongDef, int ShortDef, CustomOption Parent = null)
+        {
+            CommonTasksOption = Create(Id + 20000, Type, "CommonTasks", CommonDef, 0f, 4f, 1f, Parent, Format:"NoTranslate");
+            LongTasksOption = Create(Id + 20001, Type, "LongTasks", LongDef, 0f, 15f, 1f, Parent, Format:"NoTranslate");
+            ShortTasksOption = Create(Id + 20002, Type, "ShortTasks", ShortDef, 0f, 23f, 1f, Parent, Format:"NoTranslate");
         }
     }
 }

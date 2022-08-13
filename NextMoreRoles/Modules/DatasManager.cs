@@ -1,5 +1,9 @@
 using System;
 using System.Collections.Generic;
+using NextMoreRoles.Roles;
+using NextMoreRoles.Roles.Data.Crewmate;
+using NextMoreRoles.Roles.Data.Impostor;
+using NextMoreRoles.Roles.Data.Neutral;
 
 namespace NextMoreRoles.Modules
 {
@@ -36,8 +40,27 @@ namespace NextMoreRoles.Modules
         }
     }
 
-    class PlayerDatas
+    static class PlayerDatas
     {
+        public static RoleId GetRole(this PlayerControl Player)
+        {
+            try
+            {
+                // クルー
+                if (Player.IsRole(RoleId.Sheriff)) return RoleId.Sheriff;
 
+                // インポ
+                if (Player.IsRole(RoleId.Madmate)) return RoleId.Madmate;
+                if (Player.IsRole(RoleId.Ninja)) return RoleId.Ninja;
+
+                // 第三
+                if (Player.IsRole(RoleId.Jackal)) return RoleId.Jackal;
+            }
+            catch(SystemException Error)
+            {
+                Logger.Error($"Roleの取得に失敗しました。エラー:{Error}", "DataManager");
+            }
+            return RoleId.Crewmate;
+        }
     }
 }
