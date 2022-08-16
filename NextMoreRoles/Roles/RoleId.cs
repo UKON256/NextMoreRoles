@@ -3,20 +3,20 @@ namespace NextMoreRoles.Roles
 {
     public enum RoleId
     {
-        //クルー
+        // クルー陣営
         Crewmate,
         Sheriff,
 
 
 
-        //インポスター
+        // インポスター陣営
         Impostor,
         Ninja,
         Madmate,
 
 
 
-        //ニュートラル
+        // 第三陣営
         Jackal,
         SideKick,
     }

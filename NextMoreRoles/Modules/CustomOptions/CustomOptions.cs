@@ -31,7 +31,7 @@ namespace NextMoreRoles.Modules.CustomOptions
         //=====クルーメイトタブ=====//
         public static CustomRoleOption MadmateOption;
         public static CustomOption MadmateCanVent;
-        public static CustomOption MadmateIsImpostorView;                       //インポの視界
+        public static CustomOption MadmateIsImpostorVision;                     //インポの視界
         public static CustomOption MadmateCanKnowImpostor;                      //インポを知れる
         public static CustomTasksOption MadmateTask;                            //マッドのインポを知るためのタスク
 
@@ -46,7 +46,7 @@ namespace NextMoreRoles.Modules.CustomOptions
         //=====インポスタータブ=====//
         public static CustomRoleOption SerialKillerOption;
         public static CustomOption SerialKillerKillCool;
-        public static CustomOption SerialKillerSelfDeathTime;                   //自殺時間
+        public static CustomOption SerialKillerSucideTime;                      //自殺時間
         public static CustomOption SerialKillerIsMeetingReset;                  //会議でリセット
 
 
@@ -55,8 +55,14 @@ namespace NextMoreRoles.Modules.CustomOptions
         public static CustomRoleOption JackalOption;
         public static CustomOption JackalKillCool;
         public static CustomOption JackalCanVent;
+        public static CustomOption JackalIsImpostorVision;                      //インポと同じ視界
         public static CustomOption JackalCanMakeSideKick;
-        public static CustomOption JackalIsImpostorView;                        //インポと同じ視界
+        public static CustomOption SideKickMakeCool;                            //指名クール
+
+        public static CustomOption SideKickCanPromotion;                        //昇格可能か
+        public static CustomOption SideKickCanVent;
+        public static CustomOption SideKickCanMakeSideKick;                     //サイドキックがサイドキックを作れる
+        public static CustomOption SideKickCanKill;
 
 
 
@@ -100,7 +106,7 @@ namespace NextMoreRoles.Modules.CustomOptions
             //=====クルーメイトタブ=====//
             MadmateOption = new(20100, CustomOptionType.Crewmate, "Madmate", RoleClass.Madmate.Color, (int)CrewmatePlayers[2]);
             MadmateCanVent = CustomOption.Create(20101, CustomOptionType.Crewmate, "CanVent", true, MadmateOption);
-            MadmateIsImpostorView = CustomOption.Create(20102, CustomOptionType.Crewmate, "IsImpostorView", true, MadmateOption);
+            MadmateIsImpostorVision = CustomOption.Create(20102, CustomOptionType.Crewmate, "IsImpostorVision", true, MadmateOption);
             MadmateCanKnowImpostor = CustomOption.Create(20103, CustomOptionType.Crewmate, "CanKnowImpostor", Rates4, MadmateOption, Format:"NoTranslate");
             MadmateTask = new(20104, CustomOptionType.Crewmate, 1, 1, 3, MadmateCanKnowImpostor);
 
@@ -115,7 +121,7 @@ namespace NextMoreRoles.Modules.CustomOptions
             //=====インポスタータブ=====//
             SerialKillerOption = new(30100, CustomOptionType.Impostor, "SerialKiller", RoleClass.SerialKiller.Color, (int)ImpostorPlayers[2]);
             SerialKillerKillCool = CustomOption.Create(30101, CustomOptionType.Impostor, "KillCool", Cooldown[0], Cooldown[1], Cooldown[2], Cooldown[3], SerialKillerOption, Format:"NoTranslate");
-            SerialKillerSelfDeathTime = CustomOption.Create(30102, CustomOptionType.Impostor, "SelfDeathTime", Cooldown[0], Cooldown[1], Cooldown[2], Cooldown[3], SerialKillerOption, Format:"NoTranslate");
+            SerialKillerSucideTime = CustomOption.Create(30102, CustomOptionType.Impostor, "SucideTime", Cooldown[0], Cooldown[1], Cooldown[2], Cooldown[3], SerialKillerOption, Format:"NoTranslate");
             SerialKillerIsMeetingReset = CustomOption.Create(30103, CustomOptionType.Impostor, "IsMeetingReset", true, SerialKillerOption);
 
 
@@ -124,8 +130,14 @@ namespace NextMoreRoles.Modules.CustomOptions
             JackalOption = new(40100, CustomOptionType.Neutral, "Jackal", RoleClass.Jackal.Color);
             JackalKillCool = CustomOption.Create(40101, CustomOptionType.Neutral, "KillCool", Cooldown[0], Cooldown[1], Cooldown[2], Cooldown[3], JackalOption, Format:"NoTranslate");
             JackalCanVent = CustomOption.Create(40102, CustomOptionType.Neutral, "CanVent", true, JackalOption);
+            JackalIsImpostorVision = CustomOption.Create(40104, CustomOptionType.Neutral, "IsImpostorVision", true, JackalOption);
             JackalCanMakeSideKick = CustomOption.Create(40103, CustomOptionType.Neutral, "CanMakeSideKick", true, JackalOption);
-            JackalIsImpostorView = CustomOption.Create(40104, CustomOptionType.Neutral, "IsImpostorView", true, JackalOption);
+            SideKickMakeCool = CustomOption.Create(40104, CustomOptionType.Neutral, "MakeCool", Cooldown[0], Cooldown[1], Cooldown[2], Cooldown[3], JackalCanMakeSideKick, true);
+
+            SideKickCanPromotion = CustomOption.Create(40105, CustomOptionType.Neutral, "CanPromotion", true, JackalCanMakeSideKick);
+            SideKickCanVent = CustomOption.Create(40107, CustomOptionType.Neutral, "CanVent", true, JackalCanMakeSideKick);
+            SideKickCanMakeSideKick = CustomOption.Create(40108, CustomOptionType.Neutral, "SideKickCanMakeSideKick", false, JackalCanMakeSideKick);
+            SideKickCanKill = CustomOption.Create(40109, CustomOptionType.Neutral, "CanKill", false, JackalCanMakeSideKick);
 
 
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using NextMoreRoles.Modules.CustomOptions;
@@ -9,16 +10,23 @@ namespace NextMoreRoles.Roles
         //役職のデータリセット  実行元:GamePatches.GameStart.ClearAndReloads.cs
         public static void ClearAndReload()
         {
-            //=====クルーメイト陣営=====//
-            Sheriff.ClearAndReload();
+            try
+            {
+                //=====クルーメイト陣営=====//
+                Sheriff.ClearAndReload();
 
-            //=====インポスター陣営=====//
-            Madmate.ClearAndReload();
-            SerialKiller.ClearAndReload();
+                //=====インポスター陣営=====//
+                Madmate.ClearAndReload();
+                SerialKiller.ClearAndReload();
 
-            //=====    第三陣営    =====//
-            Jackal.ClearAndReload();
-            SideKick.ClearAndReload();
+                //=====    第三陣営    =====//
+                Jackal.ClearAndReload();
+                SideKick.ClearAndReload();
+            }
+            catch(SystemException Error)
+            {
+                Logger.Error($"役職のリセットに失敗しました。エラー:{Error}", "RoleClass");
+            }
         }
 
 
@@ -55,13 +63,16 @@ namespace NextMoreRoles.Roles
 
             //設定(CustomOption)
             public static bool CanVent;
-            public static bool IsImpostorView;
+            public static bool IsImpostorVision;
             public static bool CanKnowImpostor;
             public static int MadmateNeedsTask;
 
             public static void ClearAndReload()
             {
                 MadmatePlayer = new();
+                CanVent = CustomOptions.MadmateCanVent.GetBool();
+                IsImpostorVision = CustomOptions.MadmateIsImpostorVision.GetBool();
+                CanKnowImpostor = CustomOptions.MadmateCanKnowImpostor.GetBool();
 
                 //タスク系
                 int CommonTask = CustomOptions.MadmateTask.CommonTasks;
@@ -85,10 +96,17 @@ namespace NextMoreRoles.Roles
             public static Color Color = Palette.ImpostorRed;
 
             //設定(CustomOption)
+            public static float KillCool;
+            public static float SucideTime;             //自殺時間
+            public static bool IsMeetingReset;          //会議でリセット
+
 
             public static void ClearAndReload()
             {
                 SerialKillerPlayer = new();
+                KillCool = CustomOptions.SerialKillerKillCool.GetFloat();
+                SucideTime = CustomOptions.SerialKillerSucideTime.GetFloat();
+                IsMeetingReset = CustomOptions.SerialKillerIsMeetingReset.GetBool();
             }
         }
 
@@ -101,10 +119,20 @@ namespace NextMoreRoles.Roles
             public static Color Color = new Color32(65, 105, 255, byte.MaxValue);
 
             //設定(CustomOption)
+            public static float KillCool;
+            public static bool CanVent;
+            public static bool IsImpostorVision;        //インポの視界
+            public static bool CanMakeSideKick;
+            public static float MakeCool;               //指名クール
 
             public static void ClearAndReload()
             {
                 JackalPlayer = new();
+                KillCool = CustomOptions.JackalKillCool.GetFloat();
+                CanVent = CustomOptions.JackalCanVent.GetBool();
+                IsImpostorVision = CustomOptions.JackalIsImpostorVision.GetBool();
+                CanMakeSideKick = CustomOptions.JackalCanMakeSideKick.GetBool();
+                MakeCool = CustomOptions.SideKickMakeCool.GetFloat();
             }
         }
 
@@ -114,10 +142,18 @@ namespace NextMoreRoles.Roles
             public static Color Color = new Color32(65, 105, 255, byte.MaxValue);
 
             //設定(CustomOption)
+            public static bool SideKickCanPromotion;
+            public static bool SideKickCanVent;
+            public static bool SideKickCanMakeSideKick; //昇格サイドキックがサイドキックを作れる
+            public static bool SideKickCanKill;
 
             public static void ClearAndReload()
             {
                 SideKickPlayer = new();
+                SideKickCanPromotion = CustomOptions.SideKickCanPromotion.GetBool();
+                SideKickCanVent = CustomOptions.SideKickCanVent.GetBool();
+                SideKickCanMakeSideKick = CustomOptions.SideKickCanMakeSideKick.GetBool();
+                SideKickCanKill = CustomOptions.SideKickCanKill.GetBool();
             }
         }
     }
