@@ -3,15 +3,20 @@ using System.Linq;
 using HarmonyLib;
 using Hazel;
 using NextMoreRoles.Modules.CustomOptions;
+using NextMoreRoles.Modules.DatasManager;
+using NextMoreRoles.Roles;
+using NextMoreRoles.Patches.GamePatches.GameStart;
 
 namespace NextMoreRoles.Modules.CustomRPC
 {
+    //RPCのリストぉ
     public enum CustomRPC
     {
-        ShareOptions = 112,
+        ShareOptions = 182,
         SetRoomDestroyTimer,
         ShareMODVersion,
         ShareBotData,
+        SetRole,
     }
 
     public static class RPCProcedure
@@ -61,7 +66,19 @@ namespace NextMoreRoles.Modules.CustomRPC
             BotManager.AllBots.Add(Bot);
         }
 
-        //RPC管理
+        //役職をセットする
+        public static void SetRole(byte PlayerId, byte SetRoleId)
+        {
+            var Player = ModHelpers.PlayerById(PlayerId);
+            var RoleId = (RoleId)SetRoleId;
+            //役職を消してから再設定する
+            if (RoleId.IsAttribute_Role()) Player.RemoveRole();
+            Player.SetRole(RoleId);
+        }
+
+
+
+        //RPC送信されたとき
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
         class RPCHandlerPatch
         {
@@ -101,9 +118,16 @@ namespace NextMoreRoles.Modules.CustomRPC
                             ShareMODVersion(major, minor, patch, revision == 0xFF ? -1 : revision, guid, versionOwnerId);
                             break;
 
+                        //BOTデータシェア
                         case (byte)CustomRPC.ShareBotData:
                             ShareBotData(Reader.ReadByte());
                             break;
+
+                        //役職セット
+                        case (byte)CustomRPC.SetRole:
+                            SetRole(Reader.ReadByte(), Reader.ReadByte());
+                            break;
+
                     }
                     Logger.Info("CustomRPCを送信しました。コールID:"+CallId, "CustomRPC");
                 }

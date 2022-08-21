@@ -6,7 +6,6 @@ using UnityEngine;
 using Hazel;
 using NextMoreRoles.Helpers;
 using NextMoreRoles.Roles;
-using NextMoreRoles.Modules.Intro;
 
 namespace NextMoreRoles.Modules.CustomOptions
 {

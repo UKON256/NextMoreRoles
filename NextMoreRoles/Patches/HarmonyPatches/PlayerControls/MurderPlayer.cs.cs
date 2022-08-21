@@ -1,6 +1,6 @@
 using HarmonyLib;
 using System;
-using NextMoreRoles.Modules;
+using NextMoreRoles.Modules.DatasManager;
 
 namespace NextMoreRoles.Patches.HarmonyPatches.PlayerControls
 {

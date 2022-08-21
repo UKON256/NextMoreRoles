@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using NextMoreRoles.Modules;
+using NextMoreRoles.Modules.DatasManager;
 
 namespace NextMoreRoles.Patches.GamePatches.GameEnds
 {

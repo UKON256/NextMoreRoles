@@ -11,7 +11,7 @@ namespace NextMoreRoles.Patches.HarmonyPatches
     {
         static void Postfix(HudManager __instance)
         {
-            NextMoreRoles.Modules.Button.HudManager_Start.Postfix(__instance);
+            //NextMoreRoles.Modules.Button.HudManager_Start.Postfix(__instance);
         }
     }
 

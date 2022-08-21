@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using UnityEngine;
 using System.Collections.Generic;
 using NextMoreRoles.Roles;
@@ -21,10 +22,10 @@ namespace NextMoreRoles.Modules.CustomOptions
         public static CustomOption PresetSelection;
         public static CustomOption CrewmateRolesMin;
         public static CustomOption CrewmateRolesMax;
-        public static CustomOption NeutralRolesMin;
-        public static CustomOption NeutralRolesMax;
         public static CustomOption ImpostorRolesMin;
         public static CustomOption ImpostorRolesMax;
+        public static CustomOption NeutralRolesMin;
+        public static CustomOption NeutralRolesMax;
 
 
 
@@ -63,6 +64,15 @@ namespace NextMoreRoles.Modules.CustomOptions
         public static CustomOption SideKickCanVent;
         public static CustomOption SideKickCanMakeSideKick;                     //サイドキックがサイドキックを作れる
         public static CustomOption SideKickCanKill;
+
+
+
+        //=====コンビネーションタブ=====//
+
+
+
+        //=====重複陣営タブ=====//
+        public static CustomRoleOption DebuggerOption;
 
 
 
@@ -130,22 +140,23 @@ namespace NextMoreRoles.Modules.CustomOptions
             JackalOption = new(40100, CustomOptionType.Neutral, "Jackal", RoleClass.Jackal.Color);
             JackalKillCool = CustomOption.Create(40101, CustomOptionType.Neutral, "KillCool", Cooldown[0], Cooldown[1], Cooldown[2], Cooldown[3], JackalOption, Format:"NoTranslate");
             JackalCanVent = CustomOption.Create(40102, CustomOptionType.Neutral, "CanVent", true, JackalOption);
-            JackalIsImpostorVision = CustomOption.Create(40104, CustomOptionType.Neutral, "IsImpostorVision", true, JackalOption);
-            JackalCanMakeSideKick = CustomOption.Create(40103, CustomOptionType.Neutral, "CanMakeSideKick", true, JackalOption);
-            SideKickMakeCool = CustomOption.Create(40104, CustomOptionType.Neutral, "MakeCool", Cooldown[0], Cooldown[1], Cooldown[2], Cooldown[3], JackalCanMakeSideKick, true);
+            JackalIsImpostorVision = CustomOption.Create(40103, CustomOptionType.Neutral, "IsImpostorVision", true, JackalOption);
+            JackalCanMakeSideKick = CustomOption.Create(40104, CustomOptionType.Neutral, "CanMakeSideKick", true, JackalOption);
+            SideKickMakeCool = CustomOption.Create(40105, CustomOptionType.Neutral, "MakeCool", Cooldown[0], Cooldown[1], Cooldown[2], Cooldown[3], JackalCanMakeSideKick, true);
 
-            SideKickCanPromotion = CustomOption.Create(40105, CustomOptionType.Neutral, "CanPromotion", true, JackalCanMakeSideKick);
+            SideKickCanPromotion = CustomOption.Create(40106, CustomOptionType.Neutral, "CanPromotion", true, JackalCanMakeSideKick);
             SideKickCanVent = CustomOption.Create(40107, CustomOptionType.Neutral, "CanVent", true, JackalCanMakeSideKick);
             SideKickCanMakeSideKick = CustomOption.Create(40108, CustomOptionType.Neutral, "SideKickCanMakeSideKick", false, JackalCanMakeSideKick);
             SideKickCanKill = CustomOption.Create(40109, CustomOptionType.Neutral, "CanKill", false, JackalCanMakeSideKick);
 
 
 
-            //=====   コンビタブ   =====//
+            //=====コンビネーションタブ=====//
 
 
 
-            //=====    属性タブ    =====//
+            //=====重複陣営タブ=====//
+            if(Configs.IsDebugMode.Value) DebuggerOption = new(60100, CustomOptionType.Attribute, "Debugger", RoleClass.Debugger.Color, 1);
         }
     }
 }

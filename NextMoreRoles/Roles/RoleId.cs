@@ -11,13 +11,18 @@ namespace NextMoreRoles.Roles
 
         // インポスター陣営
         Impostor,
-        Ninja,
         Madmate,
+        SerialKiller,
 
 
 
         // 第三陣営
         Jackal,
         SideKick,
+
+
+
+        //デバッグ用
+        Debugger,
     }
 }

@@ -9,10 +9,9 @@ namespace NextMoreRoles.Patches.GamePatches.GameStart
         //実行元:HarmonyPatches.GameStartManager.cs、   終了時:Patches.GamePatches.GameEnds.GameEnds.cs
         public static void ClearAndReloads()
         {
-            NextMoreRoles.Modules.ResetFlags.ClearAndReloads();
-            NextMoreRoles.Modules.ResetDatas.ClearAndReloads();
-            NextMoreRoles.Patches.GamePatches.GameEnds.AdditionalTempData.Clear();
-            NextMoreRoles.Roles.RoleClass.ClearAndReload();
+            NextMoreRoles.Modules.DatasManager.Reset.ClearAndReloads();                 //データリセット
+            NextMoreRoles.Patches.GamePatches.GameEnds.AdditionalTempData.Clear();      //試合終了ステータスをリセット
+            NextMoreRoles.Roles.RoleClass.ClearAndReloads();                            //役職の設定などを再取得
 
             //BotRPC送信
             if (AmongUsClient.Instance.AmHost)

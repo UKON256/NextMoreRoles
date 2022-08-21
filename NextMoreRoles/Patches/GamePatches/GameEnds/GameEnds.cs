@@ -5,6 +5,7 @@ using UnityEngine;
 using HarmonyLib;
 using NextMoreRoles.Modules;
 using NextMoreRoles.Helpers;
+using NextMoreRoles.Modules.DatasManager;
 
 namespace NextMoreRoles.Patches.GamePatches.GameEnds
 {
@@ -60,7 +61,7 @@ namespace NextMoreRoles.Patches.GamePatches.GameEnds
                 //第三
 
                 //第三が勝ってようが関係ない奴たち
-                bool IsEveryoneDied = PlayerFlags.GetAllAlivePlayer == null;
+                bool IsEveryoneDied = PlayerDatas.GetAllAlivePlayer() == null;
                 bool IsHaison = GameOverReason == (GameOverReason)CustomGameOverReason.Haison;
 
 

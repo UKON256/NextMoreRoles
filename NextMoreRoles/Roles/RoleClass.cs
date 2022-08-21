@@ -8,7 +8,7 @@ namespace NextMoreRoles.Roles
     public static class RoleClass
     {
         //役職のデータリセット  実行元:GamePatches.GameStart.ClearAndReloads.cs
-        public static void ClearAndReload()
+        public static void ClearAndReloads()
         {
             try
             {
@@ -22,6 +22,9 @@ namespace NextMoreRoles.Roles
                 //=====    第三陣営    =====//
                 Jackal.ClearAndReload();
                 SideKick.ClearAndReload();
+
+                //=====デバッグ用=====//
+                Debugger.ClearAndReload();
             }
             catch(SystemException Error)
             {
@@ -35,7 +38,7 @@ namespace NextMoreRoles.Roles
         public static class Sheriff
         {
             public static List<PlayerControl> SheriffPlayer;
-            public static Color Color = new Color32(248, 205, 70, byte.MaxValue);
+            public static Color32 Color = new Color32(248, 205, 70, byte.MaxValue);
 
             //設定(CustomOption)
             public static float FireCool;
@@ -59,7 +62,7 @@ namespace NextMoreRoles.Roles
         public static class Madmate
         {
             public static List<PlayerControl> MadmatePlayer;
-            public static Color Color = Palette.ImpostorRed;
+            public static Color32 Color = Palette.ImpostorRed;
 
             //設定(CustomOption)
             public static bool CanVent;
@@ -75,25 +78,28 @@ namespace NextMoreRoles.Roles
                 CanKnowImpostor = CustomOptions.MadmateCanKnowImpostor.GetBool();
 
                 //タスク系
-                int CommonTask = CustomOptions.MadmateTask.CommonTasks;
-                int LongTask = CustomOptions.MadmateTask.LongTasks;
-                int ShortTask = CustomOptions.MadmateTask.ShortTasks;
-                int TotalTasks = CommonTask + LongTask + ShortTask;
-                //マッドのトータルタスクが0なら他プレイヤーと同じタスク量に
-                if (TotalTasks == 0)
+                if (CanKnowImpostor)
                 {
-                    CommonTask = PlayerControl.GameOptions.NumCommonTasks;
-                    LongTask = PlayerControl.GameOptions.NumLongTasks;
-                    ShortTask = PlayerControl.GameOptions.NumShortTasks;
+                    int CommonTask = CustomOptions.MadmateTask.CommonTasks;
+                    int LongTask = CustomOptions.MadmateTask.LongTasks;
+                    int ShortTask = CustomOptions.MadmateTask.ShortTasks;
+                    int TotalTasks = CommonTask + LongTask + ShortTask;
+                    //マッドのトータルタスクが0なら他プレイヤーと同じタスク量に
+                    if (TotalTasks == 0)
+                    {
+                        CommonTask = PlayerControl.GameOptions.NumCommonTasks;
+                        LongTask = PlayerControl.GameOptions.NumLongTasks;
+                        ShortTask = PlayerControl.GameOptions.NumShortTasks;
+                    }
+                    MadmateNeedsTask = (int)(TotalTasks * (int.Parse(CustomOptions.MadmateTask.GetString().Replace("%", "")) / 100f));
                 }
-                MadmateNeedsTask = (int)(TotalTasks * (int.Parse(CustomOptions.MadmateTask.GetString().Replace("%", "")) / 100f));
             }
         }
 
         public static class SerialKiller
         {
             public static List<PlayerControl> SerialKillerPlayer;
-            public static Color Color = Palette.ImpostorRed;
+            public static Color32 Color = Palette.ImpostorRed;
 
             //設定(CustomOption)
             public static float KillCool;
@@ -116,7 +122,7 @@ namespace NextMoreRoles.Roles
         public static class Jackal
         {
             public static List<PlayerControl> JackalPlayer;
-            public static Color Color = new Color32(65, 105, 255, byte.MaxValue);
+            public static Color32 Color = new Color32(65, 105, 255, byte.MaxValue);
 
             //設定(CustomOption)
             public static float KillCool;
@@ -139,7 +145,7 @@ namespace NextMoreRoles.Roles
         public static class SideKick
         {
             public static List<PlayerControl> SideKickPlayer;
-            public static Color Color = new Color32(65, 105, 255, byte.MaxValue);
+            public static Color32 Color = new Color32(65, 105, 255, byte.MaxValue);
 
             //設定(CustomOption)
             public static bool SideKickCanPromotion;
@@ -154,6 +160,22 @@ namespace NextMoreRoles.Roles
                 SideKickCanVent = CustomOptions.SideKickCanVent.GetBool();
                 SideKickCanMakeSideKick = CustomOptions.SideKickCanMakeSideKick.GetBool();
                 SideKickCanKill = CustomOptions.SideKickCanKill.GetBool();
+            }
+        }
+
+
+
+        //=====デバッグ用=====//
+        public static class Debugger
+        {
+            public static List<PlayerControl> DebuggerPlayer;
+            public static Color32 Color = Palette.DisabledGrey;
+
+            //設定(CustomOption)
+
+            public static void ClearAndReload()
+            {
+                DebuggerPlayer = new();
             }
         }
     }
