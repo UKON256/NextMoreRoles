@@ -72,7 +72,7 @@ namespace NextMoreRoles.Modules.CustomRPC
             var Player = ModHelpers.PlayerById(PlayerId);
             var RoleId = (RoleId)SetRoleId;
             //役職を消してから再設定する
-            if (RoleId.IsAttribute_Role()) Player.RemoveRole();
+            ////if (RoleId.IsAttribute_Role()) Player.RemoveRole();
             Player.SetRole(RoleId);
         }
 

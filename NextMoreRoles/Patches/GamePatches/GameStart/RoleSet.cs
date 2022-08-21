@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using NextMoreRoles.Modules.CustomOptions;
 using NextMoreRoles.Roles;
@@ -14,36 +15,38 @@ namespace NextMoreRoles.Patches.GamePatches.GameStart
     {
         public static void SetUpRoles()
         {
-            if (!AmongUsClient.Instance.AmHost) return;
-
-            //役職数の最小・最大を代入
-            var CrewmateMin = CustomOptions.CrewmateRolesMin.GetInt();
-            var CrewmateMax = CustomOptions.CrewmateRolesMax.GetInt();
-            var ImpostorMin = CustomOptions.ImpostorRolesMin.GetInt();
-            var ImpostorMax = CustomOptions.ImpostorRolesMax.GetInt();
-            var NeutralMin = CustomOptions.NeutralRolesMin.GetInt();
-            var NeutralMax = CustomOptions.NeutralRolesMax.GetInt();
-
-            //役職数の最小が最大より多ければ最大を最小の値に代入する
-            if (CrewmateMin > CrewmateMax) CrewmateMin = CrewmateMax;
-            if (ImpostorMin > ImpostorMax) ImpostorMin = ImpostorMax;
-            if (NeutralMin > NeutralMax) NeutralMin = NeutralMax;
-
-            //全員にとりあえず役職を付与
-            foreach (PlayerControl p in CachedPlayer.AllPlayers)
+            if (AmongUsClient.Instance.AmHost)
             {
-                if (p.IsCrew())
-                {
-                    p.RPCSetRole(RoleId.Crewmate);
-                }
-                else
-                {
-                    p.RPCSetRole(RoleId.Impostor);
-                }
-            }
 
-            //重複をセット
-            SetAttributeRole();
+                //役職数の最小・最大を代入
+                var CrewmateMin = CustomOptions.CrewmateRolesMin.GetInt();
+                var CrewmateMax = CustomOptions.CrewmateRolesMax.GetInt();
+                var ImpostorMin = CustomOptions.ImpostorRolesMin.GetInt();
+                var ImpostorMax = CustomOptions.ImpostorRolesMax.GetInt();
+                var NeutralMin = CustomOptions.NeutralRolesMin.GetInt();
+                var NeutralMax = CustomOptions.NeutralRolesMax.GetInt();
+
+                //役職数の最小が最大より多ければ最大を最小の値に代入する
+                if (CrewmateMin > CrewmateMax) CrewmateMin = CrewmateMax;
+                if (ImpostorMin > ImpostorMax) ImpostorMin = ImpostorMax;
+                if (NeutralMin > NeutralMax) NeutralMin = NeutralMax;
+
+                //全員にとりあえず役職を付与
+                foreach (PlayerControl p in CachedPlayer.AllPlayers)
+                {
+                    if (p.IsCrew())
+                    {
+                        p.RPCSetRole(RoleId.Crewmate);
+                    }
+                    else
+                    {
+                        p.RPCSetRole(RoleId.Impostor);
+                    }
+                }
+
+                //重複をセット
+                SetAttributeRole();
+            }
 
             //キャッシュをリセットする
             Reset.ClearAndReloads();
@@ -54,7 +57,7 @@ namespace NextMoreRoles.Patches.GamePatches.GameStart
         {
             if (CustomOptions.DebuggerOption.GetBool())
             {
-                PlayerControl.LocalPlayer.SetRole(RoleId.Debugger);
+                PlayerControl.LocalPlayer.RPCSetRole(RoleId.Debugger);
             }
         }
 
@@ -62,24 +65,37 @@ namespace NextMoreRoles.Patches.GamePatches.GameStart
         //役職の役職説明(タスクリストの奴)を再設定
         public static void RefreshRoleDescription(PlayerControl Target)
         {
-            if (Target == null) return;
-            List <IntroData> Infos = new() { IntroData.GetIntroData(Target.GetRole(), Target) };
-
-            foreach (IntroData RoleInfo in Infos)
+            try
             {
+                if (Target == null) return;
+                List <IntroData> Infos = new() { IntroData.GetIntroData(Target.GetRole(), Target) };
+
+                foreach (IntroData RoleInfo in Infos)
+                {
+                    var Task = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
+                    Task.transform.SetParent(Target.transform, false);
+                    Task.Text = CustomOptions.cs(RoleInfo.Color, $"{RoleInfo.Name}: {RoleInfo.GameDescription}");
+
+                    //重複を持っていたら追記
+                    if (Target.HasAttribute())
+                    {
+                        var AttributeInfo = IntroData.GetIntroData(Target.GetAttribute(), Target);
+                        Task.Text += "\n" + CustomOptions.cs(AttributeInfo.Color, $"{AttributeInfo.Name}: {AttributeInfo.GameDescription}");;
+                    }
+
+                    //役職イントロを先頭にいれる
+                    Target.myTasks.Insert(0, Task);
+                }
+            }
+            catch(SystemException Error)
+            {
+                //ログを出す
+                Logger.Error($"タスクリストの再設定に失敗しました。エラー:{Error}", "RoleSet");
+
+                //タスクリストにエラー！の文字を出す
                 var Task = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
                 Task.transform.SetParent(Target.transform, false);
-                Task.Text = CustomOptions.cs(RoleInfo.Color, $"{ModTranslation.GetString(RoleInfo.Name)}: {RoleInfo.GameDescription}");
-
-                //重複を持っていたら追記
-                if (Target.HasAttribute())
-                {
-                    var AttributeInfo = IntroData.GetIntroData(Target.GetAttribute(), Target);
-                    Task.Text += "\n" + CustomOptions.cs(AttributeInfo.Color, $"{ModTranslation.GetString(AttributeInfo.Name)}: {AttributeInfo.GameDescription}");;
-                }
-
-                //役職イントロを先頭にいれる
-                Target.myTasks.Insert(0, Task);
+                Task.Text = $"エラー！ 内容:{Error}";
             }
         }
 

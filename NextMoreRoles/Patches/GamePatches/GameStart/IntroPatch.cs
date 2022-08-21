@@ -14,17 +14,21 @@ namespace NextMoreRoles.Patches.GamePatches.GameStart
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
     class IntroCutscene_OnDestroy
     {
-
+        static void Prefix()
+        {
+            //タスクリストの役職説明を更新する
+            RoleSet.RefreshRoleDescription(PlayerControl.LocalPlayer);
+        }
     }
 
     //役職名表示！
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.ShowRole))]
     class IntroCutscene_ShowRole
     {
-        public static bool Prefix(IntroCutscene __instance, ref Il2CppSystem.Collections.IEnumerator __result)
+        static bool Prefix(IntroCutscene __instance, ref Il2CppSystem.Collections.IEnumerator __result)
         {
             __result = SetupRole(__instance).WrapToIl2Cpp();
-            return false;   //役職表示をfalseに変更
+            return false;   //役職表示をさせない
         }
 
         private static IEnumerator SetupRole(IntroCutscene __instance)
@@ -49,11 +53,16 @@ namespace NextMoreRoles.Patches.GamePatches.GameStart
                 __instance.RoleBlurbText.text += "\n" + CustomOptions.cs(AttributeInfo.Color, AttributeInfo.IntroDescription);
 
                 //プレイヤーを再表示&位置変更
+                if (__instance.ourCrewmate == null)
+                {
+                    __instance.ourCrewmate = __instance.CreatePlayer(0, 1, PlayerControl.LocalPlayer.Data, false);
+                    __instance.ourCrewmate.gameObject.SetActive(false);
+                }
                 __instance.ourCrewmate.gameObject.SetActive(true);
                 __instance.ourCrewmate.transform.localPosition = new Vector3(0f, -1.05f, -18f);
                 __instance.ourCrewmate.transform.localScale = new Vector3(1f, 1f, 1f);
 
-                //再表示する(Prefixで消している)
+                //字幕を再表示する(Prefixで消している)
                 __instance.YouAreText.gameObject.SetActive(true);
                 __instance.RoleText.gameObject.SetActive(true);
                 __instance.RoleBlurbText.gameObject.SetActive(true);
@@ -65,10 +74,10 @@ namespace NextMoreRoles.Patches.GamePatches.GameStart
 
             //メッセージ表示2.5秒後にすべて非表示にする
             yield return new WaitForSeconds(2.5f);
-            __instance.YouAreText.gameObject.SetActive(false);
-            __instance.RoleText.gameObject.SetActive(false);
-            __instance.RoleBlurbText.gameObject.SetActive(false);
-            __instance.ourCrewmate.gameObject.SetActive(false);
+            __instance.ourCrewmate.gameObject.SetActive(false);     //プレイヤーを消す
+            __instance.YouAreText.gameObject.SetActive(false);      //あなたのロールは....を消す
+            __instance.RoleText.gameObject.SetActive(false);        //役職名を消す
+            __instance.RoleBlurbText.gameObject.SetActive(false);   //役職のイントロ説明文を消す
 
             yield break;
         }
@@ -183,10 +192,6 @@ namespace NextMoreRoles.Patches.GamePatches.GameStart
             {
                 SetupIntroTeam(__instance, ref yourTeam);
             }
-        }
-
-        private static void PlayIntroSound()
-        {
         }
     }
 }

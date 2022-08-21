@@ -72,7 +72,7 @@ namespace NextMoreRoles.Modules.CustomOptions
 
 
         //=====重複陣営タブ=====//
-        public static CustomRoleOption DebuggerOption;
+        public static CustomOption DebuggerOption;
 
 
 
@@ -102,14 +102,15 @@ namespace NextMoreRoles.Modules.CustomOptions
             SpecialOptions = new CustomOptionBlank(null);
            // HideSettings = CustomOption.Create(2, CustomOptionType.General, cs(Color.white, "HideSettings"), false, SpecialOptions);
 
+            Color32 PresetYellow = new Color(204f / 255f, 204f / 255f, 0, 1f);
             //=====   メインタブ   =====//
-            PresetSelection = CustomOption.Create(10000, CustomOptionType.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Preset"), Presets, null, true);
-            CrewmateRolesMin = CustomOption.Create(10010, CustomOptionType.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "CrewmateRolesMin"), 0f, 0f, 15f, 1f, Format:"NoTranslate");
-            CrewmateRolesMax = CustomOption.Create(10011, CustomOptionType.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "CrewmateRolesMax"), 0f, 0f, 15f, 1f, Format:"NoTranslate");
-            ImpostorRolesMin = CustomOption.Create(10012, CustomOptionType.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "ImpostorRolesMin"), 0f, 0f, 15f, 1f, Format:"NoTranslate");
-            ImpostorRolesMax = CustomOption.Create(10013, CustomOptionType.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "ImpostorRolesMax"), 0f, 0f, 15f, 1f, Format:"NoTranslate");
-            NeutralRolesMin = CustomOption.Create(10014, CustomOptionType.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "NeutralRolesMin"), 0f, 0f, 15f, 1f, Format:"NoTranslate");
-            NeutralRolesMax = CustomOption.Create(10015, CustomOptionType.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "NeutralRolesMax"), 0f, 0f, 15f, 1f, Format:"NoTranslate");
+            PresetSelection = CustomOption.Create(10000, CustomOptionType.General, cs(PresetYellow, "Preset"), Presets, null, true);
+            CrewmateRolesMin = CustomOption.Create(10010, CustomOptionType.General, cs(PresetYellow, "CrewmateRolesMin"), 0f, 0f, 15f, 1f, Format:"NoTranslate");
+            CrewmateRolesMax = CustomOption.Create(10011, CustomOptionType.General, cs(PresetYellow, "CrewmateRolesMax"), 0f, 0f, 15f, 1f, Format:"NoTranslate");
+            ImpostorRolesMin = CustomOption.Create(10012, CustomOptionType.General, cs(PresetYellow, "ImpostorRolesMin"), 0f, 0f, 15f, 1f, Format:"NoTranslate");
+            ImpostorRolesMax = CustomOption.Create(10013, CustomOptionType.General, cs(PresetYellow, "ImpostorRolesMax"), 0f, 0f, 15f, 1f, Format:"NoTranslate");
+            NeutralRolesMin = CustomOption.Create(10014, CustomOptionType.General, cs(PresetYellow, "NeutralRolesMin"), 0f, 0f, 15f, 1f, Format:"NoTranslate");
+            NeutralRolesMax = CustomOption.Create(10015, CustomOptionType.General, cs(PresetYellow, "NeutralRolesMax"), 0f, 0f, 15f, 1f, Format:"NoTranslate");
 
 
 
@@ -156,7 +157,7 @@ namespace NextMoreRoles.Modules.CustomOptions
 
 
             //=====重複陣営タブ=====//
-            if(Configs.IsDebugMode.Value) DebuggerOption = new(60100, CustomOptionType.Attribute, "Debugger", RoleClass.Debugger.Color, 1);
+            if(Configs.IsDebugMode.Value) DebuggerOption = CustomOption.Create(60100, CustomOptionType.Attribute, cs(RoleClass.Debugger.Color, "Debugger"), true, null, true);
         }
     }
 }
