@@ -49,8 +49,11 @@ namespace NextMoreRoles.Patches.GamePatches.GameStart
                 __instance.RoleBlurbText.color = IntroInfo.Color;               //イントロの簡易説明の色を変更
 
                 //重複を持っていたらメッセージ追記
-                var AttributeInfo = IntroData.GetIntroData(PlayerAttribute);
-                __instance.RoleBlurbText.text += "\n" + CustomOptions.cs(AttributeInfo.Color, AttributeInfo.IntroDescription);
+                if (PlayerControl.LocalPlayer.HasAttribute())
+                {
+                    var AttributeInfo = IntroData.GetIntroData(PlayerAttribute);
+                    __instance.RoleBlurbText.text += "\n" + CustomOptions.cs(AttributeInfo.Color, AttributeInfo.IntroDescription);
+                }
 
                 //プレイヤーを再表示&位置変更
                 if (__instance.ourCrewmate == null)

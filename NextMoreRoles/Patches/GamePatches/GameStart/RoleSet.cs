@@ -1,8 +1,8 @@
-using System;
+using System.Linq;
 using System.Collections.Generic;
+using NextMoreRoles.Modules;
 using NextMoreRoles.Modules.CustomOptions;
 using NextMoreRoles.Roles;
-using NextMoreRoles.Modules;
 using NextMoreRoles.Modules.CustomRPC;
 using NextMoreRoles.Modules.DatasManager;
 using NextMoreRoles.Helpers;
@@ -65,37 +65,51 @@ namespace NextMoreRoles.Patches.GamePatches.GameStart
         //役職の役職説明(タスクリストの奴)を再設定
         public static void RefreshRoleDescription(PlayerControl Target)
         {
-            try
+            if (Target == null) return;
+
+            List<IntroData> Infos = new() { IntroData.GetIntroData(Target.GetRole(), Target) };
+            List<PlayerTask> RemoveTaskTexts = new();
+
+            foreach (PlayerTask t in Target.myTasks)
             {
-                if (Target == null) return;
-                List <IntroData> Infos = new() { IntroData.GetIntroData(Target.GetRole(), Target) };
-
-                foreach (IntroData RoleInfo in Infos)
+                var TaskText = t.gameObject.GetComponent<ImportantTextTask>();
+                if (TaskText != null)
                 {
-                    var Task = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
-                    Task.transform.SetParent(Target.transform, false);
-                    Task.Text = CustomOptions.cs(RoleInfo.Color, $"{RoleInfo.Name}: {RoleInfo.GameDescription}");
-
-                    //重複を持っていたら追記
-                    if (Target.HasAttribute())
-                    {
-                        var AttributeInfo = IntroData.GetIntroData(Target.GetAttribute(), Target);
-                        Task.Text += "\n" + CustomOptions.cs(AttributeInfo.Color, $"{AttributeInfo.Name}: {AttributeInfo.GameDescription}");;
-                    }
-
-                    //役職イントロを先頭にいれる
-                    Target.myTasks.Insert(0, Task);
+                    //取得した役職以外のイントロが入ってたら削除する
+                    var Info = Infos.FirstOrDefault(x => TaskText.Text.StartsWith(ModTranslation.GetString(x.Name)));
+                    if (Info != null)
+                        Infos.Remove(Info);
+                    else
+                        RemoveTaskTexts.Add(t);
                 }
             }
-            catch(SystemException Error)
-            {
-                //ログを出す
-                Logger.Error($"タスクリストの再設定に失敗しました。エラー:{Error}", "RoleSet");
 
-                //タスクリストにエラー！の文字を出す
-                var Task = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
-                Task.transform.SetParent(Target.transform, false);
-                Task.Text = $"エラー！ 内容:{Error}";
+            //取得した役職以外のイントロを削除
+            foreach (PlayerTask t in RemoveTaskTexts)
+            {
+                t.OnRemove();
+                Target.myTasks.Remove(t);
+                UnityEngine.Object.Destroy(t.gameObject);
+            }
+
+            //重複などその他のイントロを追記
+            foreach (IntroData RoleInfo in Infos)
+            {
+                var TaskText = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
+                TaskText.transform.SetParent(Target.transform, false);
+
+                //取得した役職のイントロを先頭にいれる
+                TaskText.Text = CustomOptions.cs(RoleInfo.Color, $"{RoleInfo.Name}: {RoleInfo.GameDescription}");
+
+                //重複を持っていたら追記する
+                if (Target.HasAttribute())
+                {
+                    var AttributeInfo = IntroData.GetIntroData(Target.GetAttribute());
+                    TaskText.Text += "\n" + CustomOptions.cs(AttributeInfo.Color, $"{AttributeInfo.Name}: {AttributeInfo.GameDescription}");
+                }
+
+                //先頭にイントロを挿入する
+                Target.myTasks.Insert(0, TaskText);
             }
         }
 
