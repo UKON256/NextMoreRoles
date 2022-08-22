@@ -11,6 +11,7 @@ namespace NextMoreRoles.Patches.HarmonyPatches
     {
         static void Postfix(HudManager __instance)
         {
+            Logger.Info("========試合開始========", "HudManager");
             //NextMoreRoles.Modules.Button.HudManager_Start.Postfix(__instance);
         }
     }

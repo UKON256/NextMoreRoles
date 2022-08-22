@@ -259,7 +259,7 @@ namespace NextMoreRoles.Patches.GamePatches.GameEnds
             };
 
             //ログ
-            Logger.Info("=====試合終了=====", "GameEnds");
+            Logger.Info("========試合終了========", "GameEnds");
             Logger.Info($"要因:{WinCondition}", "GameEnds");
 
             //陣営の方のテキストの色と内容

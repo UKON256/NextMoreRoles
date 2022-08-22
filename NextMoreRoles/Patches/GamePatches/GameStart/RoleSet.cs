@@ -13,23 +13,30 @@ namespace NextMoreRoles.Patches.GamePatches.GameStart
 {
     static class RoleSet
     {
+        public static int CrewmateRolesMin;
+        public static int CrewmateRolesMax;
+        public static int ImpostorRolesMin;
+        public static int ImpostorRolesMax;
+        public static int NeutralRolesMin;
+        public static int NeutralRolesMax;
+
         public static void SetUpRoles()
         {
             if (AmongUsClient.Instance.AmHost)
             {
 
                 //役職数の最小・最大を代入
-                var CrewmateMin = CustomOptions.CrewmateRolesMin.GetInt();
-                var CrewmateMax = CustomOptions.CrewmateRolesMax.GetInt();
-                var ImpostorMin = CustomOptions.ImpostorRolesMin.GetInt();
-                var ImpostorMax = CustomOptions.ImpostorRolesMax.GetInt();
-                var NeutralMin = CustomOptions.NeutralRolesMin.GetInt();
-                var NeutralMax = CustomOptions.NeutralRolesMax.GetInt();
+                CrewmateRolesMin = CustomOptions.CrewmateRolesMin.GetInt();
+                CrewmateRolesMax = CustomOptions.CrewmateRolesMax.GetInt();
+                ImpostorRolesMin = CustomOptions.ImpostorRolesMin.GetInt();
+                ImpostorRolesMax = CustomOptions.ImpostorRolesMax.GetInt();
+                NeutralRolesMin = CustomOptions.NeutralRolesMin.GetInt();
+                NeutralRolesMax = CustomOptions.NeutralRolesMax.GetInt();
 
                 //役職数の最小が最大より多ければ最大を最小の値に代入する
-                if (CrewmateMin > CrewmateMax) CrewmateMin = CrewmateMax;
-                if (ImpostorMin > ImpostorMax) ImpostorMin = ImpostorMax;
-                if (NeutralMin > NeutralMax) NeutralMin = NeutralMax;
+                if (CrewmateRolesMin > CrewmateRolesMax) CrewmateRolesMin = CrewmateRolesMax;
+                if (ImpostorRolesMin > ImpostorRolesMax) ImpostorRolesMin = ImpostorRolesMax;
+                if (NeutralRolesMin > NeutralRolesMax) NeutralRolesMin = NeutralRolesMax;
 
                 //全員にとりあえず役職を付与
                 foreach (PlayerControl p in CachedPlayer.AllPlayers)
@@ -106,6 +113,12 @@ namespace NextMoreRoles.Patches.GamePatches.GameStart
                 {
                     var AttributeInfo = IntroData.GetIntroData(Target.GetAttribute());
                     TaskText.Text += "\n" + CustomOptions.cs(AttributeInfo.Color, $"{AttributeInfo.Name}: {AttributeInfo.GameDescription}");
+                }
+
+                //インポなら"フェイクタスク"を追加
+                if (Target.IsImpostor())
+                {
+                    TaskText.Text += "\n" + CustomOptions.cs(Palette.ImpostorRed, $"{ModTranslation.GetString("FakeTasks")}: ");
                 }
 
                 //先頭にイントロを挿入する
