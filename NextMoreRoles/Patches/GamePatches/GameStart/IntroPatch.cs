@@ -61,11 +61,11 @@ namespace NextMoreRoles.Patches.GamePatches.GameStart
                     __instance.ourCrewmate = __instance.CreatePlayer(0, 1, PlayerControl.LocalPlayer.Data, false);
                     __instance.ourCrewmate.gameObject.SetActive(false);
                 }
-                __instance.ourCrewmate.gameObject.SetActive(true);
                 __instance.ourCrewmate.transform.localPosition = new Vector3(0f, -1.05f, -18f);
                 __instance.ourCrewmate.transform.localScale = new Vector3(1f, 1f, 1f);
 
                 //字幕を再表示する(Prefixで消している)
+                __instance.ourCrewmate.gameObject.SetActive(true);
                 __instance.YouAreText.gameObject.SetActive(true);
                 __instance.RoleText.gameObject.SetActive(true);
                 __instance.RoleBlurbText.gameObject.SetActive(true);

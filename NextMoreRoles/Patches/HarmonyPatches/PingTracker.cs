@@ -7,7 +7,7 @@ namespace NextMoreRoles.Patches.HarmonyPatches
     {
         static void Postfix(PingTracker __instance)
         {
-            NextMoreRoles.Patches.GamePatches.PingMessages.SetPingMessages(__instance);
+            NextMoreRoles.Patches.GamePatches.GameStart.PingMessages.SetPingMessages(__instance);
         }
     }
 }

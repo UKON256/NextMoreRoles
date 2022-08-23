@@ -23,7 +23,7 @@ namespace NextMoreRoles.Patches.GamePatches
 
 
 
-        //デバッグモードON
+        //デバッグモードONをPingメッセージに追記
         //実行元:GamePatches.PingMessages.cs
         public static void PingSetDebugMode(PingTracker __instance)
         {

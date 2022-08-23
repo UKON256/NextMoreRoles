@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NextMoreRoles.Patches.GamePatches
+namespace NextMoreRoles.Patches.GamePatches.GameStart
 {
     class PingMessages
     {
@@ -13,6 +13,7 @@ namespace NextMoreRoles.Patches.GamePatches
 
             NextMoreRolesPlugin.PingSetMODName(__instance);
             NextMoreRoles.Patches.GamePatches.DebugModePatch.PingSetDebugMode(__instance);
+
             //ブランチがmaster以外の時にブランチ名を表示
             if (ThisAssembly.Git.Branch != "master" || Configs.IsDebugMode.Value)
             {
