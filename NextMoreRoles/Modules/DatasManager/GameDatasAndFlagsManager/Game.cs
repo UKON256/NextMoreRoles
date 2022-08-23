@@ -4,9 +4,9 @@ namespace NextMoreRoles.Modules.DatasManager
     class ResetGameDatas
     {
         //実行元:Modules.DatasManager.Reset.cs
-        public static void Load()
+        public static void ClearCache()
         {
-
+            NextMoreRoles.Modules.DatasManager.MeetingDatas.IsMeeting = false;
         }
 
         //実行元:Modules.DatasManager.Reset.cs

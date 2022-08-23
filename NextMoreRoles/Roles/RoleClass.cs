@@ -2,9 +2,18 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using NextMoreRoles.Modules.CustomOptions;
+using NextMoreRoles.Modules;
 
 namespace NextMoreRoles.Roles
 {
+    public enum RoleType
+    {
+        Crewmate,
+        Impostor,
+        Neutral,
+        Attribute,
+    }
+
     public static class RoleClass
     {
         //役職のデータリセット  実行元:GamePatches.GameStart.ClearAndReloads.cs
@@ -170,8 +179,16 @@ namespace NextMoreRoles.Roles
         {
             public static List<PlayerControl> DebuggerPlayer;
             public static Color32 Color = Palette.DisabledGrey;
+            public static Sprite ButtonSprite;
 
             //設定(CustomOption)
+
+            public static Sprite GetButtonSprite()
+            {
+                if (ButtonSprite) return ButtonSprite;
+                ButtonSprite = ResourcesManager.LoadSpriteFromResources("NextMoreRoles.Resources.Game.RoleButtons.6Debugger.png", 115f);
+                return ButtonSprite;
+            }
 
             public static void ClearAndReload()
             {

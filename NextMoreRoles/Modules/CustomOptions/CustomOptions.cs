@@ -100,55 +100,54 @@ namespace NextMoreRoles.Modules.CustomOptions
         public static void Load()
         {
             SpecialOptions = new CustomOptionBlank(null);
-           // HideSettings = CustomOption.Create(2, CustomOptionType.General, cs(Color.white, "HideSettings"), false, SpecialOptions);
 
             Color32 PresetYellow = new Color(204f / 255f, 204f / 255f, 0, 1f);
             //=====   メインタブ   =====//
-            PresetSelection = CustomOption.Create(10000, CustomOptionType.General, cs(PresetYellow, "Preset"), Presets, null, true);
-            CrewmateRolesMin = CustomOption.Create(10010, CustomOptionType.General, cs(PresetYellow, "CrewmateRolesMin"), 0f, 0f, 15f, 1f, Format:"NoTranslate");
-            CrewmateRolesMax = CustomOption.Create(10011, CustomOptionType.General, cs(PresetYellow, "CrewmateRolesMax"), 0f, 0f, 15f, 1f, Format:"NoTranslate");
-            ImpostorRolesMin = CustomOption.Create(10012, CustomOptionType.General, cs(PresetYellow, "ImpostorRolesMin"), 0f, 0f, 15f, 1f, Format:"NoTranslate");
-            ImpostorRolesMax = CustomOption.Create(10013, CustomOptionType.General, cs(PresetYellow, "ImpostorRolesMax"), 0f, 0f, 15f, 1f, Format:"NoTranslate");
-            NeutralRolesMin = CustomOption.Create(10014, CustomOptionType.General, cs(PresetYellow, "NeutralRolesMin"), 0f, 0f, 15f, 1f, Format:"NoTranslate");
-            NeutralRolesMax = CustomOption.Create(10015, CustomOptionType.General, cs(PresetYellow, "NeutralRolesMax"), 0f, 0f, 15f, 1f, Format:"NoTranslate");
+            PresetSelection = CustomOption.Create(1100, CustomOptionType.General, cs(PresetYellow, "Preset"), Presets, null, true);
+            CrewmateRolesMin = CustomOption.Create(1200, CustomOptionType.General, cs(PresetYellow, "CrewmateRolesMin"), 0f, 0f, 15f, 1f, Format:"NoTranslate");
+            CrewmateRolesMax = CustomOption.Create(1300, CustomOptionType.General, cs(PresetYellow, "CrewmateRolesMax"), 0f, 0f, 15f, 1f, Format:"NoTranslate");
+            ImpostorRolesMin = CustomOption.Create(1400, CustomOptionType.General, cs(PresetYellow, "ImpostorRolesMin"), 0f, 0f, 15f, 1f, Format:"NoTranslate");
+            ImpostorRolesMax = CustomOption.Create(1500, CustomOptionType.General, cs(PresetYellow, "ImpostorRolesMax"), 0f, 0f, 15f, 1f, Format:"NoTranslate");
+            NeutralRolesMin = CustomOption.Create(1600, CustomOptionType.General, cs(PresetYellow, "NeutralRolesMin"), 0f, 0f, 15f, 1f, Format:"NoTranslate");
+            NeutralRolesMax = CustomOption.Create(1700, CustomOptionType.General, cs(PresetYellow, "NeutralRolesMax"), 0f, 0f, 15f, 1f, Format:"NoTranslate");
 
 
 
             //=====クルーメイトタブ=====//
-            MadmateOption = new(20100, CustomOptionType.Crewmate, "Madmate", RoleClass.Madmate.Color, (int)CrewmatePlayers[2]);
-            MadmateCanVent = CustomOption.Create(20101, CustomOptionType.Crewmate, "CanVent", true, MadmateOption);
-            MadmateIsImpostorVision = CustomOption.Create(20102, CustomOptionType.Crewmate, "IsImpostorVision", true, MadmateOption);
-            MadmateCanKnowImpostor = CustomOption.Create(20103, CustomOptionType.Crewmate, "CanKnowImpostor", Rates4, MadmateOption, Format:"NoTranslate");
-            MadmateTask = new(20104, CustomOptionType.Crewmate, 1, 1, 3, MadmateCanKnowImpostor);
+            MadmateOption = new(2001010, CustomOptionType.Crewmate, "Madmate", RoleClass.Madmate.Color, (int)CrewmatePlayers[2]);
+            MadmateCanVent = CustomOption.Create(2001020, CustomOptionType.Crewmate, "CanVent", true, MadmateOption);
+            MadmateIsImpostorVision = CustomOption.Create(2001030, CustomOptionType.Crewmate, "IsImpostorVision", true, MadmateOption);
+            MadmateCanKnowImpostor = CustomOption.Create(2001040, CustomOptionType.Crewmate, "CanKnowImpostor", Rates4, MadmateOption, Format:"NoTranslate");
+            MadmateTask = new(2001040, CustomOptionType.Crewmate, 1, 1, 3, MadmateCanKnowImpostor);
 
-            SheriffOption = new(20200, CustomOptionType.Crewmate, "Sheriff", RoleClass.Sheriff.Color);
-            SheriffFireCool = CustomOption.Create(20201, CustomOptionType.Crewmate, "FireCool", Cooldown[0], Cooldown[1], Cooldown[2], Cooldown[3], SheriffOption, Format:"NoTranslate");
-            SheriffCanFireLimit = CustomOption.Create(20202, CustomOptionType.Crewmate, "AbilityLimit", AbilityLimit[0], AbilityLimit[1], AbilityLimit[2], AbilityLimit[3], SheriffOption, Format:"NoTranslate");
-            SheriffCanFireMadmate = CustomOption.Create(20203, CustomOptionType.Crewmate, "CanFireMadmate", true, SheriffOption);
-            SheriffCanFireNeutral = CustomOption.Create(20204, CustomOptionType.Crewmate, "CanFireNeutral", true, SheriffOption);
+            SheriffOption = new(2002010, CustomOptionType.Crewmate, "Sheriff", RoleClass.Sheriff.Color);
+            SheriffFireCool = CustomOption.Create(2002020, CustomOptionType.Crewmate, "FireCool", Cooldown[0], Cooldown[1], Cooldown[2], Cooldown[3], SheriffOption, Format:"NoTranslate");
+            SheriffCanFireLimit = CustomOption.Create(2002030, CustomOptionType.Crewmate, "AbilityLimit", AbilityLimit[0], AbilityLimit[1], AbilityLimit[2], AbilityLimit[3], SheriffOption, Format:"NoTranslate");
+            SheriffCanFireMadmate = CustomOption.Create(2002040, CustomOptionType.Crewmate, "CanFireMadmate", true, SheriffOption);
+            SheriffCanFireNeutral = CustomOption.Create(2002050, CustomOptionType.Crewmate, "CanFireNeutral", true, SheriffOption);
 
 
 
             //=====インポスタータブ=====//
-            SerialKillerOption = new(30100, CustomOptionType.Impostor, "SerialKiller", RoleClass.SerialKiller.Color, (int)ImpostorPlayers[2]);
-            SerialKillerKillCool = CustomOption.Create(30101, CustomOptionType.Impostor, "KillCool", Cooldown[0], Cooldown[1], Cooldown[2], Cooldown[3], SerialKillerOption, Format:"NoTranslate");
-            SerialKillerSucideTime = CustomOption.Create(30102, CustomOptionType.Impostor, "SucideTime", Cooldown[0], Cooldown[1], Cooldown[2], Cooldown[3], SerialKillerOption, Format:"NoTranslate");
-            SerialKillerIsMeetingReset = CustomOption.Create(30103, CustomOptionType.Impostor, "IsMeetingReset", true, SerialKillerOption);
+            SerialKillerOption = new(3001010, CustomOptionType.Impostor, "SerialKiller", RoleClass.SerialKiller.Color, (int)ImpostorPlayers[2]);
+            SerialKillerKillCool = CustomOption.Create(3001020, CustomOptionType.Impostor, "KillCool", Cooldown[0], Cooldown[1], Cooldown[2], Cooldown[3], SerialKillerOption, Format:"NoTranslate");
+            SerialKillerSucideTime = CustomOption.Create(3001030, CustomOptionType.Impostor, "SucideTime", Cooldown[0], Cooldown[1], Cooldown[2], Cooldown[3], SerialKillerOption, Format:"NoTranslate");
+            SerialKillerIsMeetingReset = CustomOption.Create(3001040, CustomOptionType.Impostor, "IsMeetingReset", true, SerialKillerOption);
 
 
 
             //=====  第三陣営タブ  =====//
-            JackalOption = new(40100, CustomOptionType.Neutral, "Jackal", RoleClass.Jackal.Color);
-            JackalKillCool = CustomOption.Create(40101, CustomOptionType.Neutral, "KillCool", Cooldown[0], Cooldown[1], Cooldown[2], Cooldown[3], JackalOption, Format:"NoTranslate");
-            JackalCanVent = CustomOption.Create(40102, CustomOptionType.Neutral, "CanVent", true, JackalOption);
-            JackalIsImpostorVision = CustomOption.Create(40103, CustomOptionType.Neutral, "IsImpostorVision", true, JackalOption);
-            JackalCanMakeSideKick = CustomOption.Create(40104, CustomOptionType.Neutral, "CanMakeSideKick", true, JackalOption);
-            SideKickMakeCool = CustomOption.Create(40105, CustomOptionType.Neutral, "MakeCool", Cooldown[0], Cooldown[1], Cooldown[2], Cooldown[3], JackalCanMakeSideKick, true);
+            JackalOption = new(4001010, CustomOptionType.Neutral, "Jackal", RoleClass.Jackal.Color);
+            JackalKillCool = CustomOption.Create(4001020, CustomOptionType.Neutral, "KillCool", Cooldown[0], Cooldown[1], Cooldown[2], Cooldown[3], JackalOption, Format:"NoTranslate");
+            JackalCanVent = CustomOption.Create(4001030, CustomOptionType.Neutral, "CanVent", true, JackalOption);
+            JackalIsImpostorVision = CustomOption.Create(4001040, CustomOptionType.Neutral, "IsImpostorVision", true, JackalOption);
+            JackalCanMakeSideKick = CustomOption.Create(4001050, CustomOptionType.Neutral, "CanMakeSideKick", true, JackalOption);
+            SideKickMakeCool = CustomOption.Create(4001060, CustomOptionType.Neutral, "MakeCool", Cooldown[0], Cooldown[1], Cooldown[2], Cooldown[3], JackalCanMakeSideKick, true);
 
-            SideKickCanPromotion = CustomOption.Create(40106, CustomOptionType.Neutral, "CanPromotion", true, JackalCanMakeSideKick);
-            SideKickCanVent = CustomOption.Create(40107, CustomOptionType.Neutral, "CanVent", true, JackalCanMakeSideKick);
-            SideKickCanMakeSideKick = CustomOption.Create(40108, CustomOptionType.Neutral, "SideKickCanMakeSideKick", false, JackalCanMakeSideKick);
-            SideKickCanKill = CustomOption.Create(40109, CustomOptionType.Neutral, "CanKill", false, JackalCanMakeSideKick);
+            SideKickCanPromotion = CustomOption.Create(4001070, CustomOptionType.Neutral, "CanPromotion", true, JackalCanMakeSideKick);
+            SideKickCanVent = CustomOption.Create(4001080, CustomOptionType.Neutral, "CanVent", true, JackalCanMakeSideKick);
+            SideKickCanMakeSideKick = CustomOption.Create(4001090, CustomOptionType.Neutral, "SideKickCanMakeSideKick", false, JackalCanMakeSideKick);
+            SideKickCanKill = CustomOption.Create(4001100, CustomOptionType.Neutral, "CanKill", false, JackalCanMakeSideKick);
 
 
 
@@ -157,7 +156,7 @@ namespace NextMoreRoles.Modules.CustomOptions
 
 
             //=====重複陣営タブ=====//
-            if(Configs.IsDebugMode.Value) DebuggerOption = CustomOption.Create(60100, CustomOptionType.Attribute, cs(RoleClass.Debugger.Color, "Debugger"), true, null, true);
+            if(Configs.IsDebugMode.Value) DebuggerOption = CustomOption.Create(6999010, CustomOptionType.Attribute, cs(RoleClass.Debugger.Color, "Debugger"), true, null, true);
         }
     }
 }

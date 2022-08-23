@@ -7,7 +7,7 @@ namespace NextMoreRoles.Modules.DatasManager
     class ResetRoleCache
     {
         //実行元:Modules.DatasManager.Reset.cs
-        public static void Load()
+        public static void ClearCache()
         {
             RoleCache.RoleChache = new();
             RoleCache.AttributeCache = new();

@@ -10,7 +10,7 @@ namespace NextMoreRoles.Modules.DatasManager
     class ResetPlayerDatas
     {
         //実行元:Modules.DatasManager.Reset.cs
-        public static void Load()
+        public static void ClearCache()
         {
 
         }

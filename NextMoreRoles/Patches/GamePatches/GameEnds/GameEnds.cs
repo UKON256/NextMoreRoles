@@ -270,7 +270,7 @@ namespace NextMoreRoles.Patches.GamePatches.GameEnds
 
             //リセット
             AdditionalTempData.Clear();
-            //Patches.GamePatches.GameStart.GameStart_ClearAndReloads.ClearAndReloads();
+            ResetRoleCache.ClearCache();
         }
     }
 }

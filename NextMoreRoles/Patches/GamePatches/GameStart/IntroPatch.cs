@@ -56,11 +56,8 @@ namespace NextMoreRoles.Patches.GamePatches.GameStart
                 }
 
                 //プレイヤーを再表示&位置変更
-                if (__instance.ourCrewmate == null)
-                {
-                    __instance.ourCrewmate = __instance.CreatePlayer(0, 1, PlayerControl.LocalPlayer.Data, false);
-                    __instance.ourCrewmate.gameObject.SetActive(false);
-                }
+                __instance.ourCrewmate = __instance.CreatePlayer(0, 1, PlayerControl.LocalPlayer.Data, false);
+                __instance.ourCrewmate.gameObject.SetActive(false);
                 __instance.ourCrewmate.transform.localPosition = new Vector3(0f, -1.05f, -18f);
                 __instance.ourCrewmate.transform.localScale = new Vector3(1f, 1f, 1f);
 

@@ -12,7 +12,7 @@ namespace NextMoreRoles.Patches.HarmonyPatches
         static void Postfix(HudManager __instance)
         {
             Logger.Info("========試合開始========", "HudManager");
-            //NextMoreRoles.Modules.Button.HudManager_Start.Postfix(__instance);
+            NextMoreRoles.Modules.Role.CustomButtons.CustomButtons.HudManagerStart_Postfix(__instance);
         }
     }
 
@@ -28,6 +28,7 @@ namespace NextMoreRoles.Patches.HarmonyPatches
         static void Postfix(HudManager __instance)
         {
             LateTask.Update(Time.deltaTime);;
+            NextMoreRoles.Modules.Role.CustomButtons.CustomButton.HudUpdate();
         }
     }
 }

@@ -9,6 +9,8 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 -- **この MOD は非公式であり、この MOD の開発に関して Innersloth は関係していません。  
  この MOD の不具合などを公式に問い合わせないでください**
 
+また、MOD の導入は**自己責任で**お願いします
+
 ## 各種リンク
 
 ## クレジット

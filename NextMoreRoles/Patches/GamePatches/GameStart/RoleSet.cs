@@ -118,7 +118,7 @@ namespace NextMoreRoles.Patches.GamePatches.GameStart
                 //インポなら"フェイクタスク"を追加
                 if (Target.IsImpostor())
                 {
-                    TaskText.Text += "\n" + CustomOptions.cs(Palette.ImpostorRed, $"{ModTranslation.GetString("FakeTasks")}: ");
+                    TaskText.Text += "\n" + FastDestroyableSingleton<TranslationController>.Instance.GetString(StringNames.FakeTasks);
                 }
 
                 //先頭にイントロを挿入する

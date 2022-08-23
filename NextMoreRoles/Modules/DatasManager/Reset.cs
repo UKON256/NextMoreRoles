@@ -6,9 +6,9 @@ namespace NextMoreRoles.Modules.DatasManager
         //実行元:Main.cs
         public static void Load()
         {
-            NextMoreRoles.Modules.DatasManager.ResetRoleCache.Load();
-            NextMoreRoles.Modules.DatasManager.ResetGameDatas.Load();
-            NextMoreRoles.Modules.DatasManager.ResetPlayerDatas.Load();
+            NextMoreRoles.Modules.DatasManager.ResetRoleCache.ClearCache();
+            NextMoreRoles.Modules.DatasManager.ResetGameDatas.ClearCache();
+            NextMoreRoles.Modules.DatasManager.ResetPlayerDatas.ClearCache();
         }
 
         //試合が始まった時
