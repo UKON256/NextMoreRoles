@@ -39,7 +39,6 @@ namespace NextMoreRoles.Modules
 
             GameData.Instance.RpcSetTasks(Bot.PlayerId, new byte[0]);
             AllBots.Add(Bot);
-            Logger.Info("BOTをスポーンしました", "BotManager");
             return Bot;
         }
         //デスポーン！

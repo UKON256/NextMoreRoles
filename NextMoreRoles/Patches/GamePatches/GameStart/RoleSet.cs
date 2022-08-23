@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Linq;
 using System.Collections.Generic;
 using NextMoreRoles.Modules;
@@ -43,11 +44,13 @@ namespace NextMoreRoles.Patches.GamePatches.GameStart
                 {
                     if (p.IsCrew())
                     {
-                        p.RPCSetRole(RoleId.Crewmate);
+                        RPCSender.CallRPC(CustomRPC.SetRole, new() { p.PlayerId, (byte)RoleId.Crewmate });
+                        RPCProcedure.SetRole( p.PlayerId, (byte)RoleId.Crewmate );
                     }
                     else
                     {
-                        p.RPCSetRole(RoleId.Impostor);
+                        RPCSender.CallRPC(CustomRPC.SetRole, new() { p.PlayerId, (byte)RoleId.Impostor });
+                        RPCProcedure.SetRole( p.PlayerId, (byte)RoleId.Impostor );
                     }
                 }
 
@@ -64,7 +67,8 @@ namespace NextMoreRoles.Patches.GamePatches.GameStart
         {
             if (CustomOptions.DebuggerOption.GetBool())
             {
-                PlayerControl.LocalPlayer.RPCSetRole(RoleId.Debugger);
+                RPCSender.CallRPC(CustomRPC.SetRole, new() { CachedPlayer.LocalPlayer.PlayerId, (byte)RoleId.Debugger });
+                RPCProcedure.SetRole( CachedPlayer.LocalPlayer.PlayerId, (byte)RoleId.Debugger );
             }
         }
 
@@ -225,18 +229,6 @@ namespace NextMoreRoles.Patches.GamePatches.GameStart
 
             //役職キャッシュ再設定
             ResetRoleCache.ClearAndReloads();
-        }
-
-
-
-        //SetRoleするRPCを送信する
-        public static void RPCSetRole(this PlayerControl Target, RoleId RoleId)
-        {
-            MessageWriter Writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetRole, SendOption.Reliable, -1);
-            Writer.Write(Target.PlayerId);
-            Writer.Write((byte)RoleId);
-            AmongUsClient.Instance.FinishRpcImmediately(Writer);
-            RPCProcedure.SetRole(Target.PlayerId, (byte)RoleId);
         }
     }
 }

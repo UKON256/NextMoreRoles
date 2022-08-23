@@ -1,28 +1,40 @@
 using Hazel;
 using System;
 using System.Collections.Generic;
-using NextMoreRoles.Helpers;
 
 namespace NextMoreRoles.Modules.CustomRPC
 {
-    class RPCSender
+    static class RPCSender
     {
-        //RPCをまとめて送信するよぉ
-        public static void CallRPC(CustomRPC RPC, Action RPCProduce, List<byte> Informations)
+        //public static List<byte> RPCInformations = new();
+        //RPCをまとめて送信する
+        public static void CallRPC(CustomRPC RPCId, List<byte> Informations)
         {
-            //RPC予約
-            MessageWriter Writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.NetId, (byte)RPC, SendOption.Reliable, -1);
-
-            //情報の数だけWriterに刻む(パケット送信)
-            foreach (byte Info in Informations)
+            try
             {
-                Writer.Write(Info);
-            }
-            //RPC予約終了
-            AmongUsClient.Instance.FinishRpcImmediately(Writer);
+                //初期化
+                //RPCInformations = new();
 
-            //内容を実行！ (例：RPCProduce.SetRole(RoleId.Debugger))
-            RPCProduce();
+                //RPC予約
+                MessageWriter Writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)RPCId, SendOption.Reliable, -1);
+
+                //情報(byte)をすべて書き込む
+                foreach (byte Info in Informations)
+                {
+                    //RPCInformations.Add(Info);
+                    Writer.Write(Info);
+                }
+
+                //RPCがおわおわおわりーおわおわりー
+                AmongUsClient.Instance.FinishRpcImmediately(Writer);
+
+                //ログ
+                Logger.Info($"RPCを送信しました。Id:{RPCId}", "RPCSender");
+            }
+            catch(SystemException Error)
+            {
+                Logger.Error($"RPCの送信に失敗しました。エラー:{Error}", "RPCSender");
+            }
         }
     }
 }
