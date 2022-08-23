@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using NextMoreRoles.Modules.DatasManager;
 using NextMoreRoles.Roles;
@@ -7,6 +8,8 @@ namespace NextMoreRoles.Modules.Role.CustomButtons
     static class CustomButtons
     {
         //=====クルー陣営=====//
+        public static CustomButton SheriffFireButton;
+        public static TMPro.TMP_Text SheriffCanFireCount;
 
 
 
@@ -15,6 +18,8 @@ namespace NextMoreRoles.Modules.Role.CustomButtons
 
 
         //====第三陣営=====//
+        public static CustomButton JackalKillButton;
+        public static CustomButton JackalSideKickButton;
 
 
 
@@ -26,6 +31,20 @@ namespace NextMoreRoles.Modules.Role.CustomButtons
         public static void HudManagerStart_Postfix(HudManager __instance)
         {
             //=====クルー陣営=====//
+            SheriffFireButton = new(
+                ()=> {  },
+                (bool IsAlive, RoleId Role)=> { return IsAlive && Role == RoleId.Sheriff; },
+                ()=> { return PlayerControl.LocalPlayer.CanMove; },
+                ()=> { return !PlayerControl.LocalPlayer.CanMove; },
+                ()=> { Roles.Data.Crewmate.SheriffFunctions.OnMeetingEndEvent(); },
+                __instance.KillButton.graphic.sprite,
+                new Vector3(0f, 1f, 0),
+                __instance,
+                __instance.KillButton,
+                KeyCode.Q
+            );
+            SheriffFireButton.ButtonText = ModTranslation.GetString("Fire");
+            SheriffFireButton.ShowButtonText = true;
 
 
 
@@ -34,6 +53,18 @@ namespace NextMoreRoles.Modules.Role.CustomButtons
 
 
             //====第三陣営=====//
+            JackalKillButton = new(
+                ()=> {  },
+                (bool IsAlive, RoleId Role)=> { return IsAlive && Role == RoleId.Sheriff; },
+                ()=> { return PlayerControl.LocalPlayer.CanMove; },
+                ()=> { return !PlayerControl.LocalPlayer.CanMove; },
+                ()=> { Roles.Data.Neutral.JackalFunctions.OnMeetingEndEvent(); },
+                __instance.KillButton.graphic.sprite,
+                new Vector3(0f, 1f, 0),
+                __instance,
+                __instance.KillButton,
+                KeyCode.Q
+            );
 
 
 
