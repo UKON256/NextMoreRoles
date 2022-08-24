@@ -19,6 +19,7 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 
 - この MOD をつくるきっかけになりました
 - キャッシュ化の部分などを参考にさせていただきました
+- MapLoader などを参考にさせていただきました
 
 ##### [[TheOtherRoles](https://github.com/TheOtherRolesAU/TheOtherRoles)]
 

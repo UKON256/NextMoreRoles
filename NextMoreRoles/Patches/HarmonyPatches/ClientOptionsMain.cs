@@ -1,6 +1,6 @@
 using HarmonyLib;
 
-namespace NextMoreRoles.Patches.SystemPatches.ClientOptions
+namespace NextMoreRoles.Patches.HarmonyPatches
 {
     public static class Harmony_ClientOptionsMain
     {
@@ -10,8 +10,8 @@ namespace NextMoreRoles.Patches.SystemPatches.ClientOptions
         {
             static void Postfix()
             {
-                ClientModOptions.UpdateTranslations();
-                ClientVanillaOptions.UpdateTranslations();
+                NextMoreRoles.Patches.SystemPatches.ClientOptions.ClientModOptions.UpdateTranslations();
+                NextMoreRoles.Patches.SystemPatches.ClientOptions.ClientVanillaOptions.UpdateTranslations();
             }
         }
 

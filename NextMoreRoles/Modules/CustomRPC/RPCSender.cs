@@ -36,5 +36,38 @@ namespace NextMoreRoles.Modules.CustomRPC
                 Logger.Error($"RPCの送信に失敗しました。エラー:{Error}", "RPCSender");
             }
         }
+
+
+
+        //RPCを特定の人にのみ送信する
+        public static void CallRPC(CustomRPC RPCId, List<byte> Informations, PlayerControl TargetPlayer)
+        {
+            try
+            {
+                //初期化
+                //RPCInformations = new();
+                var Target = TargetPlayer != null ? TargetPlayer.GetClientId() : -1;
+
+                //RPC予約
+                MessageWriter Writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)RPCId, SendOption.Reliable, Target);
+
+                //情報(byte)をすべて書き込む
+                foreach (byte Info in Informations)
+                {
+                    //RPCInformations.Add(Info);
+                    Writer.Write(Info);
+                }
+
+                //RPCがおわおわおわりーおわおわりー
+                AmongUsClient.Instance.FinishRpcImmediately(Writer);
+
+                //ログ
+                Logger.Info($"RPCを送信しました。Id:{RPCId}", "RPCSender");
+            }
+            catch(SystemException Error)
+            {
+                Logger.Error($"RPCの送信に失敗しました。エラー:{Error}", "RPCSender");
+            }
+        }
     }
 }

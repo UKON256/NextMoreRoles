@@ -12,11 +12,12 @@ namespace NextMoreRoles.Modules.CustomRPC
     //RPCのリストぉ
     public enum CustomRPC
     {
-        ShareOptions = 245,
+        ShareOptions = 250,
         SetRoomDestroyTimer,
         ShareMODVersion,
         ShareBotData,
         SetRole,
+        RPCShapeShift,
     }
 
     public static class RPCProcedure
@@ -76,39 +77,53 @@ namespace NextMoreRoles.Modules.CustomRPC
             Player.SetRole(RoleId);
         }
 
+        //シェイプシフト
+        public static void RPCShapeShift(byte PlayerID, byte ShapeTargetID, byte IsAnimate)
+        {
+            PlayerControl Player = ModHelpers.PlayerById(PlayerID);
+            PlayerControl ShapeTarget = ModHelpers.PlayerById(ShapeTargetID);
+            bool Animate = false;
+
+            if (IsAnimate != byte.MaxValue)
+            {
+                Animate = true;
+            }
+            Player.Shapeshift(ShapeTarget, Animate);
+        }
+
 
 
         //RPC送信されたとき
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
         class RPCHandlerPatch
         {
-            static void Postfix([HarmonyArgument(0)] byte CallId, [HarmonyArgument(1)] MessageReader Reader)
+            static void Postfix([HarmonyArgument(0)] byte callId, [HarmonyArgument(1)] MessageReader reader)
             {
                 try
                 {
-                    byte PacketId = CallId;
+                    byte PacketId = callId;
                     switch ((CustomRPC)PacketId)
                     {
                         case CustomRPC.ShareOptions:
-                            ShareOptions((int)Reader.ReadPackedUInt32(), Reader);
+                            ShareOptions((int)reader.ReadPackedUInt32(), reader);
                             break;
 
                         case CustomRPC.SetRoomDestroyTimer:
-                            SetRoomDestroyTimer(Reader.ReadByte(), Reader.ReadByte());
+                            SetRoomDestroyTimer(reader.ReadByte(), reader.ReadByte());
                             break;
 
                         case CustomRPC.ShareMODVersion:
-                            byte major = Reader.ReadByte();
-                            byte minor = Reader.ReadByte();
-                            byte patch = Reader.ReadByte();
-                            int versionOwnerId = Reader.ReadPackedInt32();
+                            byte major = reader.ReadByte();
+                            byte minor = reader.ReadByte();
+                            byte patch = reader.ReadByte();
+                            int versionOwnerId = reader.ReadPackedInt32();
                             byte revision = 0xFF;
                             Guid guid;
-                            if (Reader.Length - Reader.Position >= 17)
+                            if (reader.Length - reader.Position >= 17)
                             { // enough bytes left to read
-                                revision = Reader.ReadByte();
+                                revision = reader.ReadByte();
                                 // GUID
-                                byte[] gbytes = Reader.ReadBytes(16);
+                                byte[] gbytes = reader.ReadBytes(16);
                                 guid = new Guid(gbytes);
                             }
                             else
@@ -120,18 +135,24 @@ namespace NextMoreRoles.Modules.CustomRPC
 
                         //BOTデータシェア
                         case CustomRPC.ShareBotData:
-                            ShareBotData(Reader.ReadByte());
+                            ShareBotData(reader.ReadByte());
                             break;
 
                         //役職セット
                         case CustomRPC.SetRole:
-                            SetRole(Reader.ReadByte(), Reader.ReadByte());
+                            SetRole(reader.ReadByte(), reader.ReadByte());
+                            break;
+
+                        //RPC版シェイプ
+                        case CustomRPC.RPCShapeShift:
+                            RPCShapeShift(reader.ReadByte(), reader.ReadByte(), reader.ReadByte());
                             break;
                     }
+                    Logger.Info($"RPCの受信に成功しました。ID:{callId}", "CustomRPC");
                 }
                 catch(SystemException Error)
                 {
-                    Logger.Error($"RPCの受信に失敗しました。ID:{CallId}、エラー:{Error}", "CustomRPC");
+                    Logger.Error($"RPCの受信に失敗しました。ID:{callId}、エラー:{Error}", "CustomRPC");
                 }
             }
         }

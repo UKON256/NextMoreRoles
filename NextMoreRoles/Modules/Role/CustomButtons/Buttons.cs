@@ -70,7 +70,7 @@ namespace NextMoreRoles.Modules.Role.CustomButtons
 
             //=====重複=====//
             DebuggerButton = new(
-                ()=> { Roles.Data.Attribute.DebuggerFunctions.OnMeetingEndEvent(); },
+                ()=> { Roles.Data.Attribute.DebuggerFunctions.OnClickEvent(); },
                 (bool IsAlive, RoleId Role)=> { return PlayerControl.LocalPlayer.IsAttributeRole(RoleId.Debugger); },
                 ()=> { return PlayerControl.LocalPlayer.CanMove; },
                 ()=> { return !PlayerControl.LocalPlayer.CanMove; },
@@ -82,7 +82,8 @@ namespace NextMoreRoles.Modules.Role.CustomButtons
                 KeyCode.K,
                 Mirror:true
             );
-            DebuggerButton.Timer = 0.1f;
+            DebuggerButton.MaxTimer = 0f;
+            DebuggerButton.Timer = 0f;
             DebuggerButton.ButtonText = ModTranslation.GetString("Debug");
             DebuggerButton.ShowButtonText = true;
         }

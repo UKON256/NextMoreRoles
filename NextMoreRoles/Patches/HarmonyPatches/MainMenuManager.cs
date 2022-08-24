@@ -9,7 +9,7 @@ namespace NextMoreRoles.Patches.HarmonyPatches
         static void Postfix(MainMenuManager __instance)
         {
             NextMoreRoles.Patches.TitlePatches.SetNMRLogo.SetLogo();
-            NextMoreRoles.Patches.SystemPatches.ClientOptions.Harmony_ClientOptionsMain.MainMenu_Start_Postfix.Postfix(__instance);
+            NextMoreRoles.Patches.HarmonyPatches.Harmony_ClientOptionsMain.MainMenu_Start_Postfix.Postfix(__instance);
         }
     }
 }
