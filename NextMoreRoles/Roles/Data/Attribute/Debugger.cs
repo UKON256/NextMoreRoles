@@ -1,4 +1,6 @@
+using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
 using NextMoreRoles.Modules;
@@ -15,42 +17,62 @@ namespace NextMoreRoles.Roles.Data.Attribute
         }
 
 
+
         public class DebugDisplay
         {
             public static void OpenDisplay()
             {
+                Modules.Role.ScientistVitalShower.Open(RoleClass.Debugger.DebugBackground, "DebugBackground", true);
                 RoleClass.Debugger.NowTab = DebugTabs.Main;
-                NextMoreRoles.Modules.Role.ScientistVitalShower.Open(RoleClass.Debugger.DebugBackground, "DebugBackground", true);
+                MakeButtons();
             }
 
-            public static void MakeButton(string Text, Transform Transform)
+            public static void MakeButtons()
             {
+                //今までのボタンを消す
+                DeleteButtons();
 
+                //作る
+                foreach (DebugDisplayPlate Panel in DebugDisplayPlate.DebugPanels)
+                {
+                    if (Panel.Tab != RoleClass.Debugger.NowTab) continue;
+
+                    var DebugPanel = new GameObject("DebugPanel");
+                    DebugPanel.gameObject.AddComponent<SpriteRenderer>().sprite = ResourcesManager.LoadSpriteFromResources("NextMoreRoles.Resources.Game.DebugDisplay_Plate.png", 150f);
+                    DebugPanel.transform.localPosition = new Vector3(0.0f, 0.0f, -55f);
+                    DebugPanel.transform.SetParent(Camera.main.transform, false);
+                }
             }
 
-            public static void Close()
+            public static void DeleteButtons()
             {
-
             }
         }
     }
 
-
-
-    public class DebugPanels
+    public class DebugDisplayPlate
     {
-        public List<DebugPanels> Panels = new();
+        public static List<DebugDisplayPlate> DebugPanels = new();
+
         public string Text;
         public DebugTabs Tab;
         public Action Action;
 
-        public DebugPanels(string Text, DebugTabs Tab, Action Action)
+        public DebugDisplayPlate(string Text, DebugTabs Tab, Action Action)
         {
             this.Text = ModTranslation.GetString(Text);
             this.Tab = Tab;
             this.Action = Action;
-            Panels.Add(this);
+            DebugPanels.Add(this);
         }
+
+
+
+        public static DebugDisplayPlate GoToChangeRole = new("GoToChangeRole", DebugTabs.Main,
+        ()=>{
+            RoleClass.Debugger.NowTab = DebugTabs.ChangeRoles;
+            DebuggerFunctions.DebugDisplay.MakeButtons();
+        });
     }
 
     public enum DebugTabs

@@ -12,7 +12,7 @@ namespace NextMoreRoles.Modules.CustomRPC
     //RPCのリストぉ
     public enum CustomRPC
     {
-        ShareOptions = 250,
+        ShareOptions = 35,
         SetRoomDestroyTimer,
         ShareMODVersion,
         ShareBotData,
