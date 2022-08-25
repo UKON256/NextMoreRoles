@@ -43,7 +43,6 @@ namespace NextMoreRoles.Patches.GamePatches.GameEnds
                 //リセットとか
                 var GameOverReason = AdditionalTempData.GameOverReason;
                 AdditionalTempData.Clear();
-                if (NextMoreRoles.Modules.Role.DebugDisplayShower.NowOpen) NextMoreRoles.Modules.Role.DebugDisplayShower.Close();
 
 
 

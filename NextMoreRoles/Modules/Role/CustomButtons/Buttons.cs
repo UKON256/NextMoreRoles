@@ -70,7 +70,7 @@ namespace NextMoreRoles.Modules.Role.CustomButtons
 
             //=====重複=====//
             DebuggerButton = new(
-                ()=> { Roles.Data.Attribute.DebuggerFunctions.OnClickEvent(); },
+                ()=> { Roles.Data.Attribute.DebuggerFunctions.DebugDisplay.OpenDisplay(); },
                 (bool IsAlive, RoleId Role)=> { return PlayerControl.LocalPlayer.IsAttributeRole(RoleId.Debugger); },
                 ()=> { return PlayerControl.LocalPlayer.CanMove; },
                 ()=> { return !PlayerControl.LocalPlayer.CanMove; },
