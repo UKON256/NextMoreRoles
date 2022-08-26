@@ -20,7 +20,7 @@ namespace NextMoreRoles.Modules.Role.CustomButtons
         public bool ShowButtonText = true;
         public string ButtonText = null;
 
-        private readonly Action OnClickEvent;
+        private readonly Action OnClick;
         private readonly Func<bool, RoleId, bool> HasButton;
         private readonly Func<bool> CouldUse;
         private readonly Func<bool> CouldCountCool;
@@ -35,9 +35,9 @@ namespace NextMoreRoles.Modules.Role.CustomButtons
         private readonly bool Mirror;
         public Color? Color;
 
-        public CustomButton(Action OnClickEvent, Func<bool, RoleId, bool>HasButton, Func<bool> CouldUse, Func<bool> CouldCountCool, Action OnMeetingEndsEvent, Sprite ButtonSprite, Vector3 PositionOffset, HudManager HudManager, ActionButton TextTemplate, KeyCode? HotKey, bool HasEffect, float EffectDuration, Action OnEffectEnds, bool Mirror = false, string ButtonText = "", Color? Color = null)
+        public CustomButton(Action OnClick, Func<bool, RoleId, bool>HasButton, Func<bool> CouldUse, Func<bool> CouldCountCool, Action OnMeetingEndsEvent, Sprite ButtonSprite, Vector3 PositionOffset, HudManager HudManager, ActionButton TextTemplate, KeyCode? HotKey, bool HasEffect, float EffectDuration, Action OnEffectEnds, bool Mirror = false, string ButtonText = "", Color? Color = null)
         {
-            this.OnClickEvent = OnClickEvent;
+            this.OnClick = OnClick;
             this.HasButton = HasButton;
             this.CouldUse = CouldUse;
             this.CouldCountCool = CouldCountCool;
@@ -68,8 +68,8 @@ namespace NextMoreRoles.Modules.Role.CustomButtons
             SetActive(false);
         }
 
-        public CustomButton(Action OnClickEvent, Func<bool, RoleId, bool> HasButton, Func<bool> CouldUse, Func<bool> CouldCountCool, Action OnMeetingEndsEvent, Sprite ButtonSprite, Vector3 PositionOffset, HudManager HudManager, ActionButton TextTemplate, KeyCode? HotKey, bool Mirror = false, string ButtonText = "", Color? Color = null)
-        : this(OnClickEvent, HasButton, CouldUse, CouldCountCool, OnMeetingEndsEvent, ButtonSprite, PositionOffset, HudManager, TextTemplate, HotKey, false, 0f, () => { }, Mirror, ButtonText, Color) { }
+        public CustomButton(Action OnClick, Func<bool, RoleId, bool> HasButton, Func<bool> CouldUse, Func<bool> CouldCountCool, Action OnMeetingEndsEvent, Sprite ButtonSprite, Vector3 PositionOffset, HudManager HudManager, ActionButton TextTemplate, KeyCode? HotKey, bool Mirror = false, string ButtonText = "", Color? Color = null)
+        : this(OnClick, HasButton, CouldUse, CouldCountCool, OnMeetingEndsEvent, ButtonSprite, PositionOffset, HudManager, TextTemplate, HotKey, false, 0f, () => { }, Mirror, ButtonText, Color) { }
 
         private void SetActive(bool IsActive)
         {
@@ -147,7 +147,7 @@ namespace NextMoreRoles.Modules.Role.CustomButtons
 
 
 
-        void OnClick()
+        void OnClickEvent()
         {
             if ((this.Timer < 0f) || (this.HasEffect && this.IsEffectActive && this.EffectCancellable))
             {
