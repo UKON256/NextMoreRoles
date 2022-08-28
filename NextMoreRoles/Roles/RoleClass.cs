@@ -181,7 +181,6 @@ namespace NextMoreRoles.Roles
             public static Color32 Color = Palette.DisabledGrey;
             public static Sprite ButtonSprite;
             public static Data.Attribute.DebugTabs NowTab;
-            public static VitalsMinigame DebugBackground;
 
             //設定(CustomOption)
 

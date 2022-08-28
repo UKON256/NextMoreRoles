@@ -6,6 +6,21 @@ using NextMoreRoles.Modules.CustomOptions;
 
 namespace NextMoreRoles.Roles
 {
+    public enum FromModType
+    {
+        Vanilla,
+        NMR,
+        TOR,
+        TORGM,
+        TORGMH,
+        SNR,
+        SNRGM,
+        TOH,
+        ExR,
+        NoS,
+        SheriffMod,
+        JackalAndSidekick,
+    }
     public class IntroData
     {
         public static List<IntroData> IntroDatas = new();                       //イントロのリスト
@@ -17,15 +32,17 @@ namespace NextMoreRoles.Roles
         public Color Color;
         public RoleId RoleId;
         public string GameDescription;
+        public FromModType FromMod;
         public RoleType Team;
         public RoleTypes IntroSound;
         public bool IsGhostRole;
         public bool IsAttributeRole;
-        IntroData(string Name, Color Color, RoleId RoleId, RoleType Team = RoleType.Crewmate, RoleTypes IntroSound = RoleTypes.Crewmate, bool IsGhostRole = false, bool IsAttributeRole = false)
+        IntroData(string Name, Color Color, RoleId RoleId, FromModType FromMod, RoleType Team = RoleType.Crewmate, RoleTypes IntroSound = RoleTypes.Crewmate, bool IsGhostRole = false, bool IsAttributeRole = false)
         {
             this.Name = ModTranslation.GetString(Name);
             this.Color = Color;
             this.RoleId = RoleId;
+            this.FromMod = FromMod;
             this.Team = Team;
             this.IntroSound = IntroSound;
             this.IsGhostRole = IsGhostRole;
@@ -75,22 +92,22 @@ namespace NextMoreRoles.Roles
 
 
         //=====クルーメイト陣営=====//
-        public static IntroData Crewmate = new("Crewmate", Palette.CrewmateBlue, RoleId.Crewmate, RoleType.Crewmate, RoleTypes.Crewmate);
-        public static IntroData Sheriff = new("Sheriff", RoleClass.Sheriff.Color, RoleId.Sheriff, RoleType.Crewmate, RoleTypes.Engineer);
+        public static IntroData Crewmate = new("Crewmate", Palette.CrewmateBlue, RoleId.Crewmate, FromModType.Vanilla, RoleType.Crewmate, RoleTypes.Crewmate);
+        public static IntroData Sheriff = new("Sheriff", RoleClass.Sheriff.Color, RoleId.Sheriff, FromModType.SheriffMod, RoleType.Crewmate, RoleTypes.Engineer);
 
         //=====インポスター陣営=====//
-        public static IntroData Impostor = new("Impostor", Palette.ImpostorRed, RoleId.Impostor, RoleType.Impostor, RoleTypes.Impostor);
-        public static IntroData SerialKiller = new("SerialKiller", RoleClass.SerialKiller.Color, RoleId.SerialKiller, RoleType.Impostor, RoleTypes.Shapeshifter);
-        public static IntroData Madmate = new("Madmate", RoleClass.Madmate.Color, RoleId.Madmate, RoleType.Impostor, RoleTypes.Impostor);
+        public static IntroData Impostor = new("Impostor", Palette.ImpostorRed, RoleId.Impostor, FromModType.Vanilla, RoleType.Impostor, RoleTypes.Impostor);
+        public static IntroData SerialKiller = new("SerialKiller", RoleClass.SerialKiller.Color, RoleId.SerialKiller, FromModType.SNR, RoleType.Impostor, RoleTypes.Shapeshifter);
+        public static IntroData Madmate = new("Madmate", RoleClass.Madmate.Color, RoleId.Madmate, FromModType.SNRGM, RoleType.Impostor, RoleTypes.Impostor);
 
         //=====  ニュートラル  =====//
-        public static IntroData Jackal = new("Jackal", RoleClass.Jackal.Color, RoleId.Jackal, RoleType.Neutral);
-        public static IntroData SideKick = new("SideKick", RoleClass.SideKick.Color, RoleId.SideKick, RoleType.Neutral);
+        public static IntroData Jackal = new("Jackal", RoleClass.Jackal.Color, RoleId.Jackal, FromModType.JackalAndSidekick, RoleType.Neutral);
+        public static IntroData SideKick = new("SideKick", RoleClass.SideKick.Color, RoleId.SideKick, FromModType.JackalAndSidekick, RoleType.Neutral);
 
 
         //=====コンビネーション=====//
 
         //=====重複陣営=====//
-        public static IntroData Debugger = new("Debugger", RoleClass.Debugger.Color, RoleId.Debugger, RoleType.Attribute, IsAttributeRole:true);
+        public static IntroData Debugger = new("Debugger", RoleClass.Debugger.Color, RoleId.Debugger, FromModType.NMR, RoleType.Attribute, IsAttributeRole:true);
     }
 }

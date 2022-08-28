@@ -96,7 +96,7 @@ namespace NextMoreRoles
 
 
 
-        private static void SendMesagesInGame(string Text)
+        public static void SendMesagesInGame(string Text)
         {
             if (DestroyableSingleton<HudManager>._instance) DestroyableSingleton<HudManager>.Instance.Notifier.AddItem(Text);
         }

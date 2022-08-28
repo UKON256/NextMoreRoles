@@ -37,11 +37,11 @@ namespace NextMoreRoles.Patches.GamePatches.GameStart
             {
                 var PlayerRole = PlayerControl.LocalPlayer.GetRole();
                 var PlayerAttribute = PlayerControl.LocalPlayer.GetAttribute();
+                var IntroInfo = IntroData.GetIntroData(PlayerRole);
 
                 //音声再生
                 IntroData.PlayIntroSound(PlayerRole);
 
-                var IntroInfo = IntroData.GetIntroData(PlayerRole);
                 __instance.YouAreText.color = IntroInfo.Color;                  //あなたのロールは...を役職の色に変更
                 __instance.RoleText.text = IntroInfo.Name;                      //役職名を変更
                 __instance.RoleText.color = IntroInfo.Color;                    //役職名の色を変更
@@ -74,11 +74,11 @@ namespace NextMoreRoles.Patches.GamePatches.GameStart
 
             //メッセージ表示2.5秒後にすべて非表示にする
             yield return new WaitForSeconds(2.5f);
-            __instance.ourCrewmate.gameObject.SetActive(false);     //プレイヤーを消す
+           /* __instance.ourCrewmate.gameObject.SetActive(false);     //プレイヤーを消す
             __instance.YouAreText.gameObject.SetActive(false);      //あなたのロールは....を消す
             __instance.RoleText.gameObject.SetActive(false);        //役職名を消す
             __instance.RoleBlurbText.gameObject.SetActive(false);   //役職のイントロ説明文を消す
-
+*/
             yield break;
         }
     }

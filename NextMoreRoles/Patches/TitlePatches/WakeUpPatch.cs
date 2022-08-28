@@ -57,8 +57,7 @@ namespace NextMoreRoles.Patches.TitlePatches
             var NMRLogo = new GameObject("NMRLogo");
             NMRLogo.transform.position = Vector3.up;
             NMRLogo.transform.localScale *= 0.55f;
-            Renderer = NMRLogo.AddComponent<SpriteRenderer>();
-            Renderer.sprite = ResourcesManager.LoadSpriteFromResources("NextMoreRoles.Resources.Titles.TitleLogo.png", 150f);
+            NMRLogo.AddComponent<SpriteRenderer>().sprite = ResourcesManager.LoadSpriteFromResources("NextMoreRoles.Resources.Titles.TitleLogo.png", 150f);
         }
     }
 }

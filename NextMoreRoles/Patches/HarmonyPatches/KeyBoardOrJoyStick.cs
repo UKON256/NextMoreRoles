@@ -16,7 +16,6 @@ namespace NextMoreRoles.Patches.HarmonyPatches
             //デバッグモードかつホスト
             if (!Configs.IsDebugMode.Value) return;
             if (Input.GetKeyDown(KeyCode.G)) NextMoreRoles.Patches.GamePatches.DebugModePatch.BotSpawn();
-            if (Input.GetKeyDown(KeyCode.F12)) PlayerControl.LocalPlayer.ReportDeadBody(CachedPlayer.LocalPlayer.Data);
         }
     }
 
