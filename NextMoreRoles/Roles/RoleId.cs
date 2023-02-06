@@ -1,28 +1,21 @@
+namespace NextMoreRoles.Roles;
 
-namespace NextMoreRoles.Roles
+public enum RoleId
 {
-    public enum RoleId
-    {
-        // クルー陣営
-        Crewmate,
-        Sheriff,
+    //* クルーメイト *//
+    Crewmate,
+    Sheriff,
 
+    //* インポスター *//
+    Impostor,
+    SerialKiller,
 
+    //* ニュートラル *//
+    Jackal,
+    JackalSidekick,
 
-        // インポスター陣営
-        Impostor,
-        Madmate,
-        SerialKiller,
+    //* アトリビュート *//
+    Lovers,
 
-
-
-        // 第三陣営
-        Jackal,
-        SideKick,
-
-
-
-        //デバッグ用
-        Debugger,
-    }
+    //* コンビネーション *//
 }

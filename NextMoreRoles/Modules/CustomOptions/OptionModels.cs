@@ -159,12 +159,12 @@ namespace NextMoreRoles.Modules.CustomOptions
         public virtual string GetString()
         {
             string sel = Selections[Selection].ToString();
-            return Format != "" ? sel : ModTranslation.GetString(sel);
+            return Format != "" ? sel : Translator.GetString(sel);
         }
 
         public virtual string GetName()
         {
-            return ModTranslation.GetString(Name);
+            return Translator.GetString(Name);
         }
 
         public virtual void UpdateSelection(int newSelection)
@@ -277,7 +277,7 @@ namespace NextMoreRoles.Modules.CustomOptions
         }
 
         public CustomRoleOption(int Id, CustomOptionType Type, string Name, Color Color, int Max = 15) :
-            base(Id, Type, CustomOptions.cs(Color, Name), CustomOptions.Rates, "", null, true, false, "NoTranslate")
+            base(Id, Type, ModHelpers.cs(Color, Name), CustomOptions.Rates, "", null, true, false, "NoTranslate")
         {
             try
             {
@@ -302,12 +302,6 @@ namespace NextMoreRoles.Modules.CustomOptions
         public int CommonTasks { get { return Mathf.RoundToInt(CommonTasksOption.GetSelection()); } }
         public int LongTasks { get { return Mathf.RoundToInt(LongTasksOption.GetSelection()); } }
         public int ShortTasks { get { return Mathf.RoundToInt(ShortTasksOption.GetSelection()); } }
-
-        /*public List<byte> GenerateTasks()
-        {
-            return NextMoreRoles.Modules..GenerateTasks(CommonTasks, LongTasks, ShortTasks);
-
-        }*/
 
         public CustomTasksOption(int Id, CustomOptionType Type, int CommonDef, int LongDef, int ShortDef, CustomOption Parent = null)
         {

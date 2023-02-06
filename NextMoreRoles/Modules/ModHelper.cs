@@ -1,38 +1,21 @@
 using System.Linq;
 using UnityEngine;
-using TMPro;
 using System.Collections.Generic;
 using NextMoreRoles.Helpers;
-using NextMoreRoles.Modules.CustomOptions;
 
 namespace NextMoreRoles.Modules
 {
     public static class ModHelpers
     {
-        public static Dictionary<byte, SpriteRenderer> MyRendCache = new();
-        public static TextMeshPro NameText(this PlayerControl player)
+        public static string cs(Color c, string s)
         {
-            return player.cosmetics.nameText;
+            return string.Format("<color=#{0:X2}{1:X2}{2:X2}{3:X2}>{4}</color>", ToByte(c.r), ToByte(c.g), ToByte(c.b), ToByte(c.a), s);
         }
-        public static TextMeshPro NameText(this PoolablePlayer player)
+        public static byte ToByte(float f)
         {
-            return player.transform.FindChild("NameText_TMP").GetComponent<TextMeshPro>();
+            f = Mathf.Clamp01(f);
+            return (byte)(f * 255);
         }
-        public static SpriteRenderer MyRend(this PlayerControl player)
-        {
-            bool Isnull = true;
-            if (MyRendCache.ContainsKey(player.PlayerId))
-            {
-                if (MyRendCache[player.PlayerId] == null) Isnull = true;
-                else Isnull = false;
-            }
-            if (Isnull)
-            {
-                MyRendCache[player.PlayerId] = player.transform.FindChild("Sprite").GetComponent<SpriteRenderer>();
-            }
-            return MyRendCache[player.PlayerId];
-        }
-
 
         public static PlayerControl PlayerById(byte id)
         {

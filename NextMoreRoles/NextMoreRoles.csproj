@@ -4,7 +4,7 @@
         <Version>1.2.3.0</Version>
         <Description>NextMoreRoles</Description>
         <Authors>UKON256</Authors>
-        <AmongUs Condition=" '$(AmongUs)' == '' ">D:\Picture\005Among us\04src\AmongUsMOD</AmongUs>
+        <AmongUs Condition=" '$(AmongUs)' == '' ">D:\ゲーム\アモアス\ソースコード\AmongUsMOD</AmongUs>
         <langVersion>preview</langVersion>
     </PropertyGroup>
 

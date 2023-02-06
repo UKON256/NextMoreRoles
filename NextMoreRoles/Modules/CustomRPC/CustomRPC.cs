@@ -3,9 +3,7 @@ using System.Linq;
 using HarmonyLib;
 using Hazel;
 using NextMoreRoles.Modules.CustomOptions;
-using NextMoreRoles.Modules.DatasManager;
 using NextMoreRoles.Roles;
-using NextMoreRoles.Patches.GamePatches.GameStart;
 
 namespace NextMoreRoles.Modules.CustomRPC
 {
@@ -44,7 +42,7 @@ namespace NextMoreRoles.Modules.CustomRPC
         //部屋が消し去られる時間をセットする
         public static void SetRoomDestroyTimer(byte Min, byte Seconds)
         {
-            Patches.LobbyPatches.ShareGameVersion.Timer = (Min * 60) + Seconds;
+            //Patches.LobbyPatches.ShareGameVersion.Timer = (Min * 60) + Seconds;
         }
 
         //MODのバージョン、MODが入っているか否かをシェアする
@@ -55,7 +53,7 @@ namespace NextMoreRoles.Modules.CustomRPC
                 ver = new System.Version(major, minor, build);
             else
                 ver = new System.Version(major, minor, build, revision);
-            Patches.LobbyPatches.ShareGameVersion.GameStartManagerUpdatePatch.VersionPlayers[clientId] = new Patches.LobbyPatches.PlayerVersion(ver, guid);
+            //Patches.LobbyPatches.ShareGameVersion.GameStartManagerUpdatePatch.VersionPlayers[clientId] = new Patches.LobbyPatches.PlayerVersion(ver, guid);
         }
 
         //BOTのデータを他人にシェアする
@@ -63,8 +61,8 @@ namespace NextMoreRoles.Modules.CustomRPC
         {
             PlayerControl Bot = ModHelpers.PlayerById(BotId);
             if (Bot == null) return;
-            if(BotManager.AllBots == null) BotManager.AllBots = new();
-            BotManager.AllBots.Add(Bot);
+            //if(BotManager.AllBots == null) BotManager.AllBots = new();
+            //BotManager.AllBots.Add(Bot);
         }
 
         //役職をセットする
@@ -74,7 +72,7 @@ namespace NextMoreRoles.Modules.CustomRPC
             var RoleId = (RoleId)SetRoleId;
             //役職を消してから再設定する
             ////if (RoleId.IsAttribute_Role()) Player.RemoveRole();
-            Player.SetRole(RoleId);
+            //Player.SetRole(RoleId);
         }
 
         //シェイプシフト

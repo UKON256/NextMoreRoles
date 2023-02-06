@@ -5,13 +5,18 @@ using System.Reflection;
 using BepInEx;
 using BepInEx.IL2CPP;
 using HarmonyLib;
+using NextMoreRoles.Patches.TitleMenuPatches;
 using NextMoreRoles.Modules;
-using NextMoreRoles.Patches.TitlePatches;
+using NextMoreRoles.Modules.CustomOptions;
 using LogType = BepInEx.Logging.LogLevel;
 
 namespace NextMoreRoles
 {
     [BepInPlugin(Id, "NextMoreRoles", VersionString)]
+    [BepInIncompatibility("com.emptybottle.townofhost")]
+    [BepInIncompatibility("me.eisbison.theotherroles")]
+    [BepInIncompatibility("me.yukieiji.extremeroles")]
+    [BepInIncompatibility("com.tugaru.TownOfPlus")]
     [BepInProcess("Among Us.exe")]
     public class NextMoreRolesPlugin : BasePlugin
     {
@@ -26,9 +31,6 @@ namespace NextMoreRoles
         public Harmony Harmony { get; } = new Harmony(Id);
         public static NextMoreRolesPlugin Instance;
         public static Dictionary<string, Dictionary<int, string>> StringDATE;
-        public static bool IsUpdate = false;
-        public static string NewVersion = "";
-        public static string thisname;
 
         public override void Load()
         {
@@ -38,11 +40,10 @@ namespace NextMoreRoles
             // 初期化
             try
             {
-                ModTranslation.Load();
-                Configs.Load();
+                CustomOptions.Load();
                 ChangeName.Load();
-                NextMoreRoles.Modules.CustomOptions.CustomOptions.Load();
-                NextMoreRoles.Modules.DatasManager.Reset.Load();
+                Translator.Load();
+                Configs.Load();
 
                 var assembly = Assembly.GetExecutingAssembly();
                 StringDATE = new Dictionary<string, Dictionary<int, string>>();
