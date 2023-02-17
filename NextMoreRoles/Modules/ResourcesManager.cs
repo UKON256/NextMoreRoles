@@ -17,7 +17,6 @@ class ResourcesManager
             Texture2D texture = LoadTextureFromResources(path);
             sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), pixelsPerUnit);
             sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
-            Logger.Info("パスからのスプライトの生成に成功しました\nPath:"+path, "ResourcesManager");
             return CachedSprites[path + pixelsPerUnit] = sprite;
         } catch {
             Logger.Error("パスからのスプライト生成に失敗しました", "ResourcesManager");
@@ -39,6 +38,38 @@ class ResourcesManager
         }
         return null;
     }
+
+    public static Dictionary<string, AudioClip> AudioClipCache = new();
+    public static AudioClip LoadAudioClipFromResources(string path, string clipName = "UNNAMED_NAME")
+    {
+        try
+        {
+            if (AudioClipCache.TryGetValue(path, out AudioClip audio)) return audio;
+
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            Stream stream = assembly.GetManifestResourceStream(path);
+            var byteAudio = new byte[stream.Length];
+            var read = stream.Read(byteAudio, 0, (int)stream.Length);
+            float[] samples = new float[byteAudio.Length / 4];
+            int offset;
+            for (int i = 0; i < samples.Length; i++)
+            {
+                offset = i * 4;
+                samples[i] = (float)BitConverter.ToInt32(byteAudio, offset) / int.MaxValue;
+            }
+            int channels = 2;
+            int sampleRate = 48000;
+            AudioClip audioClip = AudioClip.Create(clipName, samples.Length, channels, sampleRate, false);
+            audioClip.SetData(samples, 0);
+            audioClip.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
+            return AudioClipCache[path] = audioClip;
+        } catch {
+            Logger.Error("パスからのオーディオの生成に失敗しました", "ResourcesManager");
+        }
+        return null;
+    }
+
+
     internal delegate bool d_LoadImage(IntPtr tex, IntPtr data, bool markNonReadable);
     internal static d_LoadImage iCall_LoadImage;
     private static bool LoadImage(Texture2D tex, byte[] data, bool markNonReadable)

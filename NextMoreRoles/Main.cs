@@ -5,9 +5,11 @@ using System.Reflection;
 using BepInEx;
 using BepInEx.IL2CPP;
 using HarmonyLib;
-using NextMoreRoles.Patches.TitleMenuPatches;
+using NextMoreRoles.Roles;
+using NextMoreRoles.Mode;
 using NextMoreRoles.Modules;
 using NextMoreRoles.Modules.CustomOptions;
+using NextMoreRoles.Patches.TitleMenuPatches;
 using LogType = BepInEx.Logging.LogLevel;
 
 namespace NextMoreRoles
@@ -18,6 +20,7 @@ namespace NextMoreRoles
     [BepInIncompatibility("me.yukieiji.extremeroles")]
     [BepInIncompatibility("com.tugaru.TownOfPlus")]
     [BepInProcess("Among Us.exe")]
+    [HarmonyPatch]
     public class NextMoreRolesPlugin : BasePlugin
     {
         public static string NextMoreRolesTitle = $@"<color=#7dff7d>Next</color><color=#00ffff>More</color><color=#ff0000>Roles</color>";
@@ -40,10 +43,13 @@ namespace NextMoreRoles
             // 初期化
             try
             {
-                CustomOptions.Load();
-                ChangeName.Load();
+                RoleBase.Load();
+                ModeBase.Load();
+
                 Translator.Load();
+                ChangeName.Load();
                 Configs.Load();
+                CustomOptionHolder.Load();
 
                 var assembly = Assembly.GetExecutingAssembly();
                 StringDATE = new Dictionary<string, Dictionary<int, string>>();
@@ -60,6 +66,7 @@ namespace NextMoreRoles
 
 
 
+        //* ModStamp表示 *//
         [HarmonyPatch(typeof(ModManager), nameof(ModManager.LateUpdate))]
         class ShowModStamp
         {
@@ -71,11 +78,13 @@ namespace NextMoreRoles
 
 
 
-        //実行元:Patches.GamePatches.PingMessages.cs
+        //* PingにMOD情報を記載 *//
         private static string BaseCredentials = $@"<size=130%>{NextMoreRolesTitle}</size> v{NextMoreRolesPlugin.Version}";
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(PingTracker), nameof(PingTracker.Update))]
         public static void PingSetMODName(PingTracker __instance)
         {
-            __instance.text.text = $"{BaseCredentials}";
+            __instance.text.text = $"{BaseCredentials}\n{__instance.text.text}";
         }
     }
 

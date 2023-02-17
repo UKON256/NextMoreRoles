@@ -40,7 +40,7 @@ namespace NextMoreRoles.Modules
             if (client == null) return -1;
             return client.Id;
         }
-        public static bool IsCheckListPlayerControl(this List<PlayerControl> ListData, PlayerControl CheckPlayer)
+        public static bool IsContainsPlayerControl(this List<PlayerControl> ListData, PlayerControl CheckPlayer)
         {
             foreach (PlayerControl Player in ListData)
             {

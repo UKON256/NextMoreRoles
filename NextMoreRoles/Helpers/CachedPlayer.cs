@@ -63,8 +63,8 @@ namespace NextMoreRoles.Helpers
             }
         }
 
-        [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Awake))]
         [HarmonyPostfix]
+        [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Awake))]
         public static void CachePlayerPatch(PlayerControl __instance)
         {
             if (__instance.notRealPlayer) return;
@@ -89,8 +89,8 @@ namespace NextMoreRoles.Helpers
 #endif
         }
 
-        [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.OnDestroy))]
         [HarmonyPostfix]
+        [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.OnDestroy))]
         public static void RemoveCachedPlayerPatch(PlayerControl __instance)
         {
             if (__instance.notRealPlayer) return;
@@ -98,8 +98,8 @@ namespace NextMoreRoles.Helpers
             CachedPlayer.PlayerPtrs.Remove(__instance.Pointer);
         }
 
-        [HarmonyPatch(typeof(GameData), nameof(GameData.Deserialize))]
         [HarmonyPostfix]
+        [HarmonyPatch(typeof(GameData), nameof(GameData.Deserialize))]
         public static void AddCachedDataOnDeserialize()
         {
             foreach (CachedPlayer cachedPlayer in CachedPlayer.AllPlayers)
@@ -110,8 +110,8 @@ namespace NextMoreRoles.Helpers
             }
         }
 
-        [HarmonyPatch(typeof(GameData), nameof(GameData.AddPlayer))]
         [HarmonyPostfix]
+        [HarmonyPatch(typeof(GameData), nameof(GameData.AddPlayer))]
         public static void AddCachedDataOnAddPlayer()
         {
             foreach (CachedPlayer cachedPlayer in CachedPlayer.AllPlayers)
@@ -122,8 +122,8 @@ namespace NextMoreRoles.Helpers
             }
         }
 
-        [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Deserialize))]
         [HarmonyPostfix]
+        [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Deserialize))]
         public static void SetCachedPlayerId(PlayerControl __instance)
         {
             CachedPlayer.PlayerPtrs[__instance.Pointer].PlayerId = __instance.PlayerId;

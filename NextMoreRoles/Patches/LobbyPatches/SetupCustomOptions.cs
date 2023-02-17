@@ -11,7 +11,7 @@ using NextMoreRoles.Modules.CustomOptions;
 namespace NextMoreRoles.Patches.LobbyPatches;
 
 [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Start))]
-class SetupCustomOptions
+class SetupCustomOptionHolder
 {
     public static void Postfix(GameOptionsMenu __instance)
     {
@@ -266,7 +266,7 @@ class SetupCustomOptions
         }
         catch (SystemException Error)
         {
-            Logger.Error($"カスタムオプションの構成に失敗しました。{Error}", "SetupCustomOptions");
+            Logger.Error($"カスタムオプションの構成に失敗しました。{Error}", "SetupCustomOptionHolder");
         }
     }
 }
@@ -367,7 +367,7 @@ class GameOptionsUpdate
                 bool Enabled = true;
                 var Parent = Option.Parent;
 
-                if (AmongUsClient.Instance?.AmHost == false && CustomOptions.HideSettings.GetBool())
+                if (AmongUsClient.Instance?.AmHost == false && CustomOptionHolder.HideSettings.GetBool())
                 {
                     Enabled = false;
                 }
@@ -437,7 +437,7 @@ class GameOptionsDataPatch
 
     static void Postifx(ref string __result)
     {
-        bool HideSettings = AmongUsClient.Instance?.AmHost == false && CustomOptions.HideSettings.GetBool();
+        bool HideSettings = AmongUsClient.Instance?.AmHost == false && CustomOptionHolder.HideSettings.GetBool();
         if (HideSettings) return;
 
         List<string> Pages = new();
@@ -446,25 +446,25 @@ class GameOptionsDataPatch
         StringBuilder Entry = new();
         List<string> Entries = new();
 
-        Entries.Add(OptionToString(CustomOptions.PresetSelection));
+        Entries.Add(OptionToString(CustomOptionHolder.PresetSelection));
 
         var OptionName = ModHelpers.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), Translator.GetString("CrewmateRoles"));
-        var Min = CustomOptions.CrewmateRolesMin.GetSelection();
-        var Max = CustomOptions.CrewmateRolesMax.GetSelection();
+        var Min = CustomOptionHolder.CrewmateRolesMin.GetSelection();
+        var Max = CustomOptionHolder.CrewmateRolesMax.GetSelection();
         if (Min > Max) Min = Max;
         var OptionValue = (Min == Max) ? $"{Max}" : $"{Min} - {Max}";
         Entry.AppendLine($"{OptionName}: {OptionValue}");
 
         OptionName = ModHelpers.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), Translator.GetString("ImpostorRoles"));
-        Min = CustomOptions.ImpostorRolesMin.GetSelection();
-        Max = CustomOptions.ImpostorRolesMax.GetSelection();
+        Min = CustomOptionHolder.ImpostorRolesMin.GetSelection();
+        Max = CustomOptionHolder.ImpostorRolesMax.GetSelection();
         if (Min > Max) Min = Max;
         OptionValue = (Min == Max) ? $"{Max}" : $"{Min} - {Max}";
         Entry.AppendLine($"{OptionName}: {OptionValue}");
 
         OptionName = ModHelpers.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), Translator.GetString("NeutralRoles"));
-        Min = CustomOptions.NeutralRolesMin.GetSelection();
-        Max = CustomOptions.NeutralRolesMax.GetSelection();
+        Min = CustomOptionHolder.NeutralRolesMin.GetSelection();
+        Max = CustomOptionHolder.NeutralRolesMax.GetSelection();
         if (Min > Max) Min = Max;
         OptionValue = (Min == Max) ? $"{Max}" : $"{Min} - {Max}";
         Entry.AppendLine($"{OptionName}: {OptionValue}");
@@ -485,13 +485,13 @@ class GameOptionsDataPatch
 
         foreach (CustomOption Option in CustomOption.Options)
         {
-            if ((Option == CustomOptions.PresetSelection) ||
-                (Option == CustomOptions.CrewmateRolesMin) ||
-                (Option == CustomOptions.CrewmateRolesMax) ||
-                (Option == CustomOptions.ImpostorRolesMin) ||
-                (Option == CustomOptions.ImpostorRolesMax) ||
-                (Option == CustomOptions.NeutralRolesMin) ||
-                (Option == CustomOptions.NeutralRolesMax))
+            if ((Option == CustomOptionHolder.PresetSelection) ||
+                (Option == CustomOptionHolder.CrewmateRolesMin) ||
+                (Option == CustomOptionHolder.CrewmateRolesMax) ||
+                (Option == CustomOptionHolder.ImpostorRolesMin) ||
+                (Option == CustomOptionHolder.ImpostorRolesMax) ||
+                (Option == CustomOptionHolder.NeutralRolesMin) ||
+                (Option == CustomOptionHolder.NeutralRolesMax))
             {
                 continue;
             }

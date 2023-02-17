@@ -2,12 +2,18 @@ namespace NextMoreRoles.Roles;
 
 public enum RoleId
 {
+    //* インスタンス用RoleId(使わない) *//
+    RoleBase = -100,
+    CombinationRoleBase,
+
+    //* その他 *//
+    Null,
+    VanillaRoles = 0,
+
     //* クルーメイト *//
-    Crewmate,
     Sheriff,
 
     //* インポスター *//
-    Impostor,
     SerialKiller,
 
     //* ニュートラル *//
@@ -15,7 +21,8 @@ public enum RoleId
     JackalSidekick,
 
     //* アトリビュート *//
-    Lovers,
+
 
     //* コンビネーション *//
+    Lovers,
 }
